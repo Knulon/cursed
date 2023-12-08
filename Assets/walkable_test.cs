@@ -31,6 +31,8 @@ public class walkable_test : MonoBehaviour
     private List<Collider2D> overlapColliders = new List<Collider2D>();
     private ContactFilter2D contactFilter = new ContactFilter2D();
 
+    private int frameCounter = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +42,8 @@ public class walkable_test : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        frameCounter++;
+
         foreach (var blockedTile in blockedTiles)
         {
             Destroy(blockedTile);
@@ -50,6 +54,43 @@ public class walkable_test : MonoBehaviour
             Destroy(walkableTile);
         }
 
+
+        for (float i = testXmin; i < testXmax; i += testResolution)
+        {
+            for (float j = testYmin; j < testYmax; j += testResolution)
+            {
+                Vector2 testPoint = new Vector2(i, j);
+                testPoint += new Vector2(transform.position.x, transform.position.y);
+                Physics2D.OverlapBox(testPoint, new Vector2(.5f, .5f), 0, contactFilter, overlapColliders);
+                bool isWalkable = true;
+                foreach (var collider in overlapColliders)
+                {
+                    if (collider && collider.gameObject != this.gameObject)
+                    {
+                        isWalkable = false;
+                    }
+                }
+                if (isWalkable)
+                {
+                    //walkableTiles.Add(Instantiate(walkable, testPoint, Quaternion.identity));
+                }
+                else
+                {
+                    blockedTiles.Add(Instantiate(blockedoff, testPoint, Quaternion.identity));
+                }
+            }
+        }
+
+        if (frameCounter % 10 == 0)
+        {
+            updatePath();
+        }
+
+
+    }
+
+    void updatePath()
+    {
         foreach (var pathTile in pathTiles)
         {
             Destroy(pathTile);
@@ -60,34 +101,8 @@ public class walkable_test : MonoBehaviour
             Destroy(goalTile);
         }
 
-
-        for (float i = testXmin; i < testXmax; i += testResolution)
-        {
-            for (float j = testYmin; j < testYmax; j += testResolution)
-            {
-                Vector2 testPoint = new Vector2(i, j);
-                testPoint += new Vector2(transform.position.x, transform.position.y);
-                Physics2D.OverlapBox(testPoint, new Vector2(.5f, .5f), 0, contactFilter, overlapColliders);
-                bool isWalkable = false;
-                foreach (var collider in overlapColliders)
-                {
-                    if (collider && collider.gameObject != this.gameObject)
-                    {
-                        isWalkable = true;
-                    }
-                }
-                if (isWalkable)
-                {
-                    walkableTiles.Add(Instantiate(blockedoff, testPoint, Quaternion.identity));
-                }
-                else
-                {
-                    blockedTiles.Add(Instantiate(walkable, testPoint, Quaternion.identity));
-                }
-            }
-        }
-
-        path = astar.getPath(new Vector2(transform.position.x, transform.position.y), new Vector2(4.0f, 4.0f),this.gameObject);
+        path.Clear();
+        path.AddRange(astar.getPath(new Vector2(transform.position.x, transform.position.y), new Vector2(4.0f, 4.0f), this.gameObject));
 
         foreach (var pathPoint in path)
         {
@@ -95,6 +110,5 @@ public class walkable_test : MonoBehaviour
         }
 
         goalTiles.Add(Instantiate(goalTile, new Vector2(4.0f, 4.0f), Quaternion.identity));
-
     }
 }

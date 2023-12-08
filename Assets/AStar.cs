@@ -79,11 +79,13 @@ public class AStar
             }
         }
 
-        return astarSearch(start, end);
+        return astarSearch(start, end, me);
     }
 
-    Node astarSearch(Vector2 start, Vector2 end)
+    Node astarSearch(Vector2 start, Vector2 end, GameObject me)
     {
+
+        int interruptCounter = 0;
         Node startNode = new Node(null, start, 0, Vector2.Distance(start, end), 0);
 
         openList.Add(startNode.f, startNode);
@@ -94,13 +96,20 @@ public class AStar
             openList.RemoveAt(0);
             closedList.Add(currentNode);
 
-            if (currentNode.position == end)
+            if (currentNode.position == end || Vector2.Distance(currentNode.position,end)<0.4f)
             {
                 return currentNode;
             }
 
+            interruptCounter++;
+
+            if (interruptCounter > 6000)
+            {
+                throw new Exception("A* interrupted. "+interruptCounter+" iterations reached.");
+            }
+
             List<Node> children = new List<Node>();
-            foreach (var direction in new Vector2[] { Vector2.up, Vector2.down, Vector2.left, Vector2.right })
+            foreach (var direction in new Vector2[] { Vector2.up * .5f, Vector2.down * .5f, Vector2.left * .5f, Vector2.right * .5f , })
             {
                 Vector2 childPosition = currentNode.position + direction;
                 Node childNode = new Node(currentNode, childPosition, currentNode.g + 1, Vector2.Distance(childPosition, end));
@@ -109,7 +118,19 @@ public class AStar
 
             foreach (var child in children)
             {
-                if (closedList.Contains(child))
+                List<Collider2D> overlapChildCollider = new List<Collider2D>();
+                bool isWalkable = true;
+                Physics2D.OverlapBox(child.position, new Vector2(.25f, .25f), 0, contactFilter, overlapChildCollider);
+                foreach (var collider in overlapChildCollider)
+                {
+                    if (collider && collider.gameObject!=me)
+                    {
+                        isWalkable = false;
+                        break;
+                    }
+                }
+
+                if (closedList.Contains(child) || isWalkable == false)
                 {
                     continue;
                 }
