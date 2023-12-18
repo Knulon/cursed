@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 47755516}
   - component: {fileID: 47755515}
   - component: {fileID: 47755517}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Square (3)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -264,7 +264,7 @@ GameObject:
   - component: {fileID: 148565041}
   - component: {fileID: 148565040}
   - component: {fileID: 148565042}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Square
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -492,10 +492,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a23646c1153219c43b1bf9680f72de4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkable: {fileID: 9193224399235391095, guid: 91510f5471620ea4e8e9131d3f826431, type: 3}
-  blockedoff: {fileID: 5391355625828566825, guid: 003b00ec13ecfa746ab963ce2fa90fc9, type: 3}
-  pathTile: {fileID: 9193224399235391095, guid: f04eea7e5ed909e478e8797faf3aff22, type: 3}
-  goalTile: {fileID: 9193224399235391095, guid: 6da795ee18d47e34b86606b5a82065f6, type: 3}
 --- !u!1 &1524324163
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,7 +503,7 @@ GameObject:
   - component: {fileID: 1524324165}
   - component: {fileID: 1524324164}
   - component: {fileID: 1524324166}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Square (2)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -637,7 +633,7 @@ GameObject:
   - component: {fileID: 1681986451}
   - component: {fileID: 1681986450}
   - component: {fileID: 1681986452}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Square (1)
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
@@ -770,11 +766,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9148174664871130553, guid: 14fe0fd2276913d4c91fb4b05fbe7649, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.935
+      value: -7.92
       objectReference: {fileID: 0}
     - target: {fileID: 9148174664871130553, guid: 14fe0fd2276913d4c91fb4b05fbe7649, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.251
+      value: -2.13
       objectReference: {fileID: 0}
     - target: {fileID: 9148174664871130553, guid: 14fe0fd2276913d4c91fb4b05fbe7649, type: 3}
       propertyPath: m_LocalPosition.z
