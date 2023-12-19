@@ -62,20 +62,14 @@ public class AStarOnNodes
         public Node parent;
         public Pair<int, int> position;
         public float g;
-        public float h;
         public float f;
 
-        public Node(Node parent, Pair<int, int> position, float g, float h, float f)
+        public Node(Node parent, Pair<int, int> position, float g, float h)
         {
             this.parent = parent;
             this.position = position;
             this.g = g;
-            this.h = h;
-            this.f = g + h;
-        }
-
-        public Node(Node parent, Pair<int, int> position, float g, float h) : this(parent, position, g, h, g + h)
-        {
+            this.f = g+h;
         }
 
         public bool EqualsPosition(Pair<int, int> other)
@@ -265,7 +259,7 @@ public class AStarOnNodes
         //ExploredTiles.Clear();
         int interruptCounter = 0;
 
-        Node startNode = new Node(null, GetNearestNode(start), 0, Vector2.Distance(start, end), 0);
+        Node startNode = new Node(null, GetNearestNode(start), 0,  0);
         openList.Add(startNode);
 
         while (openList.Count > 0 && !_breakLoop)

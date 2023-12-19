@@ -58,7 +58,7 @@ public class AStar_Usage_Test : MonoBehaviour
         {
             Gizmos.DrawCube(astar.GetCoordinateOfNode(exploredTile), new Vector3(astar.CollisionBoxSize, astar.CollisionBoxSize, 0));
         }
-        Debug.Log("Explored tiles: " + astar.ExploredTiles.Count);
+        //Debug.Log("Explored tiles: " + astar.ExploredTiles.Count);
 
         //Draw first pathpoint
         Gizmos.color = Color.cyan;
