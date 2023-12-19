@@ -4,16 +4,19 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Diagnostics;
+using UnityEditor.Build.Reporting;
+using Debug = UnityEngine.Debug;
 
 public class AStarOnNodes
 {
 
-    [SerializeField] public static Dictionary<Pair<int, int>, HashSet<Pair<int, int>>> blockedTiles = new();
-    public List<Pair<int, int>> ExploredTiles = new();
+    [SerializeField] public static Dictionary<Pair, HashSet<Pair>> blockedTiles = new();
+    public List<Pair> ExploredTiles = new();
     private ContactFilter2D _contactFilter = new();
     private float _resolution;
     public readonly int ResolutionIndex;
-    public readonly Pair<int, int> resolutionFraction;
+    public readonly Pair resolutionFraction;
     Vector2 gridOffset;
     public float CollisionBoxSize;
     private static readonly int[,] _directions =
@@ -28,7 +31,7 @@ public class AStarOnNodes
     public AStarOnNodes(Vector2 gridOffset, int numerator, int denominator)
     {
         this.gridOffset = gridOffset;
-        resolutionFraction = new Pair<int, int>(numerator, denominator);
+        resolutionFraction = new Pair(numerator, denominator);
         _resolution = (float)numerator / denominator;
         Debug.Log("Resolution: " + _resolution);
 
@@ -36,7 +39,7 @@ public class AStarOnNodes
 
         if (!blockedTiles.ContainsKey(resolutionFraction))
         {
-            blockedTiles.Add(resolutionFraction, new HashSet<Pair<int, int>>());
+            blockedTiles.Add(resolutionFraction, new HashSet<Pair>());
         }
     }
 
@@ -44,7 +47,7 @@ public class AStarOnNodes
     {
         CollisionBoxSize = collisionBoxSize;
         this.gridOffset = gridOffset;
-        resolutionFraction = new Pair<int, int>(numerator, denominator);
+        resolutionFraction = new Pair(numerator, denominator);
         _resolution = (float)numerator / denominator;
         Debug.Log("Resolution: " + _resolution);
 
@@ -52,7 +55,7 @@ public class AStarOnNodes
 
         if (!blockedTiles.ContainsKey(resolutionFraction))
         {
-            blockedTiles.Add(resolutionFraction, new HashSet<Pair<int, int>>());
+            blockedTiles.Add(resolutionFraction, new HashSet<Pair>());
         }
     }
 
@@ -60,11 +63,11 @@ public class AStarOnNodes
     public class Node
     {
         public Node parent;
-        public Pair<int, int> position;
+        public Pair position;
         public float g;
         public float f;
 
-        public Node(Node parent, Pair<int, int> position, float g, float h)
+        public Node(Node parent, Pair position, float g, float h)
         {
             this.parent = parent;
             this.position = position;
@@ -72,41 +75,40 @@ public class AStarOnNodes
             this.f = g+h;
         }
 
-        public bool EqualsPosition(Pair<int, int> other)
+        public bool EqualsPosition(Pair other)
         {
-            return position.x == other.x && position.y == other.y;
+            return position.X == other.X && position.Y == other.Y;
         }
 
     }
 
-    public class Pair<T, N>
-    {
-        public T x;
-        public N y;
+    public class Pair {
+        public readonly int X;
+        public readonly int Y;
 
-        public Pair(T x, N y)
+        public Pair(int x, int y)
         {
-            this.x = x;
-            this.y = y;
+            this.X = x;
+            this.Y = y;
         }
 
         public override bool Equals(object obj)
         {
-            return obj is Pair<T, N> pair &&
-                   EqualityComparer<T>.Default.Equals(x, pair.x) &&
-                   EqualityComparer<N>.Default.Equals(y, pair.y);
+            return obj is Pair pair &&
+                   X == pair.X &&
+                   Y == pair.Y;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(x, y);
+            return HashCode.Combine(X, Y);
         }
     }
 
     private class MinMaxHeap
     {
         private List<Node> _heap = new();
-        private Dictionary<Pair<int, int>, Node> _nodeDictionary = new();
+        private Dictionary<Pair, Node> _nodeDictionary = new();
         public int Count => _heap.Count;
 
         public void Add(Node node)
@@ -133,9 +135,8 @@ public class AStarOnNodes
 
         public int UpdateNode(Node node) // -1 if node not found, 0 if node found and not updated, 1 if node found and updated
         {
-            if (_nodeDictionary.ContainsKey(node.position))
+            if (_nodeDictionary.TryGetValue(node.position, out var oldNode))
             {
-                Node oldNode = _nodeDictionary[node.position];
                 if (oldNode.f > node.f)
                 {
                     _nodeDictionary[node.position] = node;
@@ -222,7 +223,7 @@ public class AStarOnNodes
                 {
                     if (collider2D.gameObject.tag.Contains("Obstacle"))
                     {
-                        blockedTiles[resolutionFraction].Add(new Pair<int, int>(i, j));
+                        blockedTiles[resolutionFraction].Add(new Pair(i, j));
                     }
                 }
             }
@@ -254,8 +255,10 @@ public class AStarOnNodes
 
     Node AstarSearch(Vector2 start, Vector2 end, GameObject me)
     {
+        //Stopwatch sw = new Stopwatch();
+        //sw.Start();
         MinMaxHeap openList = new();
-        HashSet<Pair<int, int>> closedList = new();
+        HashSet<Pair> closedList = new();
         //ExploredTiles.Clear();
         int interruptCounter = 0;
 
@@ -272,32 +275,32 @@ public class AStarOnNodes
             //{
             //    ExploredTiles.Add(currentNode.position);
             //}
-            
 
-            if (currentNode.EqualsPosition(GetNearestNode(end)) || Vector2.Distance(GetCoordinateOfNode(currentNode), end) < _resolution)
+            if (currentNode.EqualsPosition(GetNearestNode(end)) || DistanceSquared(GetCoordinateOfNode(currentNode), end) < _resolution*_resolution)
             {
+                //sw.Stop();
+                //Debug.Log("A* finished in " + sw.ElapsedMilliseconds + "ms.");
                 return currentNode;
             }
 
             if (interruptCounter++ > _maxIterations)
             {
+                //sw.Stop();
+                //Debug.Log("A* failed in " + sw.ElapsedMilliseconds + "ms.");
                 throw new Exception("A* interrupted. " + _maxIterations + " iterations exceeded.");
             }
 
-
             for (int i = 0; i < 8; i++)
             {
-                Pair<int, int> childPosition = new(currentNode.position.x + _directions[i, 0], currentNode.position.y + _directions[i, 1]);
+                Pair childPosition = new(currentNode.position.X + _directions[i, 0], currentNode.position.Y + _directions[i, 1]);
+                if (closedList.Contains(childPosition) || blockedTiles[resolutionFraction].Contains(childPosition))
+                {
+                    continue;
+                }
 
                 // Changing the + 1 to directionPrice[i] will make the algorithm prefer diagonal movement. Unfortunately it has a decent performance impact.
                 Node childNode = new Node(currentNode, childPosition, currentNode.g + 1,
                     GetHeuristic(GetCoordinateOfNode(childPosition), end));
-
-                bool isBlocked = blockedTiles[resolutionFraction].Contains(childPosition);
-                if (closedList.Contains(childNode.position) || isBlocked)
-                {
-                    continue;
-                }
 
                 if (openList.UpdateNode(childNode) == -1)
                 {
@@ -305,6 +308,8 @@ public class AStarOnNodes
                 }
             }
         }
+        //sw.Stop();
+        //Debug.Log("A* path not found in " + sw.ElapsedMilliseconds + "ms.");
         return null;
     }
 
@@ -329,7 +334,7 @@ public class AStarOnNodes
 
     private Vector2 GetCoordinateOfNode(Node node)
     {
-        return GetCoordinateOfNode(node.position.x, node.position.y);
+        return GetCoordinateOfNode(node.position.X, node.position.Y);
     }
 
     private Vector2 GetCoordinateOfNode(int x, int y)
@@ -337,32 +342,30 @@ public class AStarOnNodes
         return new Vector2(x * _resolution + gridOffset.x, y * _resolution + gridOffset.y);
     }
 
-    public Vector2 GetCoordinateOfNode(Pair<int, int> node)
+    public Vector2 GetCoordinateOfNode(Pair node)
     {
-        return GetCoordinateOfNode(node.x, node.y);
+        return GetCoordinateOfNode(node.X, node.Y);
     }
 
-    private Pair<int, int> GetNearestNode(Vector2 position)
+    private Pair GetNearestNode(Vector2 position)
     {
         if (position.x < gridOffset.x || position.y < gridOffset.y)
         {
-            return new Pair<int, int>(-1, -1);
+            return new Pair(-1, -1);
         }
 
         var x = RoundToNearest((position.x - gridOffset.x) / _resolution);
         var y = RoundToNearest((position.y - gridOffset.y) / _resolution);
-        return new Pair<int, int>(x, y);
+        return new Pair(x, y);
     }
 
     private int RoundToNearest(float value)
     {
-        int rounded = (int)value;
-        value -= rounded;
-        if (value >= 0.5f)
+        if (value - (int)value >= 0.5f)
         {
-            return rounded + 1;
+            return (int)value + 1;
         }
-        return rounded;
+        return (int)value;
     }
 
     private float GetHeuristic(Vector2 start, Vector2 end)
@@ -371,5 +374,12 @@ public class AStarOnNodes
         float dy = Mathf.Abs(start.y - end.y);
         return (dx + dy) + (-0.6f * Mathf.Min(dx, dy));
         // return 1 * (dx + dy) + (1.41f - 2 * 1) * Mathf.Min(dx, dy);
+    }
+
+    private float DistanceSquared(Vector2 start, Vector2 end)
+    {
+        float dx = Mathf.Abs(start.x - end.x);
+        float dy = Mathf.Abs(start.y - end.y);
+        return dx * dx + dy * dy;
     }
 }
