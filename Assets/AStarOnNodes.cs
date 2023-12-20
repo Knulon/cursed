@@ -1,15 +1,15 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using System.Diagnostics;
-using UnityEditor.Build.Reporting;
 using Debug = UnityEngine.Debug;
+using Unity.Profiling;
 
 public class AStarOnNodes
 {
+
+    static readonly ProfilerMarker astarMarker = new ProfilerMarker("AStar");
+    static readonly ProfilerMarker heuristicMarker = new ProfilerMarker("Heuristic");
+    static readonly ProfilerMarker updatePathMarker = new ProfilerMarker("UpdatePath");
 
     [SerializeField] public static Dictionary<Pair, HashSet<Pair>> blockedTiles = new();
     public List<Pair> ExploredTiles = new();
@@ -83,8 +83,8 @@ public class AStarOnNodes
     }
 
     public class Pair {
-        public readonly int X;
-        public readonly int Y;
+        public int X;
+        public int Y;
 
         public Pair(int x, int y)
         {
@@ -99,6 +99,7 @@ public class AStarOnNodes
                    Y == pair.Y;
         }
 
+        // TODO: Combine is pretty slow. Maybe use a different hash function?
         public override int GetHashCode()
         {
             return HashCode.Combine(X, Y);
@@ -255,6 +256,7 @@ public class AStarOnNodes
 
     Node AstarSearch(Vector2 start, Vector2 end, GameObject me)
     {
+        astarMarker.Begin();
         //Stopwatch sw = new Stopwatch();
         //sw.Start();
         MinMaxHeap openList = new();
@@ -280,6 +282,7 @@ public class AStarOnNodes
             {
                 //sw.Stop();
                 //Debug.Log("A* finished in " + sw.ElapsedMilliseconds + "ms.");
+                astarMarker.End();
                 return currentNode;
             }
 
@@ -287,6 +290,7 @@ public class AStarOnNodes
             {
                 //sw.Stop();
                 //Debug.Log("A* failed in " + sw.ElapsedMilliseconds + "ms.");
+                astarMarker.End();
                 throw new Exception("A* interrupted. " + _maxIterations + " iterations exceeded.");
             }
 
@@ -298,18 +302,23 @@ public class AStarOnNodes
                     continue;
                 }
 
+                // TODO: This should use a pool of nodes to avoid GC.
                 // Changing the + 1 to directionPrice[i] will make the algorithm prefer diagonal movement. Unfortunately it has a decent performance impact.
-                Node childNode = new Node(currentNode, childPosition, currentNode.g + 1,
+                Node childNode = new(currentNode, childPosition, currentNode.g + 1,
                     GetHeuristic(GetCoordinateOfNode(childPosition), end));
+                heuristicMarker.End();
 
+                updatePathMarker.Begin();
                 if (openList.UpdateNode(childNode) == -1)
                 {
                     openList.Add(childNode);
                 }
+                updatePathMarker.End();
             }
         }
         //sw.Stop();
         //Debug.Log("A* path not found in " + sw.ElapsedMilliseconds + "ms.");
+        astarMarker.End();
         return null;
     }
 
@@ -370,6 +379,7 @@ public class AStarOnNodes
 
     private float GetHeuristic(Vector2 start, Vector2 end)
     {
+        heuristicMarker.Begin();
         float dx = Mathf.Abs(start.x - end.x);
         float dy = Mathf.Abs(start.y - end.y);
         return (dx + dy) + (-0.6f * Mathf.Min(dx, dy));
