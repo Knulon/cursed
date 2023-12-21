@@ -15,7 +15,6 @@ public class AStarOnNodes
     public List<Pair> ExploredTiles = new();
     private ContactFilter2D _contactFilter = new();
     private float _resolution;
-    public readonly int ResolutionIndex;
     public readonly Pair resolutionFraction;
     Vector2 gridOffset;
     public float CollisionBoxSize;
@@ -204,11 +203,11 @@ public class AStarOnNodes
 
     public void BuildBlockedTilesHashMap(int axisSteps)
     {
-        BuildBlockedTilesHashMap(ResolutionIndex, axisSteps);
+        BuildBlockedTilesHashMap(resolutionFraction, axisSteps);
     }
 
 
-    public void BuildBlockedTilesHashMap(int ResolutionIndexParam, int axisSteps)
+    public void BuildBlockedTilesHashMap(Pair resolutionFraction, int axisSteps)
     {
         blockedTiles[resolutionFraction].Clear();
         List<Collider2D> overlapColliders = new List<Collider2D>();

@@ -19,6 +19,9 @@ namespace TheKiwiCoder {
         public BoxCollider boxCollider;
         public CapsuleCollider capsuleCollider;
         public CharacterController characterController;
+        public SpriteRenderer spriteRenderer;
+        public AStar_Handler AStarHandler;
+        public DisplayPath displayPath;
         // TODO: This is where I need to add Components I want to access in my BTs
         // Add other game specific systems here
 
@@ -34,7 +37,10 @@ namespace TheKiwiCoder {
             context.boxCollider = gameObject.GetComponent<BoxCollider>();
             context.capsuleCollider = gameObject.GetComponent<CapsuleCollider>();
             context.characterController = gameObject.GetComponent<CharacterController>();
-            
+            context.spriteRenderer = context.gameObject.GetComponent<SpriteRenderer>();
+            context.AStarHandler = context.gameObject.GetComponent<AStar_Handler>();
+            context.displayPath = context.gameObject.GetComponent<DisplayPath>();
+
             // Add whatever else you need here...
 
             return context;
