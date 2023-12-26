@@ -1317,6 +1317,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a23646c1153219c43b1bf9680f72de4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1006485616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1006485600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eae1a8edada1bff47a8723885ae4c3d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxVelocity: 3
+  acceleration: 4
+  HumanControlled: 1
+--- !u!114 &1006485617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1006485600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8b829337fea0a9428e7f721d4123082, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bulletPrefab: {fileID: 4604892930992337797, guid: 53ac9caa79b0b294382c16fdf260b713, type: 3}
+  _bulletSpeed: 10
+  _fireRate: 1
+  _magazineSize: 2
+  _reloadTime: 3
+  _bulletSpread: 0.1
 --- !u!1 &1047037809
 GameObject:
   m_ObjectHideFlags: 0
@@ -2397,6 +2430,12 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 869887287360908417, guid: 14fe0fd2276913d4c91fb4b05fbe7649, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1006485616}
+    - targetCorrespondingSourceObject: {fileID: 869887287360908417, guid: 14fe0fd2276913d4c91fb4b05fbe7649, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1006485617}
     - targetCorrespondingSourceObject: {fileID: 869887287360908417, guid: 14fe0fd2276913d4c91fb4b05fbe7649, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1006485610}
