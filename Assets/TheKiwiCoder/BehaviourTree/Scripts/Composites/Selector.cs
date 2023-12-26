@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace TheKiwiCoder {
     public class Selector : CompositeNode {
+        // The selector node checks all children in order until one of them returns success.
         protected int current;
 
         protected override void OnStart() {

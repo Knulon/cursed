@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace TheKiwiCoder {
     public class Sequencer : CompositeNode {
+        // The sequencer node checks all children in order until one of them returns failure.
         protected int current;
 
         protected override void OnStart() {

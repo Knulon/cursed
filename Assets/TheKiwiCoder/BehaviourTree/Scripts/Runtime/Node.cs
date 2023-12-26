@@ -16,6 +16,8 @@ namespace TheKiwiCoder {
         [HideInInspector] public Vector2 position;
         [HideInInspector] public Context context;
         [HideInInspector] public Blackboard blackboard;
+        [HideInInspector] public int nodeId; 
+        [HideInInspector] public Node leftNeighborNode;
         [TextArea] public string description;
         public bool drawGizmos = false;
 

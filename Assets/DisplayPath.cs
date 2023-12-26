@@ -12,7 +12,8 @@ public class DisplayPath : MonoBehaviour
         {
             return;
         }
-        path.AddRange(path);
+        this.path.Clear();
+        this.path.AddRange(path);
     }
 
     public void OnDrawGizmos()
@@ -23,6 +24,5 @@ public class DisplayPath : MonoBehaviour
         {
             Gizmos.DrawSphere(tile, 0.1f);
         }
-        path.Clear();
     }
 }

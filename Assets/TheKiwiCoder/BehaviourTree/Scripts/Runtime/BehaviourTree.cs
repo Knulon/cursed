@@ -62,6 +62,7 @@ namespace TheKiwiCoder {
             Traverse(rootNode, node => {
                 node.context = context;
                 node.blackboard = blackboard;
+                node.leftNeighborNode = rootNode;
             });
         }
 

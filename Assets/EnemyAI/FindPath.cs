@@ -10,11 +10,11 @@ using Debug = UnityEngine.Debug;
 
 public class FindPath : ActionNode
 {
-    private List<Vector2> path = new();
-    private static Task<List<Vector2>> pathfindingTask;
+    public List<Vector2> path = new();
+    private static Dictionary<int, Task<List<Vector2>>> pathfindingTasks = new();
     private Vector2 goal;
 
-    private Stopwatch stopwatch = new Stopwatch();
+    private Stopwatch stopwatch = new();
     public TMP_Text TextField;
 
     protected override void OnStart()
@@ -24,14 +24,14 @@ public class FindPath : ActionNode
         Vector2 start = new Vector2(context.transform.position.x, context.transform.position.y);
         goal = new Vector2(4.0f, 4.0f);
 
-        if (pathfindingTask != null && pathfindingTask.Status == TaskStatus.Running)
+        if (pathfindingTasks[nodeId] != null && pathfindingTasks[nodeId].Status == TaskStatus.Running)
         {
             return;
         }
 
         stopwatch.Reset();
         stopwatch.Start();
-        pathfindingTask = Task.Run(() =>
+        pathfindingTasks[nodeId] = Task.Run(() =>
         {
             List<Vector2> localPath = new List<Vector2>();
             localPath.AddRange(context.AStarHandler.GetPath(start, goal, context.gameObject));
@@ -46,12 +46,12 @@ public class FindPath : ActionNode
 
     protected override State OnUpdate()
     {
-        if (pathfindingTask.IsCompleted)
+        if (pathfindingTasks[nodeId].IsCompleted)
         {
-            path = pathfindingTask.Result;
-            //context.displayPath.Display(path);
+            path = pathfindingTasks[nodeId].Result;
+            context.displayPath.Display(path);
             stopwatch.Stop();
-            Console.WriteLine("Pathfinding task completed in " + stopwatch.ElapsedMilliseconds + "ms");
+            Debug.Log("Pathfinding task completed in " + stopwatch.ElapsedMilliseconds + "ms");
             if (TextField != null)
             {
                 TextField.text = "Pathfinding task completed in " + stopwatch.ElapsedMilliseconds + "ms";
@@ -60,12 +60,12 @@ public class FindPath : ActionNode
             return State.Success;
         }
 
-        if (pathfindingTask.Status == TaskStatus.Running)
+        if (pathfindingTasks[nodeId].Status == TaskStatus.Running)
         {
             return State.Running;
         }
 
-        if (pathfindingTask.IsFaulted)
+        if (pathfindingTasks[nodeId].IsFaulted)
         {
             return State.Failure;
         }
