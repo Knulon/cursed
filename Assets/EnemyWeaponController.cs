@@ -28,9 +28,7 @@ public class EnemyWeaponController : MonoBehaviour
     private float _bulletsToFire = 1f;
     private float _reloadTimeLeft = 0f;
 
-
     private EnemyController _enemyController;
-
 
     // Start is called before the first frame update
     void Start()
@@ -65,14 +63,22 @@ public class EnemyWeaponController : MonoBehaviour
         if (_bulletsToFire >= 1 && _bulletsInMagazine != 0)
         {
             _bulletsToFire -= 1;
+            _bulletsInMagazine--;
+
+            shootDirection.Normalize();
+
             GameObject bullet = Instantiate(_bulletPrefab, transform.position, _bulletPrefab.transform.rotation);
-            float angle = Mathf.Atan2(shootDirection.y, shootDirection.x) * Mathf.Rad2Deg;
+
+            Vector2 rotatedShootDirection = shootDirection;
+            float randomAngle = Random.Range(-_bulletSpread, _bulletSpread);
+            rotatedShootDirection.x = shootDirection.x * Mathf.Cos(randomAngle * Mathf.Deg2Rad) - shootDirection.y * Mathf.Sin(randomAngle * Mathf.Deg2Rad);
+            rotatedShootDirection.y = shootDirection.x * Mathf.Sin(randomAngle * Mathf.Deg2Rad) + shootDirection.y * Mathf.Cos(randomAngle * Mathf.Deg2Rad);
+            rotatedShootDirection.Normalize();
+
+            float angle = Mathf.Atan2(rotatedShootDirection.y, rotatedShootDirection.x) * Mathf.Rad2Deg;
             bullet.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
-            bullet.GetComponent<Rigidbody2D>().velocity = shootDirection * _bulletSpeed;
-            bullet.transform.Rotate(0, 0, Random.Range(-_bulletSpread, _bulletSpread));
-
-            _bulletsInMagazine--;
+            bullet.GetComponent<Rigidbody2D>().velocity = rotatedShootDirection * _bulletSpeed;
         }
     }
 
@@ -97,6 +103,23 @@ public class EnemyWeaponController : MonoBehaviour
             Gizmos.color = Color.green;
             Gizmos.DrawCube(transform.position + Vector3.up, new(2, .5f, (_bulletsInMagazine / _magazineSize) * 5));
         }
-    }
 
+        // Draw bullet spread with two lines from the center
+        Vector2 shootDirection = _enemyController.Direction;
+
+        Vector2 rightSpreadBoundary = shootDirection;
+        rightSpreadBoundary.x = shootDirection.x * Mathf.Cos(_bulletSpread * Mathf.Deg2Rad) - shootDirection.y * Mathf.Sin(_bulletSpread * Mathf.Deg2Rad);
+        rightSpreadBoundary.y = shootDirection.x * Mathf.Sin(_bulletSpread * Mathf.Deg2Rad) + shootDirection.y * Mathf.Cos(_bulletSpread * Mathf.Deg2Rad);
+        rightSpreadBoundary.Normalize();
+
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawLine(transform.position, transform.position + (Vector3)rightSpreadBoundary * 5);
+
+        Vector2 leftSpreadBoundary = shootDirection;
+        leftSpreadBoundary.x = shootDirection.x * Mathf.Cos(-_bulletSpread * Mathf.Deg2Rad) - shootDirection.y * Mathf.Sin(-_bulletSpread * Mathf.Deg2Rad);
+        leftSpreadBoundary.y = shootDirection.x * Mathf.Sin(-_bulletSpread * Mathf.Deg2Rad) + shootDirection.y * Mathf.Cos(-_bulletSpread * Mathf.Deg2Rad);
+        leftSpreadBoundary.Normalize();
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawLine(transform.position, transform.position + (Vector3)leftSpreadBoundary * 5);
+    }
 }
