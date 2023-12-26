@@ -7,6 +7,9 @@ using Random = UnityEngine.Random;
 public class EnemyWeaponController : MonoBehaviour
 {
     [SerializeField]
+    public float BulletRotationOffset = -90f;
+
+    [SerializeField]
     private GameObject _bulletPrefab;
 
     [SerializeField]
@@ -75,7 +78,7 @@ public class EnemyWeaponController : MonoBehaviour
             rotatedShootDirection.y = shootDirection.x * Mathf.Sin(randomAngle * Mathf.Deg2Rad) + shootDirection.y * Mathf.Cos(randomAngle * Mathf.Deg2Rad);
             rotatedShootDirection.Normalize();
 
-            float angle = Mathf.Atan2(rotatedShootDirection.y, rotatedShootDirection.x) * Mathf.Rad2Deg;
+            float angle = Mathf.Atan2(rotatedShootDirection.y, rotatedShootDirection.x) * Mathf.Rad2Deg + BulletRotationOffset;
             bullet.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
             bullet.GetComponent<Rigidbody2D>().velocity = rotatedShootDirection * _bulletSpeed;

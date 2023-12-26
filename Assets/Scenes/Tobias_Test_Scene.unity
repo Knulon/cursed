@@ -1344,12 +1344,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8b829337fea0a9428e7f721d4123082, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bulletPrefab: {fileID: 4604892930992337797, guid: 53ac9caa79b0b294382c16fdf260b713, type: 3}
-  _bulletSpeed: 10
-  _fireRate: 1
-  _magazineSize: 2
-  _reloadTime: 3
-  _bulletSpread: 0.1
+  _bulletPrefab: {fileID: 1814608980210987177, guid: 53ac9caa79b0b294382c16fdf260b713, type: 3}
+  _bulletSpeed: 50
+  _fireRate: 33
+  _magazineSize: 999
+  _reloadTime: 1
+  _bulletSpread: 10
 --- !u!1 &1047037809
 GameObject:
   m_ObjectHideFlags: 0
