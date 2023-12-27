@@ -4,19 +4,36 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    Rigidbody2D _rigidbody2D;
-    ContactFilter2D _contactFilter2D;
-
-    // Start is called before the first frame update
-    void Start()
+    public float Damage
     {
-        _rigidbody2D = GetComponent<Rigidbody2D>();
-        _contactFilter2D = new ContactFilter2D();
-        _contactFilter2D.SetLayerMask(LayerMask.GetMask("Enemy"));
+        get;
+        set;
+    } = 1f;
+
+    private float _timeToLive = 5f;
+
+    private void Update()
+    {
+        _timeToLive -= Time.deltaTime;
+        if (_timeToLive <= 0)
+        {
+            EnemyWeaponController.AddBulletToPool(this.gameObject);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+
+    void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.gameObject.layer == 13)
+        {
+            EnemyWeaponController.AddBulletToPool(this.gameObject);
+            Debug.Log("Bullet hit obstacle");
+        }
+    }
+
+    public float GetDamageAndSendToPool()
+    {
+        EnemyWeaponController.AddBulletToPool(this.gameObject);
+        return Damage;
     }
 }

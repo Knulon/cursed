@@ -94,6 +94,13 @@ public class EnemyWeaponController : MonoBehaviour
         }
     }
 
+    public static void AddBulletToPool(GameObject bullet)
+    {
+        bullet.SetActive(false);
+        // TODO: Add bullet to pool
+    }
+
+
     void OnDrawGizmos()
     {
         if (_bulletsInMagazine == 0)
@@ -105,6 +112,11 @@ public class EnemyWeaponController : MonoBehaviour
         {
             Gizmos.color = Color.green;
             Gizmos.DrawCube(transform.position + Vector3.up, new(2, .5f, (_bulletsInMagazine / _magazineSize) * 5));
+        }
+
+        if (_enemyController == null)
+        {
+            return;
         }
 
         // Draw bullet spread with two lines from the center
