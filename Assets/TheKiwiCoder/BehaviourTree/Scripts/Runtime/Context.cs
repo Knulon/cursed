@@ -15,13 +15,16 @@ namespace TheKiwiCoder {
         public Animator animator;
         public Rigidbody physics;
         public NavMeshAgent agent;
-        public SphereCollider sphereCollider;
-        public BoxCollider boxCollider;
-        public CapsuleCollider capsuleCollider;
         public CharacterController characterController;
+        public Collider2D collider;
+        public Collider2D visionCollider;
         public SpriteRenderer spriteRenderer;
         public AStar_Handler AStarHandler;
+        public EnemyController enemyController;
+        public EnemyInfoManager enemyInfoManager;
         public DisplayPath displayPath;
+        public GameObject player;
+        public Collider2D playerCollider;
         // TODO: This is where I need to add Components I want to access in my BTs
         // Add other game specific systems here
 
@@ -33,13 +36,15 @@ namespace TheKiwiCoder {
             context.animator = gameObject.GetComponent<Animator>();
             context.physics = gameObject.GetComponent<Rigidbody>();
             context.agent = gameObject.GetComponent<NavMeshAgent>();
-            context.sphereCollider = gameObject.GetComponent<SphereCollider>();
-            context.boxCollider = gameObject.GetComponent<BoxCollider>();
-            context.capsuleCollider = gameObject.GetComponent<CapsuleCollider>();
             context.characterController = gameObject.GetComponent<CharacterController>();
+            context.collider = gameObject.GetComponent<Collider2D>();
             context.spriteRenderer = context.gameObject.GetComponent<SpriteRenderer>();
             context.AStarHandler = context.gameObject.GetComponent<AStar_Handler>();
+            context.enemyController = context.gameObject.GetComponent<EnemyController>();
+            context.enemyInfoManager = context.gameObject.GetComponent<EnemyInfoManager>();
             context.displayPath = context.gameObject.GetComponent<DisplayPath>();
+            context.player = GameObject.FindGameObjectWithTag("Player");
+            context.playerCollider = context.player.GetComponent<Collider2D>();
 
             // Add whatever else you need here...
 
