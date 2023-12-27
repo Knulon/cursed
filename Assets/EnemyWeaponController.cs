@@ -32,6 +32,50 @@ public class EnemyWeaponController : MonoBehaviour
     private float _reloadTimeLeft = 0f;
 
     private EnemyController _enemyController;
+    private static BulletPool _bulletPool = new BulletPool();
+
+    [SerializeField]
+    public int BulletPoolItems = 0;
+
+    class BulletPool
+    {
+        private Stack<GameObject> _pool = new Stack<GameObject>();
+
+        public GameObject GetBullet(GameObject _bulletPrefab, Vector3 position, float Damage)
+        {
+            if (_pool.Count == 0)
+            {
+                GameObject bullet = Instantiate(_bulletPrefab, position, _bulletPrefab.transform.rotation);
+                Bullet bulletScriptComponent = bullet.GetComponent<Bullet>();
+                bulletScriptComponent.Damage = Damage;
+                bulletScriptComponent.ResetTimeToLive();
+                return bullet;
+            }
+
+            // TODO: This fails if the bulletPrefab is not the same as the one in the pool
+            GameObject popBullet = _pool.Pop();
+            popBullet.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            popBullet.transform.position = position;
+            popBullet.transform.rotation = _bulletPrefab.transform.rotation;
+            Bullet popBulletScriptComponent = popBullet.GetComponent<Bullet>();
+            popBulletScriptComponent.ResetTimeToLive();
+            popBulletScriptComponent.Damage = Damage;
+            popBullet.SetActive(true);
+            return popBullet;
+        }
+
+        public void AddBullet(GameObject bullet)
+        {
+            bullet.SetActive(false);
+            _pool.Push(bullet);
+        }
+
+        public int Count()
+        {
+            return _pool.Count;
+        }
+    }
+
 
     // Start is called before the first frame update
     void Start()
@@ -57,6 +101,8 @@ public class EnemyWeaponController : MonoBehaviour
             _bulletsInMagazine = _magazineSize;
             _reloadTimeLeft = 0;
         }
+
+        BulletPoolItems = _bulletPool.Count();
     }
 
     public void Shoot(Vector2 shootDirection)
@@ -70,7 +116,7 @@ public class EnemyWeaponController : MonoBehaviour
 
             shootDirection.Normalize();
 
-            GameObject bullet = Instantiate(_bulletPrefab, transform.position, _bulletPrefab.transform.rotation);
+            GameObject bullet = _bulletPool.GetBullet(_bulletPrefab, transform.position, 1f);
 
             Vector2 rotatedShootDirection = shootDirection;
             float randomAngle = Random.Range(-_bulletSpread, _bulletSpread);
@@ -97,7 +143,7 @@ public class EnemyWeaponController : MonoBehaviour
     public static void AddBulletToPool(GameObject bullet)
     {
         bullet.SetActive(false);
-        // TODO: Add bullet to pool
+        _bulletPool.AddBullet(bullet);
     }
 
 

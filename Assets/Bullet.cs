@@ -36,4 +36,9 @@ public class Bullet : MonoBehaviour
         EnemyWeaponController.AddBulletToPool(this.gameObject);
         return Damage;
     }
+
+    public void ResetTimeToLive()
+    {
+        _timeToLive = 5f;
+    }
 }
