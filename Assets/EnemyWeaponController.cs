@@ -16,6 +16,9 @@ public class EnemyWeaponController : MonoBehaviour
     private float _bulletSpeed = 5f;
 
     [SerializeField]
+    private float _damage = 1f;
+
+    [SerializeField]
     private float _fireRate = 1f; // Bullets per second
 
     [SerializeField]
@@ -33,6 +36,7 @@ public class EnemyWeaponController : MonoBehaviour
 
     private EnemyController _enemyController;
     private static BulletPool _bulletPool = new BulletPool();
+    private Collider2D _myCurrenCollider2D;
 
     [SerializeField]
     public int BulletPoolItems = 0;
@@ -41,13 +45,14 @@ public class EnemyWeaponController : MonoBehaviour
     {
         private Stack<GameObject> _pool = new Stack<GameObject>();
 
-        public GameObject GetBullet(GameObject _bulletPrefab, Vector3 position, float Damage)
+        public GameObject GetBullet(GameObject _bulletPrefab, Vector3 position, float Damage, Collider2D myCollider2D)
         {
             if (_pool.Count == 0)
             {
                 GameObject bullet = Instantiate(_bulletPrefab, position, _bulletPrefab.transform.rotation);
                 Bullet bulletScriptComponent = bullet.GetComponent<Bullet>();
                 bulletScriptComponent.Damage = Damage;
+                bulletScriptComponent.SetCollider(myCollider2D);
                 bulletScriptComponent.ResetTimeToLive();
                 return bullet;
             }
@@ -60,6 +65,7 @@ public class EnemyWeaponController : MonoBehaviour
             Bullet popBulletScriptComponent = popBullet.GetComponent<Bullet>();
             popBulletScriptComponent.ResetTimeToLive();
             popBulletScriptComponent.Damage = Damage;
+            popBulletScriptComponent.SetCollider(myCollider2D);
             popBullet.SetActive(true);
             return popBullet;
         }
@@ -74,6 +80,16 @@ public class EnemyWeaponController : MonoBehaviour
         {
             return _pool.Count;
         }
+
+        public void PrepareBullets(int i, GameObject _bulletPrefab, Vector3 position, float Damage, Collider2D myCollider2D)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                GameObject bullet = Instantiate(_bulletPrefab, Vector3.zero, _bulletPrefab.transform.rotation);
+                bullet.SetActive(false);
+                _pool.Push(bullet);
+            }
+        }
     }
 
 
@@ -82,6 +98,8 @@ public class EnemyWeaponController : MonoBehaviour
     {
         _bulletsInMagazine = _magazineSize;
         _enemyController = GetComponent<EnemyController>();
+        _myCurrenCollider2D = GetComponent<Collider2D>();
+        _bulletPool.PrepareBullets(_magazineSize, _bulletPrefab, Vector3.zero, _damage, _myCurrenCollider2D);
     }
 
     // Update is called once per frame
@@ -116,7 +134,7 @@ public class EnemyWeaponController : MonoBehaviour
 
             shootDirection.Normalize();
 
-            GameObject bullet = _bulletPool.GetBullet(_bulletPrefab, transform.position, 1f);
+            GameObject bullet = _bulletPool.GetBullet(_bulletPrefab, transform.position, _damage, _myCurrenCollider2D);
 
             Vector2 rotatedShootDirection = shootDirection;
             float randomAngle = Random.Range(-_bulletSpread, _bulletSpread);

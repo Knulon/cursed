@@ -1347,10 +1347,12 @@ MonoBehaviour:
   BulletRotationOffset: -90
   _bulletPrefab: {fileID: 1814608980210987177, guid: 53ac9caa79b0b294382c16fdf260b713, type: 3}
   _bulletSpeed: 50
+  _damage: 1
   _fireRate: 33
   _magazineSize: 999
   _reloadTime: 1
   _bulletSpread: 10
+  BulletPoolItems: 0
 --- !u!1 &1047037809
 GameObject:
   m_ObjectHideFlags: 0
@@ -2533,6 +2535,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 167748795782729290, guid: 14fe0fd2276913d4c91fb4b05fbe7649, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 830577588491994078, guid: 14fe0fd2276913d4c91fb4b05fbe7649, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 869887287360908417, guid: 14fe0fd2276913d4c91fb4b05fbe7649, type: 3}
       propertyPath: m_Name
       value: Enemy

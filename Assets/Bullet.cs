@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    Collider2D _collider;
+
     public float Damage
     {
         get;
@@ -40,5 +42,11 @@ public class Bullet : MonoBehaviour
     public void ResetTimeToLive()
     {
         _timeToLive = 5f;
+    }
+
+    public void SetCollider(Collider2D collider)
+    {
+        _collider = collider;
+        Physics2D.IgnoreCollision(_collider, GetComponent<Collider2D>());
     }
 }
