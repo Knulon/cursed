@@ -13,6 +13,15 @@ public class EnemyInfoManager : MonoBehaviour
     [SerializeField]
     private float detectPlayerRadius = 5f;
 
+    [SerializeField]
+    private float attackPlayerRadius = 1f;
+
+    [SerializeField]
+    private float pathPointReachedRadius = 0.1f;
+
+    [SerializeField]
+    private float playerMovedTooMuchRadius = 0.5f;
+
 
 
     // Start is called before the first frame update
@@ -41,6 +50,23 @@ public class EnemyInfoManager : MonoBehaviour
         return detectPlayerRadius;
     }
 
+    public float GetAttackPlayerRadius()
+    {
+        return attackPlayerRadius;
+    }
+
+    public float GetPathPointReachedRadius()
+    {
+        return pathPointReachedRadius;
+    }
+
+    public float GetPlayerMovedTooMuchRadius()
+    {
+        return playerMovedTooMuchRadius;
+    }
+
+
+
     public void OnDrawGizmos()
     {
         if (playerInSight)
@@ -58,5 +84,18 @@ public class EnemyInfoManager : MonoBehaviour
         {
             Gizmos.DrawLine(gameObject.transform.position, player.transform.position);
         }
+
+        if (playerInAttackRange)
+        {
+            Gizmos.color = Color.yellow;
+        }
+        else
+        {
+            Gizmos.color = Color.black;
+        }
+        Gizmos.DrawWireSphere(gameObject.transform.position, attackPlayerRadius);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(gameObject.transform.position, pathPointReachedRadius);
     }
 }

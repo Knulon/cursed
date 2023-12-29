@@ -5,24 +5,17 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using UnityEngine;
 using TheKiwiCoder;
-using TMPro;
 using Debug = UnityEngine.Debug;
 
 public class FindPath : ActionNode
 {
     public List<Vector2> path = new();
     private static Dictionary<int, Task<List<Vector2>>> pathfindingTasks = new();
-    private Vector2 goal;
-
     private Stopwatch stopwatch = new();
-    public TMP_Text TextField;
 
     protected override void OnStart()
     {
-        TextField = GameObject.Find("Text (TMP)").GetComponent<TMP_Text>();
-
-        Vector2 start = new Vector2(context.transform.position.x, context.transform.position.y);
-        goal = new Vector2(4.0f, 4.0f);
+        pathfindingTasks.TryAdd(nodeId, null);
 
         if (pathfindingTasks[nodeId] != null && pathfindingTasks[nodeId].Status == TaskStatus.Running)
         {
@@ -31,10 +24,28 @@ public class FindPath : ActionNode
 
         stopwatch.Reset();
         stopwatch.Start();
+
+        Vector2 start = new Vector2(context.transform.position.x, context.transform.position.y);
         pathfindingTasks[nodeId] = Task.Run(() =>
         {
             List<Vector2> localPath = new List<Vector2>();
-            localPath.AddRange(context.AStarHandler.GetPath(start, goal, context.gameObject));
+
+            if (context.pathGoal == Vector2.negativeInfinity)
+            {
+                throw new Exception("Path goal not set.");
+            }
+
+            if (context.AStarHandler == null)
+            {
+                throw new Exception("AStarHandler not set.");
+            }
+
+            if (context.gameObject == null)
+            {
+                throw new Exception("GameObject not set.");
+            }
+
+            localPath.AddRange(context.AStarHandler.GetPath(start, context.pathGoal, context.gameObject));
             return localPath;
         });
         context.spriteRenderer.color = Color.red;
@@ -46,16 +57,13 @@ public class FindPath : ActionNode
 
     protected override State OnUpdate()
     {
-        if (pathfindingTasks[nodeId].IsCompleted)
+        if (pathfindingTasks[nodeId].IsCompletedSuccessfully)
         {
             path = pathfindingTasks[nodeId].Result;
+            context.path = path;
             context.displayPath.Display(path);
             stopwatch.Stop();
             Debug.Log("Pathfinding task completed in " + stopwatch.ElapsedMilliseconds + "ms");
-            if (TextField != null)
-            {
-                TextField.text = "Pathfinding task completed in " + stopwatch.ElapsedMilliseconds + "ms";
-            }
             context.spriteRenderer.color = Color.green;
             return State.Success;
         }
@@ -67,6 +75,7 @@ public class FindPath : ActionNode
 
         if (pathfindingTasks[nodeId].IsFaulted)
         {
+            Debug.LogError("Pathfinding task failed: " + pathfindingTasks[nodeId].Exception);
             return State.Failure;
         }
 

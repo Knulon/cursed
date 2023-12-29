@@ -17,16 +17,21 @@ namespace TheKiwiCoder {
         public NavMeshAgent agent;
         public CharacterController characterController;
         public Collider2D collider;
-        public Collider2D visionCollider;
         public SpriteRenderer spriteRenderer;
         public AStar_Handler AStarHandler;
         public EnemyController enemyController;
+        public EnemyWeaponController enemyWeaponController;
         public EnemyInfoManager enemyInfoManager;
         public DisplayPath displayPath;
         public GameObject player;
         public Collider2D playerCollider;
         // TODO: This is where I need to add Components I want to access in my BTs
         // Add other game specific systems here
+
+        public bool isGoalMoving = false;
+        public bool isGoalReached = false;
+        public Vector2 pathGoal = Vector2.negativeInfinity;
+        public List<Vector2> path = new List<Vector2>();
 
         public static Context CreateFromGameObject(GameObject gameObject) {
             // Fetch all commonly used components
@@ -41,6 +46,7 @@ namespace TheKiwiCoder {
             context.spriteRenderer = context.gameObject.GetComponent<SpriteRenderer>();
             context.AStarHandler = context.gameObject.GetComponent<AStar_Handler>();
             context.enemyController = context.gameObject.GetComponent<EnemyController>();
+            context.enemyWeaponController = context.gameObject.GetComponent<EnemyWeaponController>();
             context.enemyInfoManager = context.gameObject.GetComponent<EnemyInfoManager>();
             context.displayPath = context.gameObject.GetComponent<DisplayPath>();
             context.player = GameObject.FindGameObjectWithTag("Player");

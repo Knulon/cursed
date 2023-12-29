@@ -40,7 +40,7 @@ public class EnemyController : MonoBehaviour
         //_velocity = Mathf.Clamp(_velocity, 0, maxVelocity);
     }
 
-    void Move()
+    public void Move()
     {
         _isMoving = true;
         // If direction changed a lot prioritize the new direction

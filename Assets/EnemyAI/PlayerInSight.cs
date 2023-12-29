@@ -19,8 +19,8 @@ public class PlayerInSight : ActionNode
 
     protected override State OnUpdate()
     {
-        Vector2 direction = context.player.transform.position - context.gameObject.transform.position;
-        float angle = Vector2.Angle(direction, context.gameObject.transform.up);
+        Vector2 direction = context.player.transform.position - context.transform.position;
+        float angle = Vector2.Angle(direction, context.transform.up);
 
         // TODO: Check if this is needed and then implement the fov angle check
         //if (angle < 0)
@@ -40,7 +40,7 @@ public class PlayerInSight : ActionNode
 
         foreach (RaycastHit2D hit in hits)
         {
-            if (hit.collider.gameObject.tag != "Player")
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Obstacle")) // Changed from test if not player to test if obstacle because of bullets triggering this
             {
                 Debug.Log("Player out of sight.");
                 context.enemyInfoManager.SetPlayerInSight(false);
