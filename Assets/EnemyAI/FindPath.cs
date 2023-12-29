@@ -10,14 +10,15 @@ using Debug = UnityEngine.Debug;
 public class FindPath : ActionNode
 {
     public List<Vector2> path = new();
-    private static Dictionary<int, Task<List<Vector2>>> pathfindingTasks = new();
+    public int TaskId;
+    private static Dictionary<int, Task<List<Vector2>>> pathfindingTasks = new(); // TODO: Currently this can not be static, because the TaskId is unique per node but not per enemy. So if two enemies are pathfinding at the same time, they will block each others tasks.
     private Stopwatch stopwatch = new();
 
     protected override void OnStart()
     {
-        pathfindingTasks.TryAdd(nodeId, null);
+        pathfindingTasks.TryAdd(TaskId, null);
 
-        if (pathfindingTasks[nodeId] != null && pathfindingTasks[nodeId].Status == TaskStatus.Running)
+        if (pathfindingTasks[TaskId] != null && pathfindingTasks[TaskId].Status == TaskStatus.Running)
         {
             return;
         }
@@ -26,7 +27,7 @@ public class FindPath : ActionNode
         stopwatch.Start();
 
         Vector2 start = new Vector2(context.transform.position.x, context.transform.position.y);
-        pathfindingTasks[nodeId] = Task.Run(() =>
+        pathfindingTasks[TaskId] = Task.Run(() =>
         {
             List<Vector2> localPath = new List<Vector2>();
 
@@ -57,9 +58,9 @@ public class FindPath : ActionNode
 
     protected override State OnUpdate()
     {
-        if (pathfindingTasks[nodeId].IsCompletedSuccessfully)
+        if (pathfindingTasks[TaskId].IsCompletedSuccessfully)
         {
-            path = pathfindingTasks[nodeId].Result;
+            path = pathfindingTasks[TaskId].Result;
             context.path = path;
             context.displayPath.Display(path);
             stopwatch.Stop();
@@ -68,14 +69,14 @@ public class FindPath : ActionNode
             return State.Success;
         }
 
-        if (pathfindingTasks[nodeId].Status == TaskStatus.Running)
+        if (pathfindingTasks[TaskId].Status == TaskStatus.Running)
         {
             return State.Running;
         }
 
-        if (pathfindingTasks[nodeId].IsFaulted)
+        if (pathfindingTasks[TaskId].IsFaulted)
         {
-            Debug.LogError("Pathfinding task failed: " + pathfindingTasks[nodeId].Exception);
+            Debug.LogError("Pathfinding task failed: " + pathfindingTasks[TaskId].Exception);
             return State.Failure;
         }
 
@@ -85,6 +86,11 @@ public class FindPath : ActionNode
     void OnGui()
     {
         GUILayout.Label("Pathfinding task completed in " + stopwatch.ElapsedMilliseconds + "ms");
+    }
+
+    public static Dictionary<int, Task<List<Vector2>>> GetPathfindingTasks()
+    {
+        return pathfindingTasks;
     }
 
 }

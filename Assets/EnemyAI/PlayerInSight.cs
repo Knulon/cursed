@@ -42,13 +42,11 @@ public class PlayerInSight : ActionNode
         {
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Obstacle")) // Changed from test if not player to test if obstacle because of bullets triggering this
             {
-                Debug.Log("Player out of sight.");
                 context.enemyInfoManager.SetPlayerInSight(false);
                 return State.Failure;
             }
         }
 
-        Debug.Log("Player in sight.");
         context.enemyInfoManager.SetPlayerInSight(true);
         return State.Success;
     }

@@ -31,6 +31,7 @@ namespace TheKiwiCoder {
         public bool isGoalMoving = false;
         public bool isGoalReached = false;
         public Vector2 pathGoal = Vector2.negativeInfinity;
+        public Vector2 oldPathGoal = Vector2.negativeInfinity;
         public List<Vector2> path = new List<Vector2>();
 
         public static Context CreateFromGameObject(GameObject gameObject) {

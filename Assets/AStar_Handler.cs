@@ -9,6 +9,9 @@ public class AStar_Handler : MonoBehaviour
     private int Denominator = 0;
     [SerializeField]
     private Vector2 _gridOffset = new(0, 0);
+    [Header("Collision Box Size is usually _resolution / 2")]
+    [SerializeField]
+    private float _collisionBoxSize = 0.5f;
 
     private AStarOnNodes _astar;
 
@@ -16,7 +19,7 @@ public class AStar_Handler : MonoBehaviour
     void Start()
     {
         Debug.Log("Init Astar with " + Numerator + "/" + Denominator +  " grid");
-        _astar = new AStarOnNodes(_gridOffset,Numerator, Denominator);
+        _astar = new AStarOnNodes(_gridOffset,Numerator, Denominator, _collisionBoxSize);
         _astar.BuildBlockedTilesHashMap(new(Numerator,Denominator),3000);
     }
 
