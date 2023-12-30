@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -33,6 +34,7 @@ namespace TheKiwiCoder {
         public Vector2 pathGoal = Vector2.negativeInfinity;
         public Vector2 oldPathGoal = Vector2.negativeInfinity;
         public List<Vector2> path = new List<Vector2>();
+        public Dictionary<int, Task<List<Vector2>>> PathfindingTasks;
 
         public static Context CreateFromGameObject(GameObject gameObject) {
             // Fetch all commonly used components
@@ -52,6 +54,7 @@ namespace TheKiwiCoder {
             context.displayPath = context.gameObject.GetComponent<DisplayPath>();
             context.player = GameObject.FindGameObjectWithTag("Player");
             context.playerCollider = context.player.GetComponent<Collider2D>();
+            context.PathfindingTasks = new Dictionary<int, Task<List<Vector2>>>();
 
             // Add whatever else you need here...
 

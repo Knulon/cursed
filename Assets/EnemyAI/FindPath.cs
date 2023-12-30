@@ -11,14 +11,16 @@ public class FindPath : ActionNode
 {
     public List<Vector2> path = new();
     public int TaskId;
-    private static Dictionary<int, Task<List<Vector2>>> pathfindingTasks = new(); // TODO: Currently this can not be static, because the TaskId is unique per node but not per enemy. So if two enemies are pathfinding at the same time, they will block each others tasks.
     private Stopwatch stopwatch = new();
+    private Dictionary<int, Task<List<Vector2>>> _pathfindingTasks;
+
 
     protected override void OnStart()
     {
-        pathfindingTasks.TryAdd(TaskId, null);
+        _pathfindingTasks = context.PathfindingTasks;
+        _pathfindingTasks.TryAdd(TaskId, null);
 
-        if (pathfindingTasks[TaskId] != null && pathfindingTasks[TaskId].Status == TaskStatus.Running)
+        if (_pathfindingTasks[TaskId] != null && _pathfindingTasks[TaskId].Status == TaskStatus.Running)
         {
             return;
         }
@@ -27,7 +29,7 @@ public class FindPath : ActionNode
         stopwatch.Start();
 
         Vector2 start = new Vector2(context.transform.position.x, context.transform.position.y);
-        pathfindingTasks[TaskId] = Task.Run(() =>
+        _pathfindingTasks[TaskId] = Task.Run(() =>
         {
             List<Vector2> localPath = new List<Vector2>();
 
@@ -58,9 +60,9 @@ public class FindPath : ActionNode
 
     protected override State OnUpdate()
     {
-        if (pathfindingTasks[TaskId].IsCompletedSuccessfully)
+        if (_pathfindingTasks[TaskId].IsCompletedSuccessfully)
         {
-            path = pathfindingTasks[TaskId].Result;
+            path = _pathfindingTasks[TaskId].Result;
             context.path = path;
             context.displayPath.Display(path);
             stopwatch.Stop();
@@ -69,14 +71,14 @@ public class FindPath : ActionNode
             return State.Success;
         }
 
-        if (pathfindingTasks[TaskId].Status == TaskStatus.Running)
+        if (_pathfindingTasks[TaskId].Status == TaskStatus.Running)
         {
             return State.Running;
         }
 
-        if (pathfindingTasks[TaskId].IsFaulted)
+        if (_pathfindingTasks[TaskId].IsFaulted)
         {
-            Debug.LogError("Pathfinding task failed: " + pathfindingTasks[TaskId].Exception);
+            Debug.LogError("Pathfinding task failed: " + _pathfindingTasks[TaskId].Exception);
             return State.Failure;
         }
 
@@ -87,10 +89,4 @@ public class FindPath : ActionNode
     {
         GUILayout.Label("Pathfinding task completed in " + stopwatch.ElapsedMilliseconds + "ms");
     }
-
-    public static Dictionary<int, Task<List<Vector2>>> GetPathfindingTasks()
-    {
-        return pathfindingTasks;
-    }
-
 }

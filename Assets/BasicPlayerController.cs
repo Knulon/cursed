@@ -35,10 +35,17 @@ public class BasicPlayerController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-        Debug.Log("Player triggered " + collider.gameObject.name);
         if (collider.gameObject.name == "Key")
         {
+            Debug.Log("Key has been picked up.");
             HasKey = true;
+            Destroy(collider.gameObject);
+        }
+        if(collider.gameObject.name == "ExitTrigger")
+        {
+            Debug.Log("Player has reached the exit.");
+            HasKey = false;
+            // TODO: Level transition as in: Destroy all enemies, close doors, spawn new enemies, spawn key, etc.
             Destroy(collider.gameObject);
         }
     }

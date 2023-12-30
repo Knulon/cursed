@@ -10,11 +10,11 @@ public class FinishPathfinding : ActionNode
 {
     public List<Vector2> path = new();
     public int TaskId;
-    private Dictionary<int, Task<List<Vector2>>> pathfindingTasks;
+    private Dictionary<int, Task<List<Vector2>>> _pathfindingTasks;
 
     protected override void OnStart()
     {
-        pathfindingTasks = FindPath.GetPathfindingTasks();
+        _pathfindingTasks = context.PathfindingTasks;
 
     }
 
@@ -22,29 +22,29 @@ public class FinishPathfinding : ActionNode
     }
 
     protected override State OnUpdate() {
-        if (!pathfindingTasks.ContainsKey(TaskId))
+        if (!_pathfindingTasks.ContainsKey(TaskId))
         {
             Debug.LogError("TaskId not found: " + TaskId + ". Make sure to have the same TaskId as the corresponding FindTask-Node. And this node needs a succeed decorator :D");
             return State.Failure;
         }
 
-        if (pathfindingTasks[TaskId].IsCompletedSuccessfully)
+        if (_pathfindingTasks[TaskId].IsCompletedSuccessfully)
         {
-            path = pathfindingTasks[TaskId].Result;
+            path = _pathfindingTasks[TaskId].Result;
             context.path = path;
             context.displayPath.Display(path);
             context.spriteRenderer.color = Color.green;
             return State.Success;
         }
 
-        if (pathfindingTasks[TaskId].Status == TaskStatus.Running)
+        if (_pathfindingTasks[TaskId].Status == TaskStatus.Running)
         {
             return State.Running;
         }
 
-        if (pathfindingTasks[TaskId].IsFaulted)
+        if (_pathfindingTasks[TaskId].IsFaulted)
         {
-            Debug.LogError("Pathfinding task failed: " + pathfindingTasks[TaskId].Exception);
+            Debug.LogError("Pathfinding task failed: " + _pathfindingTasks[TaskId].Exception);
             return State.Failure;
         }
         return State.Success;
