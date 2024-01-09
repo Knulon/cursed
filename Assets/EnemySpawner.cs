@@ -1,7 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -22,6 +22,9 @@ public class EnemySpawner : MonoBehaviour
     private GameObject _key;
 
     [SerializeField]
+    private int _numberOfEnemies = 20;
+
+    [SerializeField]
     private bool SpawnEnemies = true;
 
     private float spawnBucket;
@@ -33,7 +36,7 @@ public class EnemySpawner : MonoBehaviour
     {
         Stack<GameObject> _pool = new();
 
-        public GameObject GetEnemy(GameObject enemyPrefab,Vector3 position, GameObject exitTrigger)
+        public GameObject GetEnemy(GameObject enemyPrefab, Vector3 position, GameObject exitTrigger)
         {
             if (_pool.Count == 0)
             {
@@ -59,7 +62,7 @@ public class EnemySpawner : MonoBehaviour
             _pool.Push(enemy);
         }
 
-        public void PrepareEnemies(GameObject enemyPrefab,int count)
+        public void PrepareEnemies(GameObject enemyPrefab, int count)
         {
             GameObject enemy = Instantiate(enemyPrefab, Vector3.zero, enemyPrefab.transform.rotation);
             EnemyInfoManager enemyInfoManager = enemy.GetComponent<EnemyInfoManager>();
@@ -83,7 +86,7 @@ public class EnemySpawner : MonoBehaviour
     {
         if (enemyPool.Count() == 0)
         {
-            enemyPool.PrepareEnemies(_enemyPrefab,300);
+            enemyPool.PrepareEnemies(_enemyPrefab, 300);
         }
     }
 
@@ -94,19 +97,24 @@ public class EnemySpawner : MonoBehaviour
         if (SpawnEnemies)
         {
             SpawnEnemyAtRate();
-            Debug.Log(enemyPool.Count());
+        }
+
+        if (_numberOfEnemies <= 0)
+        {
+            SpawnEnemies = false;
         }
     }
 
     void SpawnEnemyAtRate()
     {
-        spawnBucket += (_spawnRatePerSecond * Time.deltaTime) * (1 - Random.Range(-0.3f, 0.3f));
+        spawnBucket += (_spawnRatePerSecond * Time.deltaTime);
 
         if (spawnBucket >= 1f)
         {
             int enemiesToSpawn = (int)spawnBucket;
 
             spawnBucket -= enemiesToSpawn;
+            _numberOfEnemies -= enemiesToSpawn;
             for (int i = 0; i < enemiesToSpawn; i++)
             {
                 SpawnEnemy();
@@ -118,7 +126,7 @@ public class EnemySpawner : MonoBehaviour
     {
         Vector3 spawnPosition = transform.position + Random.insideUnitSphere * _spawnRadius;
         spawnPosition.z = 0f;
-        GameObject enemy = enemyPool.GetEnemy(_enemyPrefab,spawnPosition,_exitTrigger);
+        GameObject enemy = enemyPool.GetEnemy(_enemyPrefab, spawnPosition, _exitTrigger);
     }
 
     void OnDrawGizmos()

@@ -1074,6 +1074,7 @@ MonoBehaviour:
   _spawnRadius: 5
   _exitTrigger: {fileID: 1504159239}
   _key: {fileID: 0}
+  _numberOfEnemies: 20
   SpawnEnemies: 1
 --- !u!4 &683965737
 Transform:
