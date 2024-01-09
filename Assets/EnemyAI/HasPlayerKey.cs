@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TheKiwiCoder;
 
-public class HasPathGoal : ActionNode
+public class HasPlayerKey : ActionNode
 {
     protected override void OnStart() {
     }
@@ -12,11 +12,11 @@ public class HasPathGoal : ActionNode
     }
 
     protected override State OnUpdate() {
-        if (context.pathGoal.Equals(Vector2.negativeInfinity))
+        if (context.playerController.HasKey)
         {
-            return State.Failure;
+            return State.Success;
         }
 
-        return State.Success;
+        return State.Failure;
     }
 }

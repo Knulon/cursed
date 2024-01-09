@@ -22,6 +22,7 @@ public class EnemyInfoManager : MonoBehaviour
     [SerializeField]
     private float playerMovedTooMuchRadius = 0.5f;
 
+    [SerializeField] private GameObject exitTrigger;
 
 
     // Start is called before the first frame update
@@ -65,6 +66,10 @@ public class EnemyInfoManager : MonoBehaviour
         return playerMovedTooMuchRadius;
     }
 
+    public GameObject GetExitTrigger()
+    {
+        return exitTrigger;
+    }
 
 
     public void OnDrawGizmos()
