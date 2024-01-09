@@ -1070,7 +1070,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyPrefab: {fileID: 6135936883085294053, guid: 2275f736cf952774ea2b686c208a131e, type: 3}
-  _spawnRatePerSecond: 20
+  _spawnRatePerSecond: 0.5
   _spawnRadius: 5
   _exitTrigger: {fileID: 1504159239}
   _key: {fileID: 0}
