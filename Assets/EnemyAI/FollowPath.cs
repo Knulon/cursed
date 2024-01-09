@@ -19,7 +19,8 @@ public class FollowPath : ActionNode
 
         if (context.path.Count == 0)
         {
-            Debug.LogError("Path is empty."); // TODO: This can happen if the player or enemy is in a tile marked as unwalkable because of a low resolution in the A* grid. Fix this. Example: Unstuck the enemy with a node.
+            //Debug.LogError("Path is empty."); // TODO: This can happen if the player or enemy is in a tile marked as unwalkable because of a low resolution in the A* grid. Fix this. Example: Unstuck the enemy with a node.
+            context.isPathValid = false;
             return State.Failure; // This should never happen.
         }
 

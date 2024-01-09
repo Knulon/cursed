@@ -7,6 +7,7 @@ public class ClearPath : ActionNode
 {
     protected override void OnStart() {
         context.path.Clear();
+        context.isPathValid = false;
     }
 
     protected override void OnStop() {

@@ -12,11 +12,11 @@ public class IsPathValid : ActionNode
     }
 
     protected override State OnUpdate() {
-        if (context.path.Count == 0)
+        if (context.isPathValid)
         {
-            return State.Failure;
+            return State.Success;
         }
 
-        return State.Success;
+        return State.Failure;
     }
 }

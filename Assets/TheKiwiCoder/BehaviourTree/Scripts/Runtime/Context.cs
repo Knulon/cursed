@@ -31,10 +31,11 @@ namespace TheKiwiCoder {
         // Add other game specific systems here
 
         public bool isGoalMoving = false;
-        public bool isGoalReached = false;
+        public bool isPathValid = false;
         public Vector2 pathGoal = Vector2.negativeInfinity;
-        public Vector2 oldPathGoal = Vector2.negativeInfinity;
-        public List<Vector2> path = new List<Vector2>();
+        public List<Vector2> path = new();
+        public bool isExitGuard = false;
+        public bool ExitGuardDecisionMade = false;
         public Dictionary<int, Task<List<Vector2>>> PathfindingTasks;
 
         public static Context CreateFromGameObject(GameObject gameObject) {

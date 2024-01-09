@@ -18,10 +18,12 @@ public class FinishPathfinding : ActionNode
 
     }
 
-    protected override void OnStop() {
+    protected override void OnStop()
+    {
     }
 
-    protected override State OnUpdate() {
+    protected override State OnUpdate()
+    {
         if (!_pathfindingTasks.ContainsKey(TaskId))
         {
             Debug.LogError("TaskId not found: " + TaskId + ". Make sure to have the same TaskId as the corresponding FindTask-Node. And this node needs a succeed decorator :D");
@@ -32,6 +34,10 @@ public class FinishPathfinding : ActionNode
         {
             path = _pathfindingTasks[TaskId].Result;
             context.path = path;
+            if (path.Count > 0)
+            {
+                context.isPathValid = true;
+            }
             context.displayPath.Display(path);
             context.spriteRenderer.color = Color.green;
             return State.Success;
