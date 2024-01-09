@@ -209,7 +209,11 @@ public class AStarOnNodes
 
     public void BuildBlockedTilesHashMap(Pair resolutionFraction, int axisSteps)
     {
-        blockedTiles[resolutionFraction].Clear();
+        if (blockedTiles[resolutionFraction].Count > 0)
+        {
+            Debug.Log("Blocked tiles count: " + blockedTiles[resolutionFraction].Count);
+            return;
+        }
         List<Collider2D> overlapColliders = new List<Collider2D>();
         for (int i = 0; i < axisSteps; i++)
         {

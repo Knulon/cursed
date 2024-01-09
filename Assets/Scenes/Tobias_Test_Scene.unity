@@ -1040,6 +1040,56 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!1 &683965735
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 683965737}
+  - component: {fileID: 683965736}
+  m_Layer: 0
+  m_Name: EnemySpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &683965736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 683965735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0787d6dacd0db644b85e616c366f09d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyPrefab: {fileID: 6135936883085294053, guid: 2275f736cf952774ea2b686c208a131e, type: 3}
+  _spawnRatePerSecond: 20
+  _spawnRadius: 5
+  _exitTrigger: {fileID: 1504159239}
+  _key: {fileID: 0}
+  SpawnEnemies: 1
+--- !u!4 &683965737
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 683965735}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 59.09, y: 15.48, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &727183813
 GameObject:
   m_ObjectHideFlags: 0
@@ -1764,6 +1814,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  Key: 0
 --- !u!114 &1261750352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2809,17 +2860,21 @@ PrefabInstance:
       propertyPath: exitTrigger
       value: 
       objectReference: {fileID: 1504159239}
+    - target: {fileID: 3328961124400260375, guid: 2275f736cf952774ea2b686c208a131e, type: 3}
+      propertyPath: _bulletSpread
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 6135936883085294053, guid: 2275f736cf952774ea2b686c208a131e, type: 3}
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 6830247349915746365, guid: 2275f736cf952774ea2b686c208a131e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 33.99
       objectReference: {fileID: 0}
     - target: {fileID: 6830247349915746365, guid: 2275f736cf952774ea2b686c208a131e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 14.48
       objectReference: {fileID: 0}
     - target: {fileID: 6830247349915746365, guid: 2275f736cf952774ea2b686c208a131e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2884,3 +2939,4 @@ SceneRoots:
   - {fileID: 2104426174}
   - {fileID: 1504159241}
   - {fileID: 727183816}
+  - {fileID: 683965737}

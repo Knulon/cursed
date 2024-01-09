@@ -10,6 +10,8 @@ public class EnemyInfoManager : MonoBehaviour
     private bool playerInSight;
     private bool playerInAttackRange;
 
+    [SerializeField] public float Health { get; set; } = 100f;
+
     [SerializeField]
     private float detectPlayerRadius = 5f;
 
@@ -34,11 +36,6 @@ public class EnemyInfoManager : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     public bool SetPlayerInSight(bool value)
     {
@@ -69,6 +66,11 @@ public class EnemyInfoManager : MonoBehaviour
     public GameObject GetExitTrigger()
     {
         return exitTrigger;
+    }
+
+    public void SetExitTrigger(GameObject value)
+    {
+        exitTrigger = value;
     }
 
 

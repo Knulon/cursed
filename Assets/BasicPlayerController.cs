@@ -6,7 +6,10 @@ using UnityEngine;
 public class BasicPlayerController : MonoBehaviour
 {
     [SerializeField] public float health = 100f;
+    
     public bool HasKey { get; private set; } = false;
+
+    [SerializeField] public bool Key = false;
 
     // Start is called before the first frame update
     void Start()
@@ -17,7 +20,7 @@ public class BasicPlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        HasKey = Key;
     }
 
 

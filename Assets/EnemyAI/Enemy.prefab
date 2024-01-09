@@ -307,7 +307,7 @@ MonoBehaviour:
   _bulletSpeed: 50
   _damage: 1
   _fireRate: 33
-  _magazineSize: 999
+  _magazineSize: 10
   _reloadTime: 1
   _bulletSpread: 10
   BulletPoolItems: 0

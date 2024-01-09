@@ -39,7 +39,7 @@ public class EnemyWeaponController : MonoBehaviour
     private Collider2D _myCurrenCollider2D;
 
     [SerializeField]
-    public int BulletPoolItems = 0;
+    public int BulletPoolItems = 0; // For debugging
 
     class BulletPool
     {
