@@ -9,7 +9,6 @@ public class PlayerBullet : MonoBehaviour
     // Start is called before the first frame update
     public float speed = 50f;
     public GameObject player;
-    public float damage;
     public float Damage;
     void Start()
     {
