@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements.Experimental;
@@ -81,7 +82,7 @@ public class PlayerMoveScript : MonoBehaviour
     [SerializeField]
     float speed = 1;
 
-    bool HasKey = false;
+    bool hasKey = false;
 
 
     [SerializeField]
@@ -144,8 +145,7 @@ public class PlayerMoveScript : MonoBehaviour
     float animationTimer = 0;
     bool animateIn = true;
 
-
-    bool allowAttack = true;
+    private int LEVEL = 0;
 
 
 
@@ -177,7 +177,7 @@ public class PlayerMoveScript : MonoBehaviour
 
         // hideNonVisibleObjects();
         centerCam();
-        centerHider();
+        // centerHider();
         move();
         scale(); // only for tests
         // not yet implemented
@@ -211,10 +211,8 @@ public class PlayerMoveScript : MonoBehaviour
                 break;
             case Debuffs.NoAttack:
                 invertedControls = false;
-                allowAttack = false;
                 break;
             case Debuffs.NONE:
-                allowAttack = true;
                 break;
         }
 
@@ -259,11 +257,31 @@ public class PlayerMoveScript : MonoBehaviour
 
         if (collision.gameObject.name == "Key")
         {
-            HasKey = true;
+            // Debug.Log("COllisssion with key!!");
+            hasKey = true;
 
-            //teleport Key to nex level
-            Destroy(collision.gameObject);
+            //teleport Key to next level
+            teleportToLevel(collision.gameObject, LEVEL + 1);
         }
+
+        if (collision.gameObject.name.StartsWith("TELEPORTER"))
+        {
+            Debug.Log("TELEPORT");
+            GameObject[] spawner = GameObject.FindGameObjectsWithTag("SPAWN");
+            foreach (var spawn in spawner)
+            {
+                if (spawn.name.EndsWith("" + (LEVEL+1)))
+                {
+                    transform.position = spawn.transform.position;
+                    nextDebuff();
+                    LEVEL++;
+                    hasKey = false;
+                    break;
+                }
+            }
+            
+        }
+
 
         if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
         {
@@ -272,9 +290,9 @@ public class PlayerMoveScript : MonoBehaviour
 
 
             // thís!!
-            //  Bullet bullet = collision.gameObject.GetComponent<Bullet>();
-            //  damage(Damage.ENEMYNORMAL, bullet.damage);
-            //  bullet.GetDamageAndSendToPool();
+            Bullet bullet = collision.gameObject.GetComponent<Bullet>();
+            damage(Damage.ENEMY, bullet.GetDamageAndSendToPool());
+            
 
 
 
@@ -285,12 +303,33 @@ public class PlayerMoveScript : MonoBehaviour
         }
     }
 
+    private void teleportToLevel(GameObject obj, int v)
+    {
+        GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("keypos");
+        foreach(GameObject n in gameObjects)
+        {
+            if (n.name.EndsWith("" + v))
+            {
+                n.SetActive(false);
+                obj.transform.position = n.transform.position;
+            }
+        }
+    }
+
+    public bool HasKey()
+    {
+        return hasKey;
+    }
+
     void OnTriggerEnter2D(Collider2D collider)
     {
+
+        
+
         if (collider.gameObject.name == "ExitTrigger")
         {
             Debug.Log("Player has reached the exit.");
-            HasKey = false;
+            hasKey = false;
             // TODO: Level transition as in: Destroy all enemies, close doors, spawn new enemies, spawn key, etc.
             Destroy(collider.gameObject);
         }
@@ -305,7 +344,7 @@ public class PlayerMoveScript : MonoBehaviour
                 lives -= 1;
                 break;
             case Damage.ENEMY:
-                lives -= bulletBaseDamage+dam;
+                lives -= dam;
                 break;
             default: return false;
         }
