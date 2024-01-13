@@ -28,7 +28,7 @@ public class RoamInLevel : ActionNode
             minimumTimeDirectionCounter = minimumTimeInDirection;
         }
 
-        context.enemyController.Move();
+        context.enemyController.Move(true);
 
         return State.Success;
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,21 +11,47 @@ public class EnemyInfoManager : MonoBehaviour
     private bool playerInSight;
     private bool playerInAttackRange;
 
-    [SerializeField] public float Health { get; set; } = 100f;
+
+    public float Health
+    {
+        get => _health;
+        set
+        {
+            _health = Mathf.Clamp(value, 0, _maxHealth);
+            _healthBar.transform.localScale = new Vector3(_health / _maxHealth * _healthBarTransformScale.x, _healthBarTransformScale.y, 1);
+            if (Health > 99.8f)
+            {
+                _healthBar.SetActive(false);
+            }
+            else
+            {
+                _healthBar.SetActive(true);
+            }
+        }
+    }
 
     [SerializeField]
-    private float detectPlayerRadius = 5f;
+    private float _health = 100f;
+
+    private float _maxHealth = 100f;
 
     [SerializeField]
-    private float attackPlayerRadius = 1f;
+    public float _detectPlayerRadius = 5f;
 
     [SerializeField]
-    private float pathPointReachedRadius = 0.1f;
+    public float _attackPlayerRadius = 1f;
 
     [SerializeField]
-    private float playerMovedTooMuchRadius = 0.5f;
+    public float _pathPointReachedRadius = 0.1f;
 
-    [SerializeField] private GameObject exitTrigger;
+    [SerializeField]
+    private float _playerMovedTooMuchRadius = 0.5f;
+
+    [SerializeField] private GameObject _exitTrigger;
+
+    [SerializeField] private GameObject _healthBar;
+
+    private Vector3 _healthBarTransformScale;
 
 
     // Start is called before the first frame update
@@ -33,7 +60,7 @@ public class EnemyInfoManager : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         playerCollider = player.GetComponent<Collider2D>();
         colliders = gameObject.GetComponents<Collider2D>();
-
+        _healthBarTransformScale =  _healthBar.transform.localScale;
     }
 
 
@@ -45,32 +72,32 @@ public class EnemyInfoManager : MonoBehaviour
 
     public float GetDetectPlayerRadius()
     {
-        return detectPlayerRadius;
+        return _detectPlayerRadius;
     }
 
     public float GetAttackPlayerRadius()
     {
-        return attackPlayerRadius;
+        return _attackPlayerRadius;
     }
 
     public float GetPathPointReachedRadius()
     {
-        return pathPointReachedRadius;
+        return _pathPointReachedRadius;
     }
 
     public float GetPlayerMovedTooMuchRadius()
     {
-        return playerMovedTooMuchRadius;
+        return _playerMovedTooMuchRadius;
     }
 
     public GameObject GetExitTrigger()
     {
-        return exitTrigger;
+        return _exitTrigger;
     }
 
     public void SetExitTrigger(GameObject value)
     {
-        exitTrigger = value;
+        _exitTrigger = value;
     }
 
 
@@ -85,7 +112,7 @@ public class EnemyInfoManager : MonoBehaviour
             Gizmos.color = Color.red;
         }
 
-        Gizmos.DrawWireSphere(gameObject.transform.position, detectPlayerRadius);
+        Gizmos.DrawWireSphere(gameObject.transform.position, _detectPlayerRadius);
 
         if (player != null)
         {
@@ -100,9 +127,9 @@ public class EnemyInfoManager : MonoBehaviour
         {
             Gizmos.color = Color.black;
         }
-        Gizmos.DrawWireSphere(gameObject.transform.position, attackPlayerRadius);
+        Gizmos.DrawWireSphere(gameObject.transform.position, _attackPlayerRadius);
 
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(gameObject.transform.position, pathPointReachedRadius);
+        Gizmos.DrawWireSphere(gameObject.transform.position, _pathPointReachedRadius);
     }
 }

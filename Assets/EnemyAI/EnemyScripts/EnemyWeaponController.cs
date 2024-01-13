@@ -16,20 +16,20 @@ public class EnemyWeaponController : MonoBehaviour
     private float _bulletSpeed = 5f;
 
     [SerializeField]
-    private float _damage = 1f;
+    public float _damage = 1f;
 
     [SerializeField]
-    private float _fireRate = 1f; // Bullets per second
+    public float _fireRate = 1f; // Bullets per second
 
     [SerializeField]
-    private int _magazineSize = 10;
+    public int _magazineSize = 10;
     private int _bulletsInMagazine;
 
     [SerializeField]
-    private float _reloadTime = 1f; // Seconds
+    public float _reloadTime = 1f; // Seconds
 
     [SerializeField]
-    private float _bulletSpread = 0.1f;
+    public float _bulletSpread = 10f; // Degrees
 
     private float _bulletsToFire = 1f;
     private float _reloadTimeLeft = 0f;

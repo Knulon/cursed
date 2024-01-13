@@ -4,6 +4,12 @@ using Debug = UnityEngine.Debug;
 
 public class EnemySpawner : MonoBehaviour
 {
+    private enum Enemytype
+    {
+        Normal = 0,
+        Sniper = 1,
+        Runner = 2
+    }
 
     [SerializeField]
     private GameObject _enemyPrefab;
@@ -28,7 +34,7 @@ public class EnemySpawner : MonoBehaviour
 
     private float spawnBucket;
 
-    private static EnemyPool enemyPool = new EnemyPool();
+    private static EnemyPool enemyPool = new();
 
 
     private class EnemyPool
@@ -40,17 +46,13 @@ public class EnemySpawner : MonoBehaviour
             if (_pool.Count == 0)
             {
                 GameObject enemy = Instantiate(enemyPrefab, position, enemyPrefab.transform.rotation);
-                EnemyInfoManager enemyInfoManager = enemy.GetComponent<EnemyInfoManager>();
-                enemyInfoManager.SetExitTrigger(exitTrigger);
-                enemyInfoManager.Health = 100f;
+                SetEnemyStats(ref enemy, (Enemytype)Random.Range(0, 3), exitTrigger);
                 return enemy;
             }
 
             GameObject enemyFromPool = _pool.Pop();
             enemyFromPool.transform.position = position;
-            EnemyInfoManager enemyInfoManagerFromPool = enemyFromPool.GetComponent<EnemyInfoManager>();
-            enemyInfoManagerFromPool.SetExitTrigger(exitTrigger);
-            enemyInfoManagerFromPool.Health = 100f;
+            SetEnemyStats(ref enemyFromPool, (Enemytype)Random.Range(0, 3), exitTrigger);
             enemyFromPool.SetActive(true);
             return enemyFromPool;
         }
@@ -126,6 +128,41 @@ public class EnemySpawner : MonoBehaviour
         Vector3 spawnPosition = transform.position + Random.insideUnitSphere * _spawnRadius;
         spawnPosition.z = 0f;
         GameObject enemy = enemyPool.GetEnemy(_enemyPrefab, spawnPosition, _exitTrigger);
+    }
+
+    static void SetEnemyStats(ref GameObject enemy, Enemytype enemytype, GameObject exitTrigger)
+    {
+        EnemyInfoManager enemyInfoManager = enemy.GetComponent<EnemyInfoManager>();
+        EnemyController enemyController = enemy.GetComponent<EnemyController>();
+        EnemyWeaponController enemyWeaponController = enemy.GetComponent<EnemyWeaponController>();
+        enemyInfoManager.SetExitTrigger(exitTrigger);
+
+        switch (enemytype)
+        {
+            case Enemytype.Normal:
+                enemyInfoManager.Health = 100f;
+                break;
+            case Enemytype.Sniper:
+                enemyInfoManager.Health = 50f;
+                enemyWeaponController._fireRate = 0.5f;
+                enemyWeaponController._damage = 50f;
+                enemyWeaponController._magazineSize = 1;
+                enemyWeaponController._reloadTime = 0.25f;
+                enemyInfoManager._detectPlayerRadius = 20f;
+                enemyInfoManager._attackPlayerRadius = 18f;
+                break;
+            case Enemytype.Runner:
+                enemyInfoManager.Health = 75f;
+                enemyController.maxVelocity = 10f;
+                enemyController.acceleration = 10f;
+                enemyWeaponController._bulletSpread = 50f;
+                enemyWeaponController._fireRate = 5f;
+                enemyWeaponController._damage = 25f;
+                break;
+            default:
+                Debug.LogError("Invalid enemy type");
+                break;
+        }
     }
 
     void OnDrawGizmos()

@@ -251,7 +251,7 @@ MonoBehaviour:
   m_Name: Sequencer
   m_EditorClassIdentifier: 
   state: 0
-  started: 0
+  started: 1
   guid: 4b6dbaf04febf81409cfbf792d28bcb6
   position: {x: -0.000015258789, y: -21.279984}
   blackboard:
@@ -712,7 +712,7 @@ MonoBehaviour:
   m_Name: SetExitGuardPerm
   m_EditorClassIdentifier: 
   state: 0
-  started: 0
+  started: 1
   guid: 146014883df05d24fa2132e834587182
   position: {x: -304.11505, y: 146.4}
   blackboard:
@@ -735,7 +735,7 @@ MonoBehaviour:
   m_Name: RootNode
   m_EditorClassIdentifier: 
   state: 0
-  started: 0
+  started: 1
   guid: e0356cd439782a54bb4c3ee3dae02227
   position: {x: -0.000015258789, y: -154.08}
   blackboard:
