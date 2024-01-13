@@ -341,7 +341,7 @@ public class PlayerMoveScript : MonoBehaviour
         switch (type)
         {
             case Damage.RUNSAGAINSTWALL:
-                lives -= 1;
+                lives -= dam;
                 break;
             case Damage.ENEMY:
                 lives -= dam;
