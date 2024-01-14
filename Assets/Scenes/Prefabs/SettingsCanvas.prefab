@@ -87,10 +87,22 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6300372590509146250}
+        m_TargetAssemblyTypeName: Settings, Assembly-CSharp
+        m_MethodName: changeVolume
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &622087279171032017
 GameObject:
   m_ObjectHideFlags: 0
@@ -1152,6 +1164,7 @@ GameObject:
   - component: {fileID: 4232756138053025491}
   - component: {fileID: 998252666909264754}
   - component: {fileID: 2555097180579189314}
+  - component: {fileID: 6300372590509146250}
   m_Layer: 5
   m_Name: SettingsCanvas
   m_TagString: Untagged
@@ -1246,6 +1259,20 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &6300372590509146250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6782279745778364219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35d79004194b29e4abd8d146fc38a09f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volume: {fileID: 7229391284063538831}
+  musicSource: {fileID: 0}
 --- !u!1 &7307162977272039797
 GameObject:
   m_ObjectHideFlags: 0
