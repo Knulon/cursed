@@ -5,7 +5,7 @@ using UnityEngine;
 public class DeathMenu : MonoBehaviour
 {
     [SerializeField] GameObject deathScreen;
-    // Start is called before the first frame update
+
     public void ActivateDeath()
     {
         deathScreen.SetActive(true);
