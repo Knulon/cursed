@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Obstacle
   - enemy
+  - Audio
   layers:
   - Default
   - TransparentFX
