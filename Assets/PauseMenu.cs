@@ -3,6 +3,7 @@ using UnityEngine;
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] GameObject pauseMenu;
+
     public void Pause()
     {
         pauseMenu.SetActive(true);
@@ -19,7 +20,14 @@ public class PauseMenu : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Pause();
+            if (pauseMenu.activeSelf)
+            {
+                Resume();
+            }
+            else
+            {
+                Pause();
+            }
         }
     }
 }

@@ -107,6 +107,10 @@ public class PlayerMoveScript : MonoBehaviour
     [SerializeField]
     private GameManager gameManager;
 
+    [SerializeField]
+    private GameObject deathScreen;
+
+
     float animationTimer = 0;
     bool animateIn = true;
 
@@ -267,6 +271,12 @@ public class PlayerMoveScript : MonoBehaviour
                 lives -= dam;
                 break;
             default: return false;
+        }
+
+        if (lives <= 0)
+        {
+            deathScreen.SetActive(true);
+            Time.timeScale = 0;
         }
         return true;
     }
