@@ -24,9 +24,6 @@ public class EnemySpawner : MonoBehaviour
     private GameObject _exitTrigger;
 
     [SerializeField]
-    private GameObject _key;
-
-    [SerializeField]
     private int _numberOfEnemies = 20;
     private int _enemiesSpawned;
 
@@ -69,7 +66,7 @@ public class EnemySpawner : MonoBehaviour
             GameObject enemy = Instantiate(enemyPrefab, Vector3.zero, enemyPrefab.transform.rotation);
             EnemyInfoManager enemyInfoManager = enemy.GetComponent<EnemyInfoManager>();
             enemyInfoManager.SetExitTrigger(null);
-            enemyInfoManager.Health = 100f;
+            enemyInfoManager.SetHealth(100);
 
             for (int i = 0; i < count; i++)
             {
@@ -141,10 +138,10 @@ public class EnemySpawner : MonoBehaviour
         switch (enemytype)
         {
             case Enemytype.Normal:
-                enemyInfoManager.Health = 100f;
+                enemyInfoManager.SetHealth(100f);
                 break;
             case Enemytype.Sniper:
-                enemyInfoManager.Health = 50f;
+                enemyInfoManager.SetHealth(50f);
                 enemyWeaponController._fireRate = 0.5f;
                 enemyWeaponController._damage = 50f;
                 enemyWeaponController._magazineSize = 1;
@@ -153,7 +150,7 @@ public class EnemySpawner : MonoBehaviour
                 enemyInfoManager._attackPlayerRadius = 18f;
                 break;
             case Enemytype.Runner:
-                enemyInfoManager.Health = 75f;
+                enemyInfoManager.SetHealth(75f);
                 enemyController.maxVelocity = 10f;
                 enemyController.acceleration = 10f;
                 enemyWeaponController._bulletSpread = 50f;

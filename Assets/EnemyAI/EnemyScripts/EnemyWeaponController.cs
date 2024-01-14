@@ -52,7 +52,7 @@ public class EnemyWeaponController : MonoBehaviour
         
         if(_bulletPool == null)
         {
-            _bulletPool = BulletPool.GetInstance(_bulletPrefab,_myCurrenCollider2D);
+            _bulletPool = BulletPool.GetInstance(_bulletPrefab);
         }
     }
 

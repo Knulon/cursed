@@ -21,7 +21,7 @@ public class BulletPool : ScriptableObject
             GameObject bullet = Instantiate(_bulletPrefab, position, _bulletPrefab.transform.rotation);
             Bullet bulletScriptComponent = bullet.GetComponent<Bullet>();
             bulletScriptComponent.Damage = Damage;
-            bulletScriptComponent.SetCollider(myCollider2D);
+            //bulletScriptComponent.SetCollider(myCollider2D);
             bulletScriptComponent.ResetTimeToLive();
             bullet.layer = bulletLayer;
             return bullet;
@@ -36,7 +36,7 @@ public class BulletPool : ScriptableObject
         Bullet popBulletScriptComponent = popBullet.GetComponent<Bullet>();
         popBulletScriptComponent.ResetTimeToLive();
         popBulletScriptComponent.Damage = Damage;
-        popBulletScriptComponent.SetCollider(myCollider2D);
+        //popBulletScriptComponent.SetCollider(myCollider2D);
 
         popBullet.SetActive(true);
         return popBullet;
@@ -53,7 +53,7 @@ public class BulletPool : ScriptableObject
         return _pool.Count;
     }
 
-    public void PrepareBullets(int i, GameObject _bulletPrefab, Vector3 position, float Damage, Collider2D myCollider2D)
+    public void PrepareBullets(int i, GameObject _bulletPrefab)
     {
         for (int j = 0; j < i; j++)
         {
@@ -63,12 +63,21 @@ public class BulletPool : ScriptableObject
         }
     }
 
-    public static BulletPool GetInstance(GameObject bulletPrefab, Collider2D myCollider2D)
+    public static BulletPool GetInstance(GameObject bulletPrefab)
     {
         if (_instance == null)
         {
             _instance = CreateInstance<BulletPool>();
-            _instance.PrepareBullets(300, bulletPrefab, Vector3.zero, 0, myCollider2D);
+            _instance.PrepareBullets(300, bulletPrefab);
+        }
+        return _instance;
+    }
+
+    public static BulletPool GetInstance()
+    {
+        if (_instance == null)
+        {
+            _instance = CreateInstance<BulletPool>();
         }
         return _instance;
     }

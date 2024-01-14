@@ -11,23 +11,6 @@ public class EnemyInfoManager : MonoBehaviour
     private bool playerInAttackRange;
 
 
-    public float Health
-    {
-        get => _health;
-        set
-        {
-            _health = Mathf.Clamp(value, 0, _maxHealth);
-            _healthBar.transform.localScale = new Vector3(_health / _maxHealth * _healthBarTransformScale.x, _healthBarTransformScale.y, 1);
-            if (Health > 99.8f)
-            {
-                _healthBar.SetActive(false);
-            }
-            else
-            {
-                _healthBar.SetActive(true);
-            }
-        }
-    }
 
     [SerializeField]
     private float _health = 100f;
@@ -98,16 +81,31 @@ public class EnemyInfoManager : MonoBehaviour
         _exitTrigger = value;
     }
 
+    public void SetHealth(float value)
+    {
+        _health = value;
+        _health = Mathf.Clamp(value, 0, _maxHealth);
+        _healthBar.transform.localScale = new Vector3(_health / _maxHealth * _healthBarTransformScale.x, _healthBarTransformScale.y, 1);
+        if (_health > 99.8f)
+        {
+            _healthBar.SetActive(false);
+        }
+        else
+        {
+            _healthBar.SetActive(true);
+        }
+    }
+
     void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log("Collided with:" + collision.gameObject.name);
         if (collision.gameObject.layer.Equals(11))
         {
-            Health -= gameObject.GetComponent<Bullet>().GetDamageAndSendToPool();
-            if (Health <= 0)
+            SetHealth(_health - collision.gameObject.GetComponent<Bullet>().GetDamageAndSendToPool());
+            if (_health <= 0)
             {
                 EnemySpawner.ReturnEnemy(gameObject.transform.parent.gameObject);
             }
-
         }
     }
 
