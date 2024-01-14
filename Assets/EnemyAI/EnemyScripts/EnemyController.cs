@@ -14,7 +14,7 @@ public class EnemyController : MonoBehaviour
     public float acceleration = 4f;
     private bool _isMoving;
 
-    [SerializeField]
+    [SerializeField] 
     public bool HumanControlled = false;
 
     [SerializeField] public GameObject Parent;

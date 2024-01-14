@@ -6,7 +6,7 @@ using UnityEngine;
 public class EnemyInfoManager : MonoBehaviour
 {
     private GameObject player;
-    private Collider2D collider;
+    private Collider2D myCollider;
     private bool playerInSight;
     private bool playerInAttackRange;
 
@@ -57,7 +57,7 @@ public class EnemyInfoManager : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        collider = gameObject.GetComponent<Collider2D>();
+        myCollider = gameObject.GetComponent<Collider2D>();
         _healthBarTransformScale =  _healthBar.transform.localScale;
     }
 
