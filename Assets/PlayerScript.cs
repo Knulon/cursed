@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements.Experimental;
 
@@ -123,6 +124,15 @@ public class PlayerMoveScript : MonoBehaviour
     [SerializeField]
     float dashStrength = 100f;
 
+    [SerializeField]
+    GameObject lifes;
+    
+    [SerializeField]
+    GameObject level;
+    
+    [SerializeField]
+    GameObject key;
+
     private float dashTimer = -0.2f;
 
 
@@ -146,11 +156,17 @@ public class PlayerMoveScript : MonoBehaviour
     bool animateIn = true;
 
     private int LEVEL = 0;
+    [SerializeField]
+    int MAX_LEVEL = 4;
 
 
 
     void Start()
     {
+        // sets the rotation speed to the value edited in the settings
+        // slider from 0.5 to 3 (default value 1)
+        rotate = 100*PlayerPrefs.GetFloat("TurningSensitivity",1);
+
         cam = Camera.main;
         lives = MAX_LIVES;
         rigid = GetComponent<Rigidbody2D>();
@@ -186,10 +202,14 @@ public class PlayerMoveScript : MonoBehaviour
             shoot();
         }
 
-        
-        // showLives();
-        // showRoomNumber();
-        // ...
+        showPlayerData();
+    }
+
+    private void showPlayerData()
+    {
+        lifes.GetComponent<TextMeshProUGUI>().text = "Leben: " + lives;
+        level.GetComponent<TextMeshProUGUI>().text = "Level " + (LEVEL+1) + " von "+MAX_LEVEL;
+        key.GetComponent<TextMeshProUGUI>().text = hasKey ? "Schlüssel eingesammelt" : "";
     }
 
     private void nextDebuff()

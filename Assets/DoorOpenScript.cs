@@ -27,13 +27,7 @@ public class DoorOpenScript : MonoBehaviour
     {
         if(player != null && player.GetComponent<PlayerMoveScript>().HasKey()) {
             
-            if (!nearDoor(player.transform.position))
-            {
-                if(currentStep != AnimationStep.Closed) {
-                    animationCounter += Time.deltaTime;
-                }
-            }
-            else
+            if (nearDoor(player.transform.position))
             {
                 if (currentStep != AnimationStep.Opened)
                 {
@@ -41,6 +35,7 @@ public class DoorOpenScript : MonoBehaviour
                     currentStep = AnimationStep.Open;
                 }
             }
+
             if (animationCounter < 0.01)
             {
                 currentStep = AnimationStep.Opened;
@@ -53,7 +48,7 @@ public class DoorOpenScript : MonoBehaviour
                 transform.localScale = new Vector3(1,5f,1);
             }
 
-            if (currentStep != AnimationStep.Closed )
+            if (currentStep != AnimationStep.Closed  && currentStep != AnimationStep.Opened)
             { 
                 transform.localScale = new Vector3(1, Easing.OutCubic(animationCounter)*5f,1);
             }
