@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -45,7 +46,7 @@ public class EnemyWeaponController : MonoBehaviour
     {
         private Stack<GameObject> _pool = new Stack<GameObject>();
 
-        public GameObject GetBullet(GameObject _bulletPrefab, Vector3 position, float Damage, Collider2D myCollider2D)
+        public GameObject GetBullet(GameObject _bulletPrefab, Vector3 position, float Damage, Collider2D myCollider2D, LayerMask bulletLayer)
         {
             if (_pool.Count == 0)
             {
@@ -54,6 +55,7 @@ public class EnemyWeaponController : MonoBehaviour
                 bulletScriptComponent.Damage = Damage;
                 bulletScriptComponent.SetCollider(myCollider2D);
                 bulletScriptComponent.ResetTimeToLive();
+                bullet.layer = bulletLayer;
                 return bullet;
             }
 
@@ -62,10 +64,12 @@ public class EnemyWeaponController : MonoBehaviour
             popBullet.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             popBullet.transform.position = position;
             popBullet.transform.rotation = _bulletPrefab.transform.rotation;
+            popBullet.layer = bulletLayer;
             Bullet popBulletScriptComponent = popBullet.GetComponent<Bullet>();
             popBulletScriptComponent.ResetTimeToLive();
             popBulletScriptComponent.Damage = Damage;
             popBulletScriptComponent.SetCollider(myCollider2D);
+            
             popBullet.SetActive(true);
             return popBullet;
         }
@@ -123,7 +127,7 @@ public class EnemyWeaponController : MonoBehaviour
         BulletPoolItems = _bulletPool.Count();
     }
 
-    public void Shoot(Vector2 shootDirection)
+    public void Shoot(Vector2 shootDirection, LayerMask bulletLayer)
     {
         _bulletsToFire += _fireRate * Time.deltaTime;
 
@@ -134,7 +138,7 @@ public class EnemyWeaponController : MonoBehaviour
 
             shootDirection.Normalize();
 
-            GameObject bullet = _bulletPool.GetBullet(_bulletPrefab, transform.position, _damage, _myCurrenCollider2D);
+            GameObject bullet = _bulletPool.GetBullet(_bulletPrefab, transform.position, _damage, _myCurrenCollider2D, bulletLayer);
 
             Vector2 rotatedShootDirection = shootDirection;
             float randomAngle = Random.Range(-_bulletSpread, _bulletSpread);
@@ -153,7 +157,7 @@ public class EnemyWeaponController : MonoBehaviour
     {
         if (Input.GetButton("Fire1"))
         {
-            Shoot(_enemyController.Direction);
+            Shoot(_enemyController.Direction, LayerMask.NameToLayer("EnemyBullet"));
             Debug.Log("Shoot");
         }
     }

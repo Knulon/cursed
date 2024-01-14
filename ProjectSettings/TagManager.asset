@@ -18,8 +18,8 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - Bullet
+  - PlayerBullet
+  - EnemyBullet
   - Obstacle
   - Entity
   - 

@@ -13,7 +13,7 @@ public class ShootPlayer : ActionNode
 
     protected override State OnUpdate() {
         Vector2 directionToPlayer = context.player.transform.position - context.transform.position;
-        context.enemyWeaponController.Shoot(directionToPlayer);
+        context.enemyWeaponController.Shoot(directionToPlayer, LayerMask.NameToLayer("EnemyBullet"));
 
         return State.Success;
     }

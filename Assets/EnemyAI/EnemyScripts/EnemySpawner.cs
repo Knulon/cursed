@@ -28,6 +28,7 @@ public class EnemySpawner : MonoBehaviour
 
     [SerializeField]
     private int _numberOfEnemies = 20;
+    private int _enemiesSpawned;
 
     [SerializeField]
     private bool SpawnEnemies = true;
@@ -100,7 +101,7 @@ public class EnemySpawner : MonoBehaviour
             SpawnEnemyAtRate();
         }
 
-        if (_numberOfEnemies <= 0)
+        if (_enemiesSpawned >= _numberOfEnemies)
         {
             SpawnEnemies = false;
         }
@@ -115,7 +116,7 @@ public class EnemySpawner : MonoBehaviour
             int enemiesToSpawn = (int)spawnBucket;
 
             spawnBucket -= enemiesToSpawn;
-            _numberOfEnemies -= enemiesToSpawn;
+            _enemiesSpawned += enemiesToSpawn;
             for (int i = 0; i < enemiesToSpawn; i++)
             {
                 SpawnEnemy();
@@ -163,6 +164,17 @@ public class EnemySpawner : MonoBehaviour
                 Debug.LogError("Invalid enemy type");
                 break;
         }
+    }
+
+    public void Reset()
+    {
+        _enemiesSpawned = 0;
+        SpawnEnemies = true;
+    }
+
+    public static void ReturnEnemy(GameObject enemy)
+    {
+        enemyPool.ReturnEnemy(enemy);
     }
 
     void OnDrawGizmos()

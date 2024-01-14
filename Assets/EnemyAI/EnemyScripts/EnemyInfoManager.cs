@@ -6,8 +6,7 @@ using UnityEngine;
 public class EnemyInfoManager : MonoBehaviour
 {
     private GameObject player;
-    private Collider2D playerCollider;
-    private Collider2D[] colliders;
+    private Collider2D collider;
     private bool playerInSight;
     private bool playerInAttackRange;
 
@@ -58,8 +57,7 @@ public class EnemyInfoManager : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        playerCollider = player.GetComponent<Collider2D>();
-        colliders = gameObject.GetComponents<Collider2D>();
+        collider = gameObject.GetComponent<Collider2D>();
         _healthBarTransformScale =  _healthBar.transform.localScale;
     }
 
@@ -98,6 +96,19 @@ public class EnemyInfoManager : MonoBehaviour
     public void SetExitTrigger(GameObject value)
     {
         _exitTrigger = value;
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer.Equals(11))
+        {
+            Health -= gameObject.GetComponent<Bullet>().GetDamageAndSendToPool();
+            if (Health <= 0)
+            {
+                EnemySpawner.ReturnEnemy(gameObject.transform.parent.gameObject);
+            }
+
+        }
     }
 
 
