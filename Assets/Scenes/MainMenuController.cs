@@ -12,7 +12,7 @@ public class MainMenuController : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("Noahs_Testszene");
+        SceneManager.LoadScene("RoomsScene");
         Time.timeScale = 1;
     }
     public void LoadSettings() {

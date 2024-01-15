@@ -163,9 +163,7 @@ public class PlayerMoveScript : MonoBehaviour
 
     void Start()
     {
-        // sets the rotation speed to the value edited in the settings
-        // slider from 0.5 to 3 (default value 1)
-        rotate = 100*PlayerPrefs.GetFloat("TurningSensitivity",1);
+        updatePlayerPrefs();
 
         cam = Camera.main;
         lives = MAX_LIVES;
@@ -174,6 +172,15 @@ public class PlayerMoveScript : MonoBehaviour
         initMaps();
 
         bulletPool.PrepareBullets(100, bulletPrefab, new Vector3(0, 0, 0));
+    }
+
+    private void updatePlayerPrefs()
+    {
+        // sets the rotation speed to the value edited in the settings
+        // slider from 0.5 to 3 (default value 1)
+        float playerPref = PlayerPrefs.GetFloat("_TurningSensitivity", 1);
+        rotate = 100 * playerPref;
+        Debug.Log("rotation speed updated to " + playerPref);
     }
 
     private void initMaps()
