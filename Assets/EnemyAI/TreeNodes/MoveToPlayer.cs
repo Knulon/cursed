@@ -19,7 +19,7 @@ public class MoveToPlayer : ActionNode
         }
 
         context.enemyController.Direction = directionToPlayer;
-        context.enemyController.Move();
+        context.enemyController.Move(true);
         return State.Success;
     }
 }

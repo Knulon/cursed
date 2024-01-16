@@ -45,7 +45,7 @@ public class FollowPath : ActionNode
         }
 
         context.enemyController.Direction = direction;
-        context.enemyController.Move();
+        context.enemyController.Move(true);
 
         return State.Success;
     }
