@@ -86,7 +86,7 @@ public class EnemyInfoManager : MonoBehaviour
         _health = value;
         _health = Mathf.Clamp(value, 0, _maxHealth);
         _healthBar.transform.localScale = new Vector3(_health / _maxHealth * _healthBarTransformScale.x, _healthBarTransformScale.y, 1);
-        if (_health > 99.8f)
+        if (_health > _maxHealth-0.5f)
         {
             _healthBar.SetActive(false);
         }
@@ -94,6 +94,12 @@ public class EnemyInfoManager : MonoBehaviour
         {
             _healthBar.SetActive(true);
         }
+    }
+
+    public void SetMaxHealth(float value)
+    {
+        _maxHealth = value;
+        SetHealth(_health);
     }
 
     void OnCollisionEnter2D(Collision2D collision)

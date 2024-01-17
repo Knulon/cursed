@@ -49,4 +49,4 @@ MonoBehaviour:
   _spawnRadius: 3.75
   _exitTrigger: {fileID: 0}
   _numberOfEnemies: 20
-  SpawnEnemies: 1
+  SpawnEnemies: 0

@@ -19,6 +19,7 @@ public class EnemyController : MonoBehaviour
 
     [SerializeField] public GameObject Parent;
 
+
     // Update is called once per frame
     void Update()
     {

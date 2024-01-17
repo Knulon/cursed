@@ -333,7 +333,7 @@ public class PlayerMoveScript : MonoBehaviour
         }
 
 
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("EnemyBullet"))
         {
             if (collision.gameObject.layer.Equals(12))
             {
