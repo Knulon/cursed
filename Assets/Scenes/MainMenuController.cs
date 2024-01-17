@@ -5,6 +5,7 @@ public class MainMenuController : MonoBehaviour
 {
     [SerializeField] GameObject settingsCanvace;
     [SerializeField] GameObject mainCanvace;
+    [SerializeField] GameObject player; 
     public void SwitchScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
@@ -24,6 +25,11 @@ public class MainMenuController : MonoBehaviour
         settingsCanvace.SetActive(true);
     }
 
+    public void CloseSettings(){
+        settingsCanvace.SetActive(false);
+        player.GetComponent<PlayerMoveScript>().updatePlayerPrefs();
+    }
+    
     public void CloseSettingsMain(){
         settingsCanvace.SetActive(false);
         mainCanvace.SetActive(true);

@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
+using Random = UnityEngine.Random;
 
 public class PlayerMoveScript : MonoBehaviour
 {
@@ -11,7 +13,7 @@ public class PlayerMoveScript : MonoBehaviour
     {
         private Stack<GameObject> _pool = new Stack<GameObject>();
 
-        public GameObject GetBullet(GameObject _bulletPrefab, Vector3 position, Quaternion rotation,  float Damage)
+        public GameObject GetBullet(GameObject _bulletPrefab, Vector3 position, Quaternion rotation, float Damage)
         {
             if (_pool.Count == 0)
             {
@@ -54,7 +56,8 @@ public class PlayerMoveScript : MonoBehaviour
         }
     }
 
-    enum Damage{
+    enum Damage
+    {
         RUNSAGAINSTWALL,
         ENEMY
     }
@@ -62,10 +65,11 @@ public class PlayerMoveScript : MonoBehaviour
     enum Debuffs
     {
         NONE = 0,
-        Slower = 1,
+        DRUNK = 1,
         LessVisibility = 2,
         ChangedControls = 3,
-        NoAttack = 4
+        NoAttack = 4,
+        STRONGDRUNK = 5
     }
 
     public BulletPool bulletPool = new();
@@ -75,7 +79,7 @@ public class PlayerMoveScript : MonoBehaviour
     private float lives;
 
     [SerializeField]
-    int MAX_LIVES;
+    int MAX_LIVES = 100;
 
     [SerializeField]
     float rotate = 100f;
@@ -120,34 +124,39 @@ public class PlayerMoveScript : MonoBehaviour
     [SerializeField]
     float playerDamage = 10;
 
-    // funktionert noch nicht!!!!
-    [SerializeField]
-    float dashStrength = 100f;
+
 
     [SerializeField]
     GameObject lifes;
-    
+
     [SerializeField]
     GameObject level;
-    
+
     [SerializeField]
     GameObject key;
 
+    [SerializeField]
+    GameObject winscreen;
+
     private float dashTimer = -0.2f;
 
+
+    private bool isDrunk = false;
+    [SerializeField] float DRUNKBORDER = 0.1f;
+    private float drunkTimer = 0;
+
+    private float shakeTime = 0.001f;
 
 
     private Camera cam;
     private float timeSinceLastShoot = 0;
     private Rigidbody2D rigid;
 
+
     
 
-    private float isStuck = 0;
-    private Vector2 forceVec;
-
     Dictionary<string, string> stringMap = new Dictionary<string, string>();
-    Dictionary<KeyCode, KeyCode> keyCodeMap= new Dictionary<KeyCode, KeyCode>();
+    Dictionary<KeyCode, KeyCode> keyCodeMap = new Dictionary<KeyCode, KeyCode>();
 
     [SerializeField]
     bool invertedControls = false;
@@ -156,8 +165,9 @@ public class PlayerMoveScript : MonoBehaviour
     bool animateIn = true;
 
     private int LEVEL = 0;
-    [SerializeField]
-    int MAX_LEVEL = 4;
+    private int MAX_LEVEL = 3;
+
+    int lastLvlKeyCount = 0;
 
 
 
@@ -174,7 +184,7 @@ public class PlayerMoveScript : MonoBehaviour
         bulletPool.PrepareBullets(100, bulletPrefab, new Vector3(0, 0, 0));
     }
 
-    private void updatePlayerPrefs()
+    public void updatePlayerPrefs()
     {
         // sets the rotation speed to the value edited in the settings
         // slider from 0.5 to 3 (default value 1)
@@ -194,29 +204,42 @@ public class PlayerMoveScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.B)) { 
+        if (Input.GetKeyDown(KeyCode.B))
+        {
             nextDebuff();
         }
 
-        // hideNonVisibleObjects();
         centerCam();
-        // centerHider();
+
         move();
-        scale(); // only for tests
-        // not yet implemented
+        scale(); 
+
         if (currentDebuff != Debuffs.NoAttack)
         {
             shoot();
         }
 
         showPlayerData();
+        if(isDrunk)
+        {   
+            drunkTimer += Time.deltaTime;
+            Debug.Log("UPDATE DDRUNK");
+        }
+
     }
 
     private void showPlayerData()
     {
         lifes.GetComponent<TextMeshProUGUI>().text = "Leben: " + lives;
-        level.GetComponent<TextMeshProUGUI>().text = "Level " + (LEVEL+1) + " von "+MAX_LEVEL;
-        key.GetComponent<TextMeshProUGUI>().text = hasKey ? "Schlüssel eingesammelt" : "";
+        level.GetComponent<TextMeshProUGUI>().text = "Level " + ((LEVEL + 1) >= MAX_LEVEL ? MAX_LEVEL : (LEVEL + 1)) + " von " + MAX_LEVEL;
+        if (lastLvlKeyCount > 0)
+        {
+            key.GetComponent<TextMeshProUGUI>().text = lastLvlKeyCount>0? "eingesammelte Schlüssel: " + lastLvlKeyCount : "";
+        }
+        else
+        {
+            key.GetComponent<TextMeshProUGUI>().text = hasKey ? "Schlüssel eingesammelt" : "";
+        }
     }
 
     private void nextDebuff()
@@ -224,20 +247,24 @@ public class PlayerMoveScript : MonoBehaviour
         currentDebuff += 1;
         switch (currentDebuff)
         {
-            case Debuffs.Slower:
-                speed = speed * 2 / 3;
+            case Debuffs.DRUNK:
+                Debug.Log("DRUNK activated");
+                isDrunk = true;
                 break;
             case Debuffs.LessVisibility:
                 animateIn = true;
-                animationTimer =  0.1f;
-                speed = speed * 3 / 2; 
+                animationTimer = 0.1f;
+                isDrunk = false;
                 break;
             case Debuffs.ChangedControls:
                 animateIn = false;
                 invertedControls = true;
                 break;
             case Debuffs.NoAttack:
-                invertedControls = false;
+                // invertedControls = false;
+                break;
+            case Debuffs.STRONGDRUNK:
+                drunkTimer = 0.0001f;
                 break;
             case Debuffs.NONE:
                 break;
@@ -246,8 +273,9 @@ public class PlayerMoveScript : MonoBehaviour
     }
 
     private float getInputAxis(string s)
-    { 
-        if (!stringMap.ContainsKey(s)){
+    {
+        if (!stringMap.ContainsKey(s))
+        {
             return 0;
         }
         if (invertedControls)
@@ -263,7 +291,7 @@ public class PlayerMoveScript : MonoBehaviour
         {
             return false;
         }
-            if (invertedControls)
+        if (invertedControls)
         {
             key = keyCodeMap[key];
         }
@@ -275,65 +303,71 @@ public class PlayerMoveScript : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         GameObject other = collision.gameObject;
-        if (other.CompareTag("enemy"))
-        {
-            isStuck = 0.1f;
-            forceVec = (transform.position - other.transform.position).normalized * forceStrength;
-            rigid.AddForce(forceVec, ForceMode2D.Impulse);
-        }
 
         if (collision.gameObject.name == "Key")
         {
-            // Debug.Log("COllisssion with key!!");
             hasKey = true;
-
+            if (LEVEL >= MAX_LEVEL)
+            {
+                lastLvlKeyCount++;
+            }
             //teleport Key to next level
             teleportToLevel(collision.gameObject, LEVEL + 1);
         }
 
         if (collision.gameObject.name.StartsWith("TELEPORTER"))
         {
-            Debug.Log("TELEPORT");
-            GameObject[] spawner = GameObject.FindGameObjectsWithTag("SPAWN");
-            foreach (var spawn in spawner)
+            if (LEVEL >= MAX_LEVEL && lastLvlKeyCount == 3)
             {
-                if (spawn.name.EndsWith("" + (LEVEL+1)))
+                Debug.Log("WIN!!!!!");
+                winscreen.SetActive(true);
+                Time.timeScale = 0.0f;
+            }
+            else
+            {
+                Debug.Log("TELEPORT");
+                GameObject[] spawner = GameObject.FindGameObjectsWithTag("SPAWN");
+                foreach (var spawn in spawner)
                 {
-                    transform.position = spawn.transform.position;
-                    nextDebuff();
-                    LEVEL++;
-                    hasKey = false;
-                    break;
+                    if (spawn.name.EndsWith("" + (LEVEL + 1)))
+                    {
+                        transform.position = spawn.transform.position;
+                        nextDebuff();
+                        LEVEL++;
+                        hasKey = false;
+
+                        // TODO TOBI: add functionality for spawning monsterspawner 
+                        // LEVEL = 
+
+
+                        break;
+                    }
                 }
             }
-            
+
+        }
+
+        if (collision.gameObject.name.StartsWith("TELEPORTER_LASTLVL"))
+        {
+            Debug.Log("TELEPORT_LASTLVL");
+            collision.gameObject.SetActive(false);
+            LEVEL++;
+            nextDebuff();
+            hasKey = false;
         }
 
 
         if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
         {
-            // TODO: Distinction between enemy and player bullets
-            //Debug.Log("Player hit by bullet");
-
-
-            // thís!!
             Bullet bullet = collision.gameObject.GetComponent<Bullet>();
             damage(Damage.ENEMY, bullet.GetDamageAndSendToPool());
-            
-
-
-
-
-            // damage(Damage.ENEMYNROMAL);
-            // take when merged
-            //
         }
     }
 
     private void teleportToLevel(GameObject obj, int v)
     {
         GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("keypos");
-        foreach(GameObject n in gameObjects)
+        foreach (GameObject n in gameObjects)
         {
             if (n.name.EndsWith("" + v))
             {
@@ -350,9 +384,7 @@ public class PlayerMoveScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-
-        
-
+        /**
         if (collider.gameObject.name == "ExitTrigger")
         {
             Debug.Log("Player has reached the exit.");
@@ -360,6 +392,7 @@ public class PlayerMoveScript : MonoBehaviour
             // TODO: Level transition as in: Destroy all enemies, close doors, spawn new enemies, spawn key, etc.
             Destroy(collider.gameObject);
         }
+        **/
     }
 
     public float getLives() { return lives; }
@@ -382,63 +415,47 @@ public class PlayerMoveScript : MonoBehaviour
 
     void centerCam()
     {
-        if(cam!=null)
-            cam.transform.position = transform.position+new Vector3(0,0,-10);
+        if (cam != null)
+            cam.transform.position = transform.position + new Vector3(0, 0, -10);
         else
             cam = Camera.main;
     }
 
     void move()
     {
-        // funktionert noch nicht!!!! Kollision mit Gegner!!! -->
-        if (dashTimer > 0)
-        {
-            dashTimer -= Time.deltaTime;
-            return;
-        }
-        else if(dashTimer > -0.1)
-        {
-            // rigid.totalForce = Vector2.zero;
-            rigid.AddForce(-transform.up * dashStrength, ForceMode2D.Impulse);
-            dashTimer = -0.1f;
-        }
-        if (getInputKey(KeyCode.Return))
-        {
-            rigid.AddForce(transform.up * dashStrength, ForceMode2D.Impulse);
-                dashTimer = 0.1f;
-            return;
-        }
-        // <-- funktionert noch nicht!!!!
-
-        if (isStuck > 0)
-        {
-            isStuck -= Time.deltaTime;
-            return;
-        }else if(isStuck > -0.1)
-        {
-            rigid.AddForce(-forceVec, ForceMode2D.Impulse);
-            Debug.Log("FORCE ADDED");
-            isStuck = -0.1f;
-        }
         transform.Rotate(0, 0, Time.deltaTime * -rotate * getInputAxis("Horizontal"));
 
         float vertical = getInputAxis("Vertical");
-        transform.position += transform.up * ((vertical<0)?-0.5f: (vertical > 0) ? 1:0) * Time.deltaTime * speed;
+     
+        Vector3 rotatedMoveDirection = transform.up;
+        if (isDrunk && drunkTimer > shakeTime)
+        {
+            drunkTimer = 0;
+            float randomAngle = Random.Range(-100, 100);
+            
+            rotatedMoveDirection.x = transform.up.x * Mathf.Cos(randomAngle * Mathf.Deg2Rad) - transform.up.y * Mathf.Sin(randomAngle * Mathf.Deg2Rad);
+            rotatedMoveDirection.y = transform.up.x * Mathf.Sin(randomAngle * Mathf.Deg2Rad) + transform.up.y * Mathf.Cos(randomAngle * Mathf.Deg2Rad);
+            rotatedMoveDirection.Normalize();
+            rotatedMoveDirection *= 3f;
+        }
+        transform.position += rotatedMoveDirection * ((vertical < 0) ? -0.5f : (vertical > 0) ? 1 : 0) * Time.deltaTime * speed;
     }
 
     void shoot()
     {
 
-        if(timeSinceLastShoot < shootCooldown)
+        if (timeSinceLastShoot < shootCooldown)
         {
             timeSinceLastShoot += Time.deltaTime;
-        }else if (getInputKey(KeyCode.Space))
+        }
+        else if (getInputKey(KeyCode.Space))
         {
-            GameObject bullet = bulletPool.GetBullet(bulletPrefab, transform.position+ transform.up * bulletSpawnDistance, gameObject.transform.rotation, playerDamage);
+            GameObject bullet = bulletPool.GetBullet(bulletPrefab, transform.position + transform.up * bulletSpawnDistance, gameObject.transform.rotation, playerDamage);
             PlayerBullet pbscript = bullet.gameObject.GetComponent<PlayerBullet>();
             pbscript.speed = shootSpeed;
             pbscript.player = gameObject;
             timeSinceLastShoot = 0;
+            Debug.Log("SHOOOOOOOOT");
         }
 
     }
@@ -447,15 +464,16 @@ public class PlayerMoveScript : MonoBehaviour
         if (animationTimer > 0)
         {
             float delta = Time.deltaTime;
-            animationTimer += animateIn ? delta : -delta ;
+            animationTimer += animateIn ? delta : -delta;
         }
 
-        if(animationTimer > 0) { 
+        if (animationTimer > 0)
+        {
             Renderer renderer = hider.GetComponent<Renderer>();
-            renderer.material.SetFloat("_animationState", Easing.OutCubic(animationTimer)*4);
+            renderer.material.SetFloat("_animationState", Easing.OutCubic(animationTimer) * 4);
             renderer.UpdateGIMaterials();
             DynamicGI.UpdateEnvironment();
-            if(animationTimer > 1)
+            if (animationTimer > 1)
             {
                 animationTimer = 1;
             }
@@ -472,7 +490,7 @@ public class PlayerMoveScript : MonoBehaviour
         hider.transform.position = transform.position + (center - leftTop) + new Vector3(0, 0, -0.1f);
     }
 
-   
 
-    
+
+
 }
