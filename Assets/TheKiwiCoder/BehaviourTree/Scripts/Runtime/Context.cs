@@ -25,7 +25,7 @@ namespace TheKiwiCoder {
         public EnemyInfoManager enemyInfoManager;
         public DisplayPath displayPath;
         public GameObject player;
-        public BasicPlayerController playerController;
+        public PlayerMoveScript playerController;
         public Collider2D playerCollider;
         // TODO: This is where I need to add Components I want to access in my BTs
         // Add other game specific systems here
@@ -59,7 +59,7 @@ namespace TheKiwiCoder {
             {
                 throw new System.Exception("Player not found, which breaks everything. Pls help.");
             }
-            context.playerController = context.player.GetComponent<BasicPlayerController>();
+            context.playerController = context.player.GetComponent<PlayerMoveScript>();
             context.playerCollider = context.player.GetComponent<Collider2D>();
             context.PathfindingTasks = new Dictionary<int, Task<List<Vector2>>>();
 

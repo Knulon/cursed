@@ -1540,7 +1540,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5996901924742196478, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_Name
-      value: EnemySpawnpoint_1 (3)
+      value: EnemySpawnpoint_1
       objectReference: {fileID: 0}
     - target: {fileID: 5996901924742196478, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_TagString
@@ -2300,6 +2300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b45df6f0d4a62b459de51d33443e8fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _player: {fileID: 0}
   _enemySpawnpointPrefab: {fileID: 0}
 --- !u!1 &480384618
 GameObject:
@@ -2974,7 +2975,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5996901924742196478, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_Name
-      value: EnemySpawnpoint_1 (1)
+      value: EnemySpawnpoint_1
       objectReference: {fileID: 0}
     - target: {fileID: 5996901924742196478, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_TagString
@@ -77178,7 +77179,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5996901924742196478, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_Name
-      value: EnemySpawnpoint_1 (2)
+      value: EnemySpawnpoint_1
       objectReference: {fileID: 0}
     - target: {fileID: 5996901924742196478, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_TagString
