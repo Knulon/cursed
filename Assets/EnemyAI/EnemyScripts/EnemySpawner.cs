@@ -4,6 +4,12 @@ using Debug = UnityEngine.Debug;
 
 public class EnemySpawner : MonoBehaviour
 {
+    private enum Enemytype
+    {
+        Normal = 0,
+        Sniper = 1,
+        Runner = 2
+    }
 
     [SerializeField]
     private GameObject _enemyPrefab;
@@ -18,17 +24,15 @@ public class EnemySpawner : MonoBehaviour
     private GameObject _exitTrigger;
 
     [SerializeField]
-    private GameObject _key;
-
-    [SerializeField]
     private int _numberOfEnemies = 20;
+    private int _enemiesSpawned;
 
     [SerializeField]
     private bool SpawnEnemies = true;
 
     private float spawnBucket;
 
-    private static EnemyPool enemyPool = new EnemyPool();
+    private static EnemyPool enemyPool = new();
 
 
     private class EnemyPool
@@ -40,17 +44,13 @@ public class EnemySpawner : MonoBehaviour
             if (_pool.Count == 0)
             {
                 GameObject enemy = Instantiate(enemyPrefab, position, enemyPrefab.transform.rotation);
-                EnemyInfoManager enemyInfoManager = enemy.GetComponent<EnemyInfoManager>();
-                enemyInfoManager.SetExitTrigger(exitTrigger);
-                enemyInfoManager.Health = 100f;
+                SetEnemyStats(ref enemy, (Enemytype)Random.Range(0, 3), exitTrigger);
                 return enemy;
             }
 
             GameObject enemyFromPool = _pool.Pop();
             enemyFromPool.transform.position = position;
-            EnemyInfoManager enemyInfoManagerFromPool = enemyFromPool.GetComponent<EnemyInfoManager>();
-            enemyInfoManagerFromPool.SetExitTrigger(exitTrigger);
-            enemyInfoManagerFromPool.Health = 100f;
+            SetEnemyStats(ref enemyFromPool, (Enemytype)Random.Range(0, 3), exitTrigger);
             enemyFromPool.SetActive(true);
             return enemyFromPool;
         }
@@ -66,7 +66,7 @@ public class EnemySpawner : MonoBehaviour
             GameObject enemy = Instantiate(enemyPrefab, Vector3.zero, enemyPrefab.transform.rotation);
             EnemyInfoManager enemyInfoManager = enemy.GetComponent<EnemyInfoManager>();
             enemyInfoManager.SetExitTrigger(null);
-            enemyInfoManager.Health = 100f;
+            enemyInfoManager.SetHealth(100);
 
             for (int i = 0; i < count; i++)
             {
@@ -98,7 +98,7 @@ public class EnemySpawner : MonoBehaviour
             SpawnEnemyAtRate();
         }
 
-        if (_numberOfEnemies <= 0)
+        if (_enemiesSpawned >= _numberOfEnemies)
         {
             SpawnEnemies = false;
         }
@@ -113,7 +113,7 @@ public class EnemySpawner : MonoBehaviour
             int enemiesToSpawn = (int)spawnBucket;
 
             spawnBucket -= enemiesToSpawn;
-            _numberOfEnemies -= enemiesToSpawn;
+            _enemiesSpawned += enemiesToSpawn;
             for (int i = 0; i < enemiesToSpawn; i++)
             {
                 SpawnEnemy();
@@ -126,6 +126,52 @@ public class EnemySpawner : MonoBehaviour
         Vector3 spawnPosition = transform.position + Random.insideUnitSphere * _spawnRadius;
         spawnPosition.z = 0f;
         GameObject enemy = enemyPool.GetEnemy(_enemyPrefab, spawnPosition, _exitTrigger);
+    }
+
+    static void SetEnemyStats(ref GameObject enemy, Enemytype enemytype, GameObject exitTrigger)
+    {
+        EnemyInfoManager enemyInfoManager = enemy.GetComponent<EnemyInfoManager>();
+        EnemyController enemyController = enemy.GetComponent<EnemyController>();
+        EnemyWeaponController enemyWeaponController = enemy.GetComponent<EnemyWeaponController>();
+        enemyInfoManager.SetExitTrigger(exitTrigger);
+
+        switch (enemytype)
+        {
+            case Enemytype.Normal:
+                enemyInfoManager.SetHealth(100f);
+                break;
+            case Enemytype.Sniper:
+                enemyInfoManager.SetHealth(50f);
+                enemyWeaponController._fireRate = 0.5f;
+                enemyWeaponController._damage = 50f;
+                enemyWeaponController._magazineSize = 1;
+                enemyWeaponController._reloadTime = 0.25f;
+                enemyInfoManager._detectPlayerRadius = 20f;
+                enemyInfoManager._attackPlayerRadius = 18f;
+                break;
+            case Enemytype.Runner:
+                enemyInfoManager.SetHealth(75f);
+                enemyController.maxVelocity = 10f;
+                enemyController.acceleration = 10f;
+                enemyWeaponController._bulletSpread = 50f;
+                enemyWeaponController._fireRate = 5f;
+                enemyWeaponController._damage = 25f;
+                break;
+            default:
+                Debug.LogError("Invalid enemy type");
+                break;
+        }
+    }
+
+    public void Reset()
+    {
+        _enemiesSpawned = 0;
+        SpawnEnemies = true;
+    }
+
+    public static void ReturnEnemy(GameObject enemy)
+    {
+        enemyPool.ReturnEnemy(enemy);
     }
 
     void OnDrawGizmos()

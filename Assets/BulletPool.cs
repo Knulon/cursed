@@ -1,60 +1,85 @@
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
-public class BulletPool : MonoBehaviour 
+public class BulletPool : ScriptableObject
 {
-    public GameObject bulletsPrefab;
-    private GameObject[] bullets;
-    private int activeObjects = 0;
+    [DisallowNull]
+    private static BulletPool _instance;
 
-    BulletPool(GameObject bulletType, int startBullets)
+    private Stack<GameObject> _pool;
+
+    private BulletPool()
     {
-        bulletsPrefab = bulletType;
-        this.activeObjects = 0;
-        this.bullets = new GameObject[startBullets];
-        for (int i = 0; i < this.bullets.Length; i++)
+        _pool = new Stack<GameObject>();
+    }
+
+    public GameObject GetBullet(GameObject _bulletPrefab, Vector3 position, float Damage, Collider2D myCollider2D, LayerMask bulletLayer)
+    {
+        if (_pool.Count == 0)
         {
-            bullets[i] = Instantiate(bulletsPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-            bullets[i].SetActive(false);
+            GameObject bullet = Instantiate(_bulletPrefab, position, _bulletPrefab.transform.rotation);
+            Bullet bulletScriptComponent = bullet.GetComponent<Bullet>();
+            bulletScriptComponent.Damage = Damage;
+            //bulletScriptComponent.SetCollider(myCollider2D);
+            bulletScriptComponent.ResetTimeToLive();
+            bullet.layer = bulletLayer;
+            return bullet;
+        }
+
+        // TODO: This fails if the bulletPrefab is not the same as the one in the pool
+        GameObject popBullet = _pool.Pop();
+        popBullet.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        popBullet.transform.position = position;
+        popBullet.transform.rotation = _bulletPrefab.transform.rotation;
+        popBullet.layer = bulletLayer;
+        Bullet popBulletScriptComponent = popBullet.GetComponent<Bullet>();
+        popBulletScriptComponent.ResetTimeToLive();
+        popBulletScriptComponent.Damage = Damage;
+        //popBulletScriptComponent.SetCollider(myCollider2D);
+
+        popBullet.SetActive(true);
+        return popBullet;
+    }
+
+    public void AddBullet(GameObject bullet)
+    {
+        bullet.SetActive(false);
+        _pool.Push(bullet);
+    }
+
+    public int Count()
+    {
+        return _pool.Count;
+    }
+
+    public void PrepareBullets(int i, GameObject _bulletPrefab)
+    {
+        for (int j = 0; j < i; j++)
+        {
+            GameObject bullet = Instantiate(_bulletPrefab, Vector3.zero, _bulletPrefab.transform.rotation);
+            bullet.SetActive(false);
+            _pool.Push(bullet);
         }
     }
 
-    void doubleBullets()
+    public static BulletPool GetInstance(GameObject bulletPrefab)
     {
-        GameObject[] gameObjects = new GameObject[bullets.Length * 2];
-        for (int i = 0; i < bullets.Length; i++)
+        if (_instance == null)
         {
-            gameObjects[i] = bullets[i];
+            _instance = CreateInstance<BulletPool>();
+            _instance.PrepareBullets(300, bulletPrefab);
         }
-        for (int i = bullets.Length; i < gameObjects.Length; i++)
+        return _instance;
+    }
+
+    public static BulletPool GetInstance()
+    {
+        if (_instance == null)
         {
-            gameObjects[i] = Instantiate(bulletsPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-            bullets[i].SetActive(false);
+            _instance = CreateInstance<BulletPool>();
         }
-        bullets = gameObjects;
-    }
-
-    GameObject getBullet()
-    {
-        if (activeObjects >= bullets.Length)
-            doubleBullets();
-        GameObject bullet = bullets[activeObjects++];
-        bullet.SetActive(true);
-        return bullet;
-    }
-
-    void swap(int idx1, int idx2)
-    {
-        GameObject temp = bullets[idx1];
-        bullets[idx1] = bullets[idx2];
-        bullets[idx2] = temp;
-    }
-
-    void deactivate(GameObject obj)
-    {
-        int idxSwap = System.Array.IndexOf(bullets, obj);
-        swap(idxSwap, activeObjects--);
-        obj.SetActive(false);
-
+        return _instance;
     }
 
 }

@@ -5,11 +5,18 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 using Random = UnityEngine.Random;
+using System.Numerics;
+using UnityEngine;
+using UnityEngine.UIElements;
+using UnityEngine.UIElements.Experimental;
+using Quaternion = UnityEngine.Quaternion;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 public class PlayerMoveScript : MonoBehaviour
 {
 
-    public class BulletPool
+    enum Damage
     {
         private Stack<GameObject> _pool = new Stack<GameObject>();
 
@@ -72,7 +79,9 @@ public class PlayerMoveScript : MonoBehaviour
         STRONGDRUNK = 5
     }
 
-    public BulletPool bulletPool = new();
+    private BulletPool bulletPool;
+
+    private int levelID;
 
 
     // player attributes
@@ -117,6 +126,8 @@ public class PlayerMoveScript : MonoBehaviour
     [SerializeField]
     float shootSpeed = 1;
 
+    [SerializeField]
+    float bulletSpeed = 1;
 
     [SerializeField]
     float bulletBaseDamage = 3;
@@ -152,14 +163,18 @@ public class PlayerMoveScript : MonoBehaviour
     private float timeSinceLastShoot = 0;
     private Rigidbody2D rigid;
 
-
-    
-
     Dictionary<string, string> stringMap = new Dictionary<string, string>();
     Dictionary<KeyCode, KeyCode> keyCodeMap = new Dictionary<KeyCode, KeyCode>();
 
     [SerializeField]
     bool invertedControls = false;
+
+    [SerializeField]
+    private GameManager gameManager;
+
+    [SerializeField]
+    private GameObject deathScreen;
+
 
     float animationTimer = 0;
     bool animateIn = true;
@@ -174,14 +189,13 @@ public class PlayerMoveScript : MonoBehaviour
     void Start()
     {
         updatePlayerPrefs();
+        bulletPool = BulletPool.GetInstance(bulletPrefab);
 
         cam = Camera.main;
         lives = MAX_LIVES;
         rigid = GetComponent<Rigidbody2D>();
 
         initMaps();
-
-        bulletPool.PrepareBullets(100, bulletPrefab, new Vector3(0, 0, 0));
     }
 
     public void updatePlayerPrefs()
@@ -210,7 +224,6 @@ public class PlayerMoveScript : MonoBehaviour
         }
 
         centerCam();
-
         move();
         scale(); 
 
@@ -234,11 +247,11 @@ public class PlayerMoveScript : MonoBehaviour
         level.GetComponent<TextMeshProUGUI>().text = "Level " + ((LEVEL + 1) >= MAX_LEVEL ? MAX_LEVEL : (LEVEL + 1)) + " von " + MAX_LEVEL;
         if (lastLvlKeyCount > 0)
         {
-            key.GetComponent<TextMeshProUGUI>().text = lastLvlKeyCount>0? "eingesammelte Schlüssel: " + lastLvlKeyCount : "";
+            key.GetComponent<TextMeshProUGUI>().text = lastLvlKeyCount>0? "eingesammelte Schlï¿½ssel: " + lastLvlKeyCount : "";
         }
         else
         {
-            key.GetComponent<TextMeshProUGUI>().text = hasKey ? "Schlüssel eingesammelt" : "";
+            key.GetComponent<TextMeshProUGUI>().text = hasKey ? "Schlï¿½ssel eingesammelt" : "";
         }
     }
 
@@ -359,6 +372,10 @@ public class PlayerMoveScript : MonoBehaviour
 
         if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
         {
+        if (collision.gameObject.layer.Equals(12))
+        {
+            Debug.Log("Player hit by bullet");
+
             Bullet bullet = collision.gameObject.GetComponent<Bullet>();
             damage(Damage.ENEMY, bullet.GetDamageAndSendToPool());
         }
@@ -387,9 +404,11 @@ public class PlayerMoveScript : MonoBehaviour
         /**
         if (collider.gameObject.name == "ExitTrigger")
         {
+            levelID++;
             Debug.Log("Player has reached the exit.");
             hasKey = false;
             // TODO: Level transition as in: Destroy all enemies, close doors, spawn new enemies, spawn key, etc.
+            gameManager.nextLevel(levelID);
             Destroy(collider.gameObject);
         }
         **/
@@ -407,6 +426,12 @@ public class PlayerMoveScript : MonoBehaviour
                 lives -= dam;
                 break;
             default: return false;
+        }
+
+        if (lives <= 0)
+        {
+            deathScreen.SetActive(true);
+            Time.timeScale = 0;
         }
         return true;
     }

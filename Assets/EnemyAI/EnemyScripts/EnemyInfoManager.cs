@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,35 +6,42 @@ using UnityEngine;
 public class EnemyInfoManager : MonoBehaviour
 {
     private GameObject player;
-    private Collider2D playerCollider;
-    private Collider2D[] colliders;
+    private Collider2D myCollider;
     private bool playerInSight;
     private bool playerInAttackRange;
 
-    [SerializeField] public float Health { get; set; } = 100f;
+
 
     [SerializeField]
-    private float detectPlayerRadius = 5f;
+    private float _health = 100f;
+
+    private float _maxHealth = 100f;
 
     [SerializeField]
-    private float attackPlayerRadius = 1f;
+    public float _detectPlayerRadius = 5f;
 
     [SerializeField]
-    private float pathPointReachedRadius = 0.1f;
+    public float _attackPlayerRadius = 1f;
 
     [SerializeField]
-    private float playerMovedTooMuchRadius = 0.5f;
+    public float _pathPointReachedRadius = 0.1f;
 
-    [SerializeField] private GameObject exitTrigger;
+    [SerializeField]
+    private float _playerMovedTooMuchRadius = 0.5f;
+
+    [SerializeField] private GameObject _exitTrigger;
+
+    [SerializeField] private GameObject _healthBar;
+
+    private Vector3 _healthBarTransformScale;
 
 
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        playerCollider = player.GetComponent<Collider2D>();
-        colliders = gameObject.GetComponents<Collider2D>();
-
+        myCollider = gameObject.GetComponent<Collider2D>();
+        _healthBarTransformScale =  _healthBar.transform.localScale;
     }
 
 
@@ -45,32 +53,60 @@ public class EnemyInfoManager : MonoBehaviour
 
     public float GetDetectPlayerRadius()
     {
-        return detectPlayerRadius;
+        return _detectPlayerRadius;
     }
 
     public float GetAttackPlayerRadius()
     {
-        return attackPlayerRadius;
+        return _attackPlayerRadius;
     }
 
     public float GetPathPointReachedRadius()
     {
-        return pathPointReachedRadius;
+        return _pathPointReachedRadius;
     }
 
     public float GetPlayerMovedTooMuchRadius()
     {
-        return playerMovedTooMuchRadius;
+        return _playerMovedTooMuchRadius;
     }
 
     public GameObject GetExitTrigger()
     {
-        return exitTrigger;
+        return _exitTrigger;
     }
 
     public void SetExitTrigger(GameObject value)
     {
-        exitTrigger = value;
+        _exitTrigger = value;
+    }
+
+    public void SetHealth(float value)
+    {
+        _health = value;
+        _health = Mathf.Clamp(value, 0, _maxHealth);
+        _healthBar.transform.localScale = new Vector3(_health / _maxHealth * _healthBarTransformScale.x, _healthBarTransformScale.y, 1);
+        if (_health > 99.8f)
+        {
+            _healthBar.SetActive(false);
+        }
+        else
+        {
+            _healthBar.SetActive(true);
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("Collided with:" + collision.gameObject.name);
+        if (collision.gameObject.layer.Equals(11))
+        {
+            SetHealth(_health - collision.gameObject.GetComponent<Bullet>().GetDamageAndSendToPool());
+            if (_health <= 0)
+            {
+                EnemySpawner.ReturnEnemy(gameObject.transform.parent.gameObject);
+            }
+        }
     }
 
 
@@ -85,7 +121,7 @@ public class EnemyInfoManager : MonoBehaviour
             Gizmos.color = Color.red;
         }
 
-        Gizmos.DrawWireSphere(gameObject.transform.position, detectPlayerRadius);
+        Gizmos.DrawWireSphere(gameObject.transform.position, _detectPlayerRadius);
 
         if (player != null)
         {
@@ -100,9 +136,9 @@ public class EnemyInfoManager : MonoBehaviour
         {
             Gizmos.color = Color.black;
         }
-        Gizmos.DrawWireSphere(gameObject.transform.position, attackPlayerRadius);
+        Gizmos.DrawWireSphere(gameObject.transform.position, _attackPlayerRadius);
 
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(gameObject.transform.position, pathPointReachedRadius);
+        Gizmos.DrawWireSphere(gameObject.transform.position, _pathPointReachedRadius);
     }
 }

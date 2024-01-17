@@ -9,10 +9,13 @@ public class PlayerBullet : MonoBehaviour
     // Start is called before the first frame update
     public float speed = 50f;
     public GameObject player;
+
+    private static BulletPool _bulletPool;
+
     public float Damage;
     void Start()
     {
-
+        _bulletPool = BulletPool.GetInstance();
     }
 
     // Update is called once per frame
@@ -38,11 +41,5 @@ public class PlayerBullet : MonoBehaviour
                 SendToPool();
             }
         }
-    }
-
-
-    public void SendToPool()
-    {
-        player.GetComponent<PlayerMoveScript>().bulletPool.AddBullet(this.gameObject);
     }
 }

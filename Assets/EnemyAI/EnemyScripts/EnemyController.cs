@@ -14,15 +14,16 @@ public class EnemyController : MonoBehaviour
     public float acceleration = 4f;
     private bool _isMoving;
 
-    [SerializeField]
+    [SerializeField] 
     public bool HumanControlled = false;
 
+    [SerializeField] public GameObject Parent;
 
     // Update is called once per frame
     void Update()
     {
         KeyboardInput();
-        transform.Translate(_velocityVector * Time.deltaTime);
+        Parent.transform.Translate(_velocityVector * Time.deltaTime);
         SlowDownUntilStop();
     }
 
@@ -40,8 +41,13 @@ public class EnemyController : MonoBehaviour
         //_velocity = Mathf.Clamp(_velocity, 0, maxVelocity);
     }
 
-    public void Move()
+    public void Move(bool calledByScript)
     {
+        if (HumanControlled && calledByScript)
+        {
+            return;
+        }
+
         _isMoving = true;
         // If direction changed a lot prioritize the new direction
         if (Vector2.Angle(_oldDirection, _direction) >= 90)
@@ -94,7 +100,7 @@ public class EnemyController : MonoBehaviour
         if (keyDown)
         {
             Direction = newDir;
-            Move();
+            Move(false);
         }
     }
 
@@ -117,6 +123,7 @@ public class EnemyController : MonoBehaviour
     public float MaxVelocity
     {
         get => maxVelocity;
+        set => maxVelocity = value;
     }
 
     public float Acceleration

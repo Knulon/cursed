@@ -55,6 +55,10 @@ namespace TheKiwiCoder {
             context.enemyInfoManager = context.gameObject.GetComponent<EnemyInfoManager>();
             context.displayPath = context.gameObject.GetComponent<DisplayPath>();
             context.player = GameObject.FindGameObjectWithTag("Player");
+            if (context.player == null)
+            {
+                throw new System.Exception("Player not found, which breaks everything. Pls help.");
+            }
             context.playerController = context.player.GetComponent<BasicPlayerController>();
             context.playerCollider = context.player.GetComponent<Collider2D>();
             context.PathfindingTasks = new Dictionary<int, Task<List<Vector2>>>();
