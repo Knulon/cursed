@@ -112,13 +112,6 @@ public class EnemyWeaponController : MonoBehaviour
         }
     }
 
-    public static void AddBulletToPool(GameObject bullet)
-    {
-        bullet.SetActive(false);
-        _bulletPool.AddBullet(bullet);
-    }
-
-
     void OnDrawGizmos()
     {
         if (_bulletsInMagazine == 0)
