@@ -16,52 +16,7 @@ using Vector3 = UnityEngine.Vector3;
 public class PlayerMoveScript : MonoBehaviour
 {
 
-    enum Damage
-    {
-        private Stack<GameObject> _pool = new Stack<GameObject>();
-
-        public GameObject GetBullet(GameObject _bulletPrefab, Vector3 position, Quaternion rotation, float Damage)
-        {
-            if (_pool.Count == 0)
-            {
-                Debug.Log("new Bullet created!");
-                GameObject bullet = Instantiate(_bulletPrefab, position, rotation);
-                PlayerBullet bulletScriptComponent = bullet.GetComponent<PlayerBullet>();
-                bulletScriptComponent.Damage = Damage;
-                return bullet;
-            }
-
-            // TODO: This fails if the bulletPrefab is not the same as the one in the pool
-            GameObject popBullet = _pool.Pop();
-            popBullet.transform.position = position;
-            popBullet.transform.rotation = rotation;
-            PlayerBullet popBulletScriptComponent = popBullet.GetComponent<PlayerBullet>();
-            popBulletScriptComponent.Damage = Damage;
-            popBullet.SetActive(true);
-            return popBullet;
-        }
-
-        public void AddBullet(GameObject bullet)
-        {
-            bullet.SetActive(false);
-            _pool.Push(bullet);
-        }
-
-        public int Count()
-        {
-            return _pool.Count;
-        }
-
-        public void PrepareBullets(int i, GameObject _bulletPrefab, Vector3 position)
-        {
-            for (int j = 0; j < i; j++)
-            {
-                GameObject bullet = Instantiate(_bulletPrefab, Vector3.zero, _bulletPrefab.transform.rotation);
-                bullet.SetActive(false);
-                _pool.Push(bullet);
-            }
-        }
-    }
+    
 
     enum Damage
     {
@@ -79,7 +34,7 @@ public class PlayerMoveScript : MonoBehaviour
         STRONGDRUNK = 5
     }
 
-    private BulletPool bulletPool;
+    public BulletPool bulletPool;
 
     private int levelID;
 
@@ -190,6 +145,14 @@ public class PlayerMoveScript : MonoBehaviour
     {
         updatePlayerPrefs();
         bulletPool = BulletPool.GetInstance(bulletPrefab);
+        bulletPool.PrepareBullets(100, bulletPrefab);
+
+        if(bulletPool != null )
+        {
+            Debug.Log("BULLET POOOOOOL");
+        }
+
+        gameManager.nextLevel(1);
 
         cam = Camera.main;
         lives = MAX_LIVES;
@@ -372,12 +335,13 @@ public class PlayerMoveScript : MonoBehaviour
 
         if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
         {
-        if (collision.gameObject.layer.Equals(12))
-        {
-            Debug.Log("Player hit by bullet");
+            if (collision.gameObject.layer.Equals(12))
+            {
+                Debug.Log("Player hit by bullet");
 
-            Bullet bullet = collision.gameObject.GetComponent<Bullet>();
-            damage(Damage.ENEMY, bullet.GetDamageAndSendToPool());
+                Bullet bullet = collision.gameObject.GetComponent<Bullet>();
+                damage(Damage.ENEMY, bullet.GetDamageAndSendToPool());
+            }
         }
     }
 
@@ -390,6 +354,7 @@ public class PlayerMoveScript : MonoBehaviour
             {
                 n.SetActive(false);
                 obj.transform.position = n.transform.position;
+                gameManager.nextLevel(LEVEL+1);
             }
         }
     }
@@ -438,7 +403,7 @@ public class PlayerMoveScript : MonoBehaviour
 
 
 
-    void centerCam()
+    private void centerCam()
     {
         if (cam != null)
             cam.transform.position = transform.position + new Vector3(0, 0, -10);
@@ -475,12 +440,30 @@ public class PlayerMoveScript : MonoBehaviour
         }
         else if (getInputKey(KeyCode.Space))
         {
-            GameObject bullet = bulletPool.GetBullet(bulletPrefab, transform.position + transform.up * bulletSpawnDistance, gameObject.transform.rotation, playerDamage);
-            PlayerBullet pbscript = bullet.gameObject.GetComponent<PlayerBullet>();
-            pbscript.speed = shootSpeed;
-            pbscript.player = gameObject;
-            timeSinceLastShoot = 0;
-            Debug.Log("SHOOOOOOOOT");
+            // TODO TOBI: what layer mask??
+            GameObject bullet = bulletPool.GetBullet(bulletPrefab, transform.position + transform.up * bulletSpawnDistance, playerDamage, null, bulletLayer: 11);
+            if (bullet != null)
+            {
+                PlayerBullet pbscript = bullet.gameObject.GetComponent<PlayerBullet>();
+                /**
+                pbscript.speed = shootSpeed;
+                pbscript.player = gameObject;
+                timeSinceLastShoot = 0;
+                Debug.Log("SHOOOOOOOOT");
+                **/
+                Vector2 dir = transform.up;
+                Vector2 rotatedShootDirection = dir;
+                rotatedShootDirection.x = dir.x * Mathf.Cos(-90 * Mathf.Deg2Rad) - dir.y * Mathf.Sin(-90 * Mathf.Deg2Rad);
+                rotatedShootDirection.y = dir.x * Mathf.Sin(-90 * Mathf.Deg2Rad) + dir.y * Mathf.Cos(-90 * Mathf.Deg2Rad);
+                rotatedShootDirection.Normalize();
+
+                float angle = Mathf.Atan2(rotatedShootDirection.y, rotatedShootDirection.x) * Mathf.Rad2Deg;
+                bullet.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+                bullet.GetComponent<Rigidbody2D>().velocity = (dir * bulletSpeed);
+
+                timeSinceLastShoot = 0;
+            }
         }
 
     }

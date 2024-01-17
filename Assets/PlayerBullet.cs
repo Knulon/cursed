@@ -42,4 +42,10 @@ public class PlayerBullet : MonoBehaviour
             }
         }
     }
+
+
+    public void SendToPool()
+    {
+        player.GetComponent<PlayerMoveScript>().bulletPool.AddBullet(gameObject);
+    }
 }

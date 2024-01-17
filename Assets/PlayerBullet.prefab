@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 366544753785040460}
   - component: {fileID: 8034476631505802231}
   - component: {fileID: 3842335343732864122}
+  - component: {fileID: 89952779866127647}
   m_Layer: 11
   m_Name: PlayerBullet
   m_TagString: Untagged
@@ -136,7 +137,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!50 &3458463607803809122
+--- !u!50 &89952779866127647
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0

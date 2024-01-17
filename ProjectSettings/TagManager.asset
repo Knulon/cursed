@@ -9,6 +9,8 @@ TagManager:
   - SPAWN
   - keypos
   - Audio
+  - Undefined
+  - EnemySpawnpoint
   layers:
   - Default
   - TransparentFX
