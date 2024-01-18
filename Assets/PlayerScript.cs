@@ -108,11 +108,14 @@ public class PlayerMoveScript : MonoBehaviour
 
     [SerializeField] GameObject pauseMenu;
 
+    void Awake()
+    {
+        bulletPool = BulletPool.GetInstance(bulletPrefab);
+    }
+
     void Start()
     {
         updatePlayerPrefs();
-        bulletPool = BulletPool.GetInstance(bulletPrefab);
-        bulletPool.PrepareBullets(100, bulletPrefab);
 
         if (bulletPool != null)
         {

@@ -86,7 +86,7 @@ public class EnemySpawner : MonoBehaviour
 
     }
 
-    void Start()
+    void Awake()
     {
         if (!_enemiesArePrepared)
         {

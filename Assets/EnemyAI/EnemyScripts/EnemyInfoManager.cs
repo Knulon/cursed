@@ -44,12 +44,6 @@ public class EnemyInfoManager : MonoBehaviour
         _healthBarTransformScale =  _healthBar.transform.localScale;
     }
 
-    void OnDestroy()
-    {
-        Debug.Log("Enemy destroyed");
-    }
-
-
     public bool SetPlayerInSight(bool value)
     {
         playerInSight = value;
