@@ -83,6 +83,11 @@ public class EnemyInfoManager : MonoBehaviour
 
     public void SetHealth(float value)
     {
+        if (_healthBarTransformScale.Equals(Vector3.zero))
+        {
+            _healthBarTransformScale = _healthBar.transform.localScale;
+        }
+
         _health = value;
         _health = Mathf.Clamp(value, 0, _maxHealth);
         _healthBar.transform.localScale = new Vector3(_health / _maxHealth * _healthBarTransformScale.x, _healthBarTransformScale.y, 1);
