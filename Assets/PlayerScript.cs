@@ -307,9 +307,7 @@ public class PlayerMoveScript : MonoBehaviour
                         LEVEL++;
                         hasKey = false;
 
-                        // TODO TOBI: add functionality for spawning monsterspawner 
-                        // LEVEL = 
-
+                        gameManager.nextLevel(LEVEL);
 
                         break;
                     }
@@ -349,7 +347,6 @@ public class PlayerMoveScript : MonoBehaviour
             {
                 n.SetActive(false);
                 obj.transform.position = n.transform.position;
-                gameManager.nextLevel(LEVEL + 1);
             }
         }
     }

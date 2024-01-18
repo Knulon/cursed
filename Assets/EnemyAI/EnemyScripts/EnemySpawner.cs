@@ -162,24 +162,27 @@ public class EnemySpawner : MonoBehaviour
         switch (enemytype)
         {
             case Enemytype.Normal:
+                enemyWeaponController._reloadTime = 0.25f;
+                enemyWeaponController._damage = 11f;
                 enemyInfoManager.SetMaxHealth(100f);
                 break;
             case Enemytype.Sniper:
                 enemyInfoManager.SetMaxHealth(50f);
                 enemyWeaponController._fireRate = 0.5f;
-                enemyWeaponController._damage = 50f;
+                enemyWeaponController._damage = 17f;
                 enemyWeaponController._magazineSize = 1;
-                enemyWeaponController._reloadTime = 0.25f;
+                enemyWeaponController._reloadTime = 0.5f;
                 enemyInfoManager._detectPlayerRadius = 20f;
                 enemyInfoManager._attackPlayerRadius = 18f;
                 break;
             case Enemytype.Runner:
                 enemyInfoManager.SetMaxHealth(75f);
+                enemyWeaponController._reloadTime = 0.25f;
                 enemyController.maxVelocity = 10f;
                 enemyController.acceleration = 10f;
                 enemyWeaponController._bulletSpread = 50f;
                 enemyWeaponController._fireRate = 5f;
-                enemyWeaponController._damage = 25f;
+                enemyWeaponController._damage = 7f;
                 break;
             default:
                 Debug.LogError("Invalid enemy type");
