@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
+using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -45,14 +47,14 @@ public class EnemySpawner : MonoBehaviour
             if (_pool.Count == 0)
             {
                 GameObject enemy = Instantiate(enemyPrefab, position, enemyPrefab.transform.rotation);
-                SetEnemyStats(ref enemy, (Enemytype)Random.Range(0, 3), exitTrigger);
+                SetEnemyStats(ref enemy, (Enemytype)Random.Range(0, Enum.GetNames(typeof(Enemytype)).Length), exitTrigger);
                 return enemy;
             }
 
             GameObject enemyFromPool = _pool.Pop();
             enemyFromPool.SetActive(true);
             enemyFromPool.transform.position = position;
-            SetEnemyStats(ref enemyFromPool, (Enemytype)Random.Range(0, 3), exitTrigger);
+            SetEnemyStats(ref enemyFromPool, (Enemytype)Random.Range(0, Enum.GetNames(typeof(Enemytype)).Length), exitTrigger);
             return enemyFromPool;
         }
 
