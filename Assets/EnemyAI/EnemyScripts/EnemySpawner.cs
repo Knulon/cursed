@@ -50,8 +50,11 @@ public class EnemySpawner : MonoBehaviour
                 SetEnemyStats(ref enemy, (Enemytype)Random.Range(0, Enum.GetNames(typeof(Enemytype)).Length), exitTrigger);
                 return enemy;
             }
-
             GameObject enemyFromPool = _pool.Pop();
+            for (int i = 0; i<10 && enemyFromPool == null; i++)
+            {
+                enemyFromPool = _pool.Pop();
+            }
             enemyFromPool.SetActive(true);
             enemyFromPool.transform.position = position;
             SetEnemyStats(ref enemyFromPool, (Enemytype)Random.Range(0, Enum.GetNames(typeof(Enemytype)).Length), exitTrigger);
@@ -91,7 +94,7 @@ public class EnemySpawner : MonoBehaviour
         AStar_Handler aStar_Handler = _enemyPrefab.GetComponentInChildren<AStar_Handler>();
         if (aStar_Handler != null)
         {
-            AStarOnNodes aStar = new(aStar_Handler.GetGridOffset(),aStar_Handler.GetNumerator(),aStar_Handler.GetDenominator(), aStar_Handler.GetCollisionBoxSize());
+            AStarOnNodes aStar = new(aStar_Handler.GetGridOffset(), aStar_Handler.GetNumerator(), aStar_Handler.GetDenominator(), aStar_Handler.GetCollisionBoxSize());
             aStar.BuildBlockedTilesHashMap(new(aStar_Handler.GetNumerator(), aStar_Handler.GetDenominator()), 3000);
         }
 
