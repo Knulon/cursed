@@ -15,6 +15,11 @@ public class Bullet : MonoBehaviour
 
     private float _timeToLive = 5f;
 
+    void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
     private void Start()
     {
         if (BulletPool == null)

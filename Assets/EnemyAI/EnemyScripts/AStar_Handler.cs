@@ -42,4 +42,9 @@ public class AStar_Handler : MonoBehaviour
     {
         return Denominator;
     }
+
+    public float GetCollisionBoxSize()
+    {
+        return _collisionBoxSize;
+    }
 }

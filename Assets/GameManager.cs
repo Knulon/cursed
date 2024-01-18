@@ -93,6 +93,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void OnDestroy()
+    {
+        ClearLevel();
+    }
+
     public void ClearLevel() // Deletes all enemies and resets all enemy spawners; 
     {
         List<GameObject> enemies = new(GameObject.FindGameObjectsWithTag("enemy"));

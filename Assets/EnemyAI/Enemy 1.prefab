@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 2330974371992758395}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 34.32763, y: 14.495033, z: 0.042632807}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -370,7 +370,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Numerator: 3
   Denominator: 4
-  _gridOffset: {x: -10, y: -10}
+  _gridOffset: {x: -75, y: -75}
   _collisionBoxSize: 0.5
 --- !u!114 &2916149255418568051
 MonoBehaviour:

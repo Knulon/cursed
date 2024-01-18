@@ -88,12 +88,21 @@ public class EnemySpawner : MonoBehaviour
 
     void Awake()
     {
+        AStar_Handler aStar_Handler = _enemyPrefab.GetComponentInChildren<AStar_Handler>();
+        if (aStar_Handler != null)
+        {
+            AStarOnNodes aStar = new(aStar_Handler.GetGridOffset(),aStar_Handler.GetNumerator(),aStar_Handler.GetDenominator(), aStar_Handler.GetCollisionBoxSize());
+            aStar.BuildBlockedTilesHashMap(new(aStar_Handler.GetNumerator(), aStar_Handler.GetDenominator()), 3000);
+        }
+
         if (!_enemiesArePrepared)
         {
             _enemiesArePrepared = true;
             enemyPool = new();
             enemyPool.PrepareEnemies(_enemyPrefab, 300);
         }
+
+
     }
 
 
