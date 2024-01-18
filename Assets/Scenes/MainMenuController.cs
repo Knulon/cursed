@@ -8,6 +8,7 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] GameObject player; 
     public void SwitchScene(string sceneName)
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene(sceneName);
     }
 
