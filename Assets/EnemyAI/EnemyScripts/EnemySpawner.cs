@@ -67,7 +67,7 @@ public class EnemySpawner : MonoBehaviour
             GameObject enemy = Instantiate(enemyPrefab, Vector3.zero, enemyPrefab.transform.rotation);
             EnemyInfoManager enemyInfoManager = enemy.GetComponentInChildren<EnemyInfoManager>();
             enemyInfoManager.SetExitTrigger(null);
-            enemyInfoManager.SetHealth(100);
+            enemyInfoManager.SetMaxHealth(100);
 
             for (int i = 0; i < count; i++)
             {
@@ -149,7 +149,7 @@ public class EnemySpawner : MonoBehaviour
         switch (enemytype)
         {
             case Enemytype.Normal:
-                enemyInfoManager.SetHealth(100f);
+                enemyInfoManager.SetMaxHealth(100f);
                 break;
             case Enemytype.Sniper:
                 enemyInfoManager.SetMaxHealth(50f);
