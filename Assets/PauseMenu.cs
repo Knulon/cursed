@@ -16,18 +16,19 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1;
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (pauseMenu.activeSelf)
-            {
-                Resume();
-            }
-            else
-            {
-                Pause();
-            }
-        }
-    }
+    // void Update()
+    // {
+    //     if (Input.GetKeyDown(KeyCode.Escape))
+    //     {
+    //         Debug.Log("MACH MAL NE PAUSE!");
+    //         if (pauseMenu.activeSelf)
+    //         {
+    //             Resume();
+    //         }
+    //         else
+    //         {
+    //             Pause();
+    //         }
+    //     }
+    // }
 }
