@@ -2,22 +2,14 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 using Random = UnityEngine.Random;
-using System.Numerics;
-using UnityEngine;
-using UnityEngine.UIElements;
-using UnityEngine.UIElements.Experimental;
 using Quaternion = UnityEngine.Quaternion;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
 public class PlayerMoveScript : MonoBehaviour
 {
-
-    
-
     enum Damage
     {
         RUNSAGAINSTWALL,
@@ -36,8 +28,6 @@ public class PlayerMoveScript : MonoBehaviour
 
     public BulletPool bulletPool;
 
-    private int levelID;
-
 
     // player attributes
     private float lives;
@@ -53,19 +43,12 @@ public class PlayerMoveScript : MonoBehaviour
 
     bool hasKey = false;
 
-
-    [SerializeField]
-    float forceStrength = 100f;
-
-
     // Additional features
-
     [SerializeField]
     GameObject bulletPrefab;
 
     [SerializeField]
     GameObject hider;
-
 
     [SerializeField]
     float bulletSpawnDistance = 2.5f;
@@ -73,24 +56,14 @@ public class PlayerMoveScript : MonoBehaviour
 
     private Debuffs currentDebuff = Debuffs.NONE;
 
-
+    [SerializeField]
+    float shootCooldown = 0.1f;
 
     [SerializeField]
-    float shootCooldown = 0.5f;
+    float bulletSpeed = 2;
 
     [SerializeField]
-    float shootSpeed = 1;
-
-    [SerializeField]
-    float bulletSpeed = 1;
-
-    [SerializeField]
-    float bulletBaseDamage = 3;
-
-    [SerializeField]
-    float playerDamage = 10;
-
-
+    float playerDamage = 25;
 
     [SerializeField]
     GameObject lifes;
@@ -104,15 +77,10 @@ public class PlayerMoveScript : MonoBehaviour
     [SerializeField]
     GameObject winscreen;
 
-    private float dashTimer = -0.2f;
-
-
     private bool isDrunk = false;
-    [SerializeField] float DRUNKBORDER = 0.1f;
     private float drunkTimer = 0;
 
     private float shakeTime = 0.001f;
-
 
     private Camera cam;
     private float timeSinceLastShoot = 0;
@@ -130,7 +98,6 @@ public class PlayerMoveScript : MonoBehaviour
     [SerializeField]
     private GameObject deathScreen;
 
-
     float animationTimer = 0;
     bool animateIn = true;
 
@@ -139,7 +106,7 @@ public class PlayerMoveScript : MonoBehaviour
 
     int lastLvlKeyCount = 0;
 
-
+    [SerializeField] GameObject pauseMenu;
 
     void Start()
     {
@@ -147,7 +114,7 @@ public class PlayerMoveScript : MonoBehaviour
         bulletPool = BulletPool.GetInstance(bulletPrefab);
         bulletPool.PrepareBullets(100, bulletPrefab);
 
-        if(bulletPool != null )
+        if (bulletPool != null)
         {
             Debug.Log("BULLET POOOOOOL");
         }
@@ -177,18 +144,43 @@ public class PlayerMoveScript : MonoBehaviour
         keyCodeMap.Add(KeyCode.Space, KeyCode.Return);
         keyCodeMap.Add(KeyCode.Return, KeyCode.Space);
     }
+    
+    public void Pause()
+    {
+        pauseMenu.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void Resume()
+    {
+        pauseMenu.SetActive(false);
+        Time.timeScale = 1;
+    }
 
     // Update is called once per frame
     void Update()
     {
+        // TODO remove
         if (Input.GetKeyDown(KeyCode.B))
         {
             nextDebuff();
         }
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (pauseMenu.activeSelf)
+            {
+                Resume();
+            }
+            else
+            {
+                Pause();
+            }
+        }
+
         centerCam();
         move();
-        scale(); 
+        scale();
 
         if (currentDebuff != Debuffs.NoAttack)
         {
@@ -196,8 +188,8 @@ public class PlayerMoveScript : MonoBehaviour
         }
 
         showPlayerData();
-        if(isDrunk)
-        {   
+        if (isDrunk)
+        {
             drunkTimer += Time.deltaTime;
             Debug.Log("UPDATE DDRUNK");
         }
@@ -210,11 +202,11 @@ public class PlayerMoveScript : MonoBehaviour
         level.GetComponent<TextMeshProUGUI>().text = "Level " + ((LEVEL + 1) >= MAX_LEVEL ? MAX_LEVEL : (LEVEL + 1)) + " von " + MAX_LEVEL;
         if (lastLvlKeyCount > 0)
         {
-            key.GetComponent<TextMeshProUGUI>().text = lastLvlKeyCount>0? "eingesammelte Schl�ssel: " + lastLvlKeyCount : "";
+            key.GetComponent<TextMeshProUGUI>().text = lastLvlKeyCount > 0 ? "eingesammelte Schlüssel: " + lastLvlKeyCount : "";
         }
         else
         {
-            key.GetComponent<TextMeshProUGUI>().text = hasKey ? "Schl�ssel eingesammelt" : "";
+            key.GetComponent<TextMeshProUGUI>().text = hasKey ? "Schlüssel eingesammelt" : "";
         }
     }
 
@@ -354,7 +346,7 @@ public class PlayerMoveScript : MonoBehaviour
             {
                 n.SetActive(false);
                 obj.transform.position = n.transform.position;
-                gameManager.nextLevel(LEVEL+1);
+                gameManager.nextLevel(LEVEL + 1);
             }
         }
     }
@@ -362,21 +354,6 @@ public class PlayerMoveScript : MonoBehaviour
     public bool HasKey()
     {
         return hasKey;
-    }
-
-    void OnTriggerEnter2D(Collider2D collider)
-    {
-        /**
-        if (collider.gameObject.name == "ExitTrigger")
-        {
-            levelID++;
-            Debug.Log("Player has reached the exit.");
-            hasKey = false;
-            // TODO: Level transition as in: Destroy all enemies, close doors, spawn new enemies, spawn key, etc.
-            gameManager.nextLevel(levelID);
-            Destroy(collider.gameObject);
-        }
-        **/
     }
 
     public float getLives() { return lives; }
@@ -416,13 +393,13 @@ public class PlayerMoveScript : MonoBehaviour
         transform.Rotate(0, 0, Time.deltaTime * -rotate * getInputAxis("Horizontal"));
 
         float vertical = getInputAxis("Vertical");
-     
+
         Vector3 rotatedMoveDirection = transform.up;
         if (isDrunk && drunkTimer > shakeTime)
         {
             drunkTimer = 0;
             float randomAngle = Random.Range(-100, 100);
-            
+
             rotatedMoveDirection.x = transform.up.x * Mathf.Cos(randomAngle * Mathf.Deg2Rad) - transform.up.y * Mathf.Sin(randomAngle * Mathf.Deg2Rad);
             rotatedMoveDirection.y = transform.up.x * Mathf.Sin(randomAngle * Mathf.Deg2Rad) + transform.up.y * Mathf.Cos(randomAngle * Mathf.Deg2Rad);
             rotatedMoveDirection.Normalize();
@@ -445,12 +422,6 @@ public class PlayerMoveScript : MonoBehaviour
             if (bullet != null)
             {
                 PlayerBullet pbscript = bullet.gameObject.GetComponent<PlayerBullet>();
-                /**
-                pbscript.speed = shootSpeed;
-                pbscript.player = gameObject;
-                timeSinceLastShoot = 0;
-                Debug.Log("SHOOOOOOOOT");
-                **/
                 Vector2 dir = transform.up;
                 Vector2 rotatedShootDirection = dir;
                 rotatedShootDirection.x = dir.x * Mathf.Cos(-90 * Mathf.Deg2Rad) - dir.y * Mathf.Sin(-90 * Mathf.Deg2Rad);

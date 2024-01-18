@@ -101,19 +101,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e202470b3663e6e49991eb8468c30cc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MAX_LIVES: 0
+  bulletPool: {fileID: 0}
+  MAX_LIVES: 100
   rotate: 100
-  speed: 1
-  forceStrength: 1
-  bulletPrefab: {fileID: 8141687356764217195, guid: 8d403797e76ddfc468e0d0ed228dee57, type: 3}
+  speed: 3
+  bulletPrefab: {fileID: 1814608980210987177, guid: 53ac9caa79b0b294382c16fdf260b713, type: 3}
   hider: {fileID: 6779415745109454550}
   bulletSpawnDistance: 2.5
   shootCooldown: 0.2
-  shootSpeed: 10
-  bulletBaseDamage: 3
+  bulletSpeed: 10
   playerDamage: 10
-  dashStrength: 0.3
+  lifes: {fileID: 0}
+  level: {fileID: 0}
+  key: {fileID: 0}
+  winscreen: {fileID: 0}
   invertedControls: 0
+  gameManager: {fileID: 0}
+  deathScreen: {fileID: 0}
 --- !u!58 &7116460219203877009
 CircleCollider2D:
   m_ObjectHideFlags: 0

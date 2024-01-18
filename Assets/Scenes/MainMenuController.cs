@@ -17,6 +17,7 @@ public class MainMenuController : MonoBehaviour
         Time.timeScale = 1;
     }
     public void LoadSettings() {
+        mainCanvace.SetActive(false);
         settingsCanvace.SetActive(true);
     }
     
@@ -27,6 +28,7 @@ public class MainMenuController : MonoBehaviour
 
     public void CloseSettings(){
         settingsCanvace.SetActive(false);
+        mainCanvace.SetActive(true);
         player.GetComponent<PlayerMoveScript>().updatePlayerPrefs();
     }
     
