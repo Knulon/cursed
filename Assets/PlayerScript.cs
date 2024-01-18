@@ -7,6 +7,8 @@ using Random = UnityEngine.Random;
 using Quaternion = UnityEngine.Quaternion;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
+using Unity.Mathematics;
+using UnityEngine.UI;
 
 public class PlayerMoveScript : MonoBehaviour
 {
@@ -115,6 +117,7 @@ public class PlayerMoveScript : MonoBehaviour
 
     void Start()
     {
+        setSound();
         updatePlayerPrefs();
 
         if (bulletPool != null)
@@ -129,6 +132,22 @@ public class PlayerMoveScript : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
 
         initMaps();
+    }
+    [SerializeField]
+    Slider soundSlider;
+
+    [SerializeField]
+    Settings settings;
+
+    private void setSound()
+    {
+        soundSlider.value = PlayerPrefs.GetFloat("_Volume", 1);
+        settings.changeVolume();
+    }
+
+    public void regenerate()
+    {
+        lives = math.clamp(lives + 20, 0, MAX_LIVES);
     }
 
     public void updatePlayerPrefs()
@@ -307,7 +326,7 @@ public class PlayerMoveScript : MonoBehaviour
                         LEVEL++;
                         hasKey = false;
 
-                        gameManager.nextLevel(LEVEL);
+                        gameManager.nextLevel(LEVEL+1);
 
                         break;
                     }

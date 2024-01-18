@@ -34,12 +34,14 @@ public class EnemyInfoManager : MonoBehaviour
     [SerializeField] private GameObject _healthBar;
 
     private Vector3 _healthBarTransformScale;
+    private PlayerMoveScript playerMoveScript;
 
 
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        playerMoveScript = player.GetComponent<PlayerMoveScript>();
         myCollider = gameObject.GetComponent<Collider2D>();
         _healthBarTransformScale =  _healthBar.transform.localScale;
     }
@@ -114,6 +116,7 @@ public class EnemyInfoManager : MonoBehaviour
             SetHealth(_health - collision.gameObject.GetComponent<Bullet>().GetDamageAndSendToPool());
             if (_health <= 0)
             {
+                playerMoveScript.regenerate();
                 EnemySpawner.ReturnEnemy(gameObject.transform.parent.gameObject);
             }
         }

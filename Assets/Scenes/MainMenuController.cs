@@ -1,11 +1,13 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenuController : MonoBehaviour
 {
     [SerializeField] GameObject settingsCanvace;
     [SerializeField] GameObject mainCanvace;
-    [SerializeField] GameObject player; 
+    [SerializeField] GameObject player;
+    [SerializeField] Slider soundSlider;
     public void SwitchScene(string sceneName)
     {
         Time.timeScale = 1f;
@@ -15,6 +17,7 @@ public class MainMenuController : MonoBehaviour
     public void StartGame()
     {
         SceneManager.LoadScene("RoomsScene");
+        
         Time.timeScale = 1;
         if (player != null)
         {

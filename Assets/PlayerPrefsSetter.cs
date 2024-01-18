@@ -7,6 +7,7 @@ public class PlayerPrefsSetter : MonoBehaviour
 {
 
     Slider slider;
+    
 
     public void Start()
     {
