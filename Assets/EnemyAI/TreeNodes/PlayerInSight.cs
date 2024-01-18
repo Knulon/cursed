@@ -18,6 +18,10 @@ public class PlayerInSight : ActionNode
 
     protected override State OnUpdate()
     {
+        if (context.player == null)
+        {
+            context.player = GameObject.FindGameObjectWithTag("Player");
+        }
         Vector2 direction = context.player.transform.position - context.transform.position;
         float angle = Vector2.Angle(direction, context.transform.up);
 

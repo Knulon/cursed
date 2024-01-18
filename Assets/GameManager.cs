@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour
 
     public void nextLevel(int nextLevelID)
     {
-        if (nextLevelID > 1)
+        if (nextLevelID >= 1)
         {
             ClearLevel();
         }
@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void ClearLevel() // Deletes all enemies and resets all enemy spawners; 
+    public void ClearLevel() // Deletes all enemies and resets all enemy spawners; 
     {
         List<GameObject> enemies = new(GameObject.FindGameObjectsWithTag("enemy"));
         foreach (var enemy in enemies)

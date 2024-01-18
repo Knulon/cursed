@@ -28,6 +28,11 @@ public class EnemyController : MonoBehaviour
         SlowDownUntilStop();
     }
 
+    void Awake()
+    {
+        DontDestroyOnLoad(gameObject.transform.parent.gameObject);
+    }
+
     private void SlowDownUntilStop()
     {
         if (_isMoving)

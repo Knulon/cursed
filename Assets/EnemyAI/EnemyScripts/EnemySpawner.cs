@@ -133,7 +133,6 @@ public class EnemySpawner : MonoBehaviour
         Vector3 spawnPosition = transform.position + Random.insideUnitSphere * _spawnRadius;
         spawnPosition.z = 0f;
         GameObject enemy = enemyPool.GetEnemy(_enemyPrefab, spawnPosition, _exitTrigger);
-        Debug.Log("Spawner " + this.name + " spawned an enemy.");
     }
 
     public void SetExitTrigger(GameObject exitTrigger)

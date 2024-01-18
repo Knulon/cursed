@@ -15,6 +15,15 @@ public class MainMenuController : MonoBehaviour
     {
         SceneManager.LoadScene("RoomsScene");
         Time.timeScale = 1;
+        if (player != null)
+        {
+            GameManager gM = player.GetComponent<GameManager>();
+            gM.nextLevel(1);
+        }
+        else
+        {
+            Debug.LogError("Player not found!");
+        }
     }
     public void LoadSettings() {
         mainCanvace.SetActive(false);
