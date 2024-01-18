@@ -169,7 +169,7 @@ public class PlayerMoveScript : MonoBehaviour
             nextDebuff();
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && lives > 0)
         {
             if (pauseMenu.activeSelf)
             {
