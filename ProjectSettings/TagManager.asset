@@ -6,7 +6,12 @@ TagManager:
   tags:
   - Obstacle
   - enemy
+  - SPAWN
+  - keypos
   - Audio
+  - Undefined
+  - EnemySpawnpoint
+  - ExitTrigger
   layers:
   - Default
   - TransparentFX

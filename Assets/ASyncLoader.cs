@@ -15,7 +15,6 @@ public class ASyncLoader : MonoBehaviour
     public void LoadLevelButton(string levelToLoad) {
         mainMenu.SetActive(false);
         loadingScreen.SetActive(true);
-
         StartCoroutine(LoadLevelASync(levelToLoad));
     }
 

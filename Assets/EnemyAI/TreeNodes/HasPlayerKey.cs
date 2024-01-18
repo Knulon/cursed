@@ -12,7 +12,7 @@ public class HasPlayerKey : ActionNode
     }
 
     protected override State OnUpdate() {
-        if (context.playerController.HasKey)
+        if (context.playerController.HasKey())
         {
             return State.Success;
         }

@@ -68,7 +68,7 @@ public class BulletPool : ScriptableObject
         if (_instance == null)
         {
             _instance = CreateInstance<BulletPool>();
-            _instance.PrepareBullets(300, bulletPrefab);
+            _instance.PrepareBullets(400, bulletPrefab);
         }
         return _instance;
     }

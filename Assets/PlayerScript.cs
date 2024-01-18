@@ -1,15 +1,15 @@
+using System;
 using System.Collections.Generic;
-using System.Numerics;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
+using Random = UnityEngine.Random;
 using Quaternion = UnityEngine.Quaternion;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
 public class PlayerMoveScript : MonoBehaviour
 {
-
     enum Damage
     {
         RUNSAGAINSTWALL,
@@ -19,22 +19,21 @@ public class PlayerMoveScript : MonoBehaviour
     enum Debuffs
     {
         NONE = 0,
-        Slower = 1,
+        DRUNK = 1,
         LessVisibility = 2,
         ChangedControls = 3,
-        NoAttack = 4
+        NoAttack = 4,
+        STRONGDRUNK = 5
     }
 
-    private BulletPool bulletPool;
-
-    private int levelID;
+    public BulletPool bulletPool;
 
 
     // player attributes
     private float lives;
 
     [SerializeField]
-    int MAX_LIVES;
+    int MAX_LIVES = 100;
 
     [SerializeField]
     float rotate = 100f;
@@ -42,21 +41,14 @@ public class PlayerMoveScript : MonoBehaviour
     [SerializeField]
     float speed = 1;
 
-    bool HasKey = false;
-
-
-    [SerializeField]
-    float forceStrength = 100f;
-
+    bool hasKey = false;
 
     // Additional features
-
     [SerializeField]
     GameObject bulletPrefab;
 
     [SerializeField]
     GameObject hider;
-
 
     [SerializeField]
     float bulletSpawnDistance = 2.5f;
@@ -64,39 +56,35 @@ public class PlayerMoveScript : MonoBehaviour
 
     private Debuffs currentDebuff = Debuffs.NONE;
 
-
+    [SerializeField]
+    float shootCooldown = 0.1f;
 
     [SerializeField]
-    float shootCooldown = 0.5f;
+    float bulletSpeed = 2;
 
     [SerializeField]
-    float shootSpeed = 1;
+    float playerDamage = 25;
 
     [SerializeField]
-    float bulletSpeed = 1;
+    GameObject lifes;
 
     [SerializeField]
-    float bulletBaseDamage = 3;
+    GameObject level;
 
     [SerializeField]
-    float playerDamage = 10;
+    GameObject key;
 
-    // funktionert noch nicht!!!!
     [SerializeField]
-    float dashStrength = 100f;
+    GameObject winscreen;
 
-    private float dashTimer = -0.2f;
+    private bool isDrunk = false;
+    private float drunkTimer = 0;
 
-
+    private float shakeTime = 0.001f;
 
     private Camera cam;
     private float timeSinceLastShoot = 0;
     private Rigidbody2D rigid;
-
-
-
-    private float isStuck = 0;
-    private Vector2 forceVec;
 
     Dictionary<string, string> stringMap = new Dictionary<string, string>();
     Dictionary<KeyCode, KeyCode> keyCodeMap = new Dictionary<KeyCode, KeyCode>();
@@ -110,24 +98,46 @@ public class PlayerMoveScript : MonoBehaviour
     [SerializeField]
     private GameObject deathScreen;
 
-
     float animationTimer = 0;
     bool animateIn = true;
 
+    private int LEVEL = 0;
+    private int MAX_LEVEL = 3;
 
-    bool allowAttack = true;
+    int lastLvlKeyCount = 0;
 
+    [SerializeField] GameObject pauseMenu;
 
+    void Awake()
+    {
+        bulletPool = BulletPool.GetInstance(bulletPrefab);
+    }
 
     void Start()
     {
-        bulletPool = BulletPool.GetInstance(bulletPrefab);
+        updatePlayerPrefs();
+
+        if (bulletPool != null)
+        {
+            Debug.Log("BULLET POOOOOOL");
+        }
+
+        gameManager.nextLevel(1);
 
         cam = Camera.main;
         lives = MAX_LIVES;
         rigid = GetComponent<Rigidbody2D>();
 
         initMaps();
+    }
+
+    public void updatePlayerPrefs()
+    {
+        // sets the rotation speed to the value edited in the settings
+        // slider from 0.5 to 3 (default value 1)
+        float playerPref = PlayerPrefs.GetFloat("_TurningSensitivity", 1);
+        rotate = 100 * playerPref;
+        Debug.Log("rotation speed updated to " + playerPref);
     }
 
     private void initMaps()
@@ -137,30 +147,70 @@ public class PlayerMoveScript : MonoBehaviour
         keyCodeMap.Add(KeyCode.Space, KeyCode.Return);
         keyCodeMap.Add(KeyCode.Return, KeyCode.Space);
     }
+    
+    public void Pause()
+    {
+        pauseMenu.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void Resume()
+    {
+        pauseMenu.SetActive(false);
+        Time.timeScale = 1;
+    }
 
     // Update is called once per frame
     void Update()
     {
+        // TODO remove
         if (Input.GetKeyDown(KeyCode.B))
         {
             nextDebuff();
         }
 
-        // hideNonVisibleObjects();
+        if (Input.GetKeyDown(KeyCode.Escape) && lives > 0)
+        {
+            if (pauseMenu.activeSelf)
+            {
+                Resume();
+            }
+            else
+            {
+                Pause();
+            }
+        }
+
         centerCam();
-        //centerHider();
         move();
-        scale(); // only for tests
-        // not yet implemented
+        scale();
+
         if (currentDebuff != Debuffs.NoAttack)
         {
             shoot();
         }
 
+        showPlayerData();
+        if (isDrunk)
+        {
+            drunkTimer += Time.deltaTime;
+            Debug.Log("UPDATE DDRUNK");
+        }
 
-        // showLives();
-        // showRoomNumber();
-        // ...
+    }
+
+    private void showPlayerData()
+    {
+        lifes.GetComponent<TextMeshProUGUI>().text = "Leben: " + lives;
+        level.GetComponent<TextMeshProUGUI>().text = "Level " + ((LEVEL + 1) >= MAX_LEVEL ? MAX_LEVEL : (LEVEL + 1)) + " von " + MAX_LEVEL;
+        if (lastLvlKeyCount > 0)
+        {
+            key.GetComponent<TextMeshProUGUI>().text = lastLvlKeyCount > 0 ? "eingesammelte Schlüssel: " + lastLvlKeyCount : "";
+        }
+        else
+        {
+            key.GetComponent<TextMeshProUGUI>().text = hasKey ? "Schlüssel eingesammelt" : "";
+        }
     }
 
     private void nextDebuff()
@@ -168,24 +218,26 @@ public class PlayerMoveScript : MonoBehaviour
         currentDebuff += 1;
         switch (currentDebuff)
         {
-            case Debuffs.Slower:
-                speed = speed * 2 / 3;
+            case Debuffs.DRUNK:
+                Debug.Log("DRUNK activated");
+                isDrunk = true;
                 break;
             case Debuffs.LessVisibility:
                 animateIn = true;
                 animationTimer = 0.1f;
-                speed = speed * 3 / 2;
+                isDrunk = false;
                 break;
             case Debuffs.ChangedControls:
                 animateIn = false;
                 invertedControls = true;
                 break;
             case Debuffs.NoAttack:
-                invertedControls = false;
-                allowAttack = false;
+                // invertedControls = false;
+                break;
+            case Debuffs.STRONGDRUNK:
+                drunkTimer = 0.0001f;
                 break;
             case Debuffs.NONE:
-                allowAttack = true;
                 break;
         }
 
@@ -222,41 +274,86 @@ public class PlayerMoveScript : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         GameObject other = collision.gameObject;
-        if (other.CompareTag("enemy"))
-        {
-            isStuck = 0.1f;
-            forceVec = (transform.position - other.transform.position).normalized * forceStrength;
-            rigid.AddForce(forceVec, ForceMode2D.Impulse);
-        }
 
         if (collision.gameObject.name == "Key")
         {
-            HasKey = true;
-
-            //teleport Key to nex level
-            Destroy(collision.gameObject);
+            hasKey = true;
+            if (LEVEL >= MAX_LEVEL)
+            {
+                lastLvlKeyCount++;
+            }
+            //teleport Key to next level
+            teleportToLevel(collision.gameObject, LEVEL + 1);
         }
 
-        if (collision.gameObject.layer.Equals(12))
+        if (collision.gameObject.name.StartsWith("TELEPORTER"))
         {
-            Debug.Log("Player hit by bullet");
+            if (LEVEL >= MAX_LEVEL && lastLvlKeyCount == 3)
+            {
+                Debug.Log("WIN!!!!!");
+                winscreen.SetActive(true);
+                Time.timeScale = 0.0f;
+            }
+            else
+            {
+                Debug.Log("TELEPORT");
+                GameObject[] spawner = GameObject.FindGameObjectsWithTag("SPAWN");
+                foreach (var spawn in spawner)
+                {
+                    if (spawn.name.EndsWith("" + (LEVEL + 1)))
+                    {
+                        transform.position = spawn.transform.position;
+                        nextDebuff();
+                        LEVEL++;
+                        hasKey = false;
 
-            Bullet bullet = collision.gameObject.GetComponent<Bullet>();
-            damage(Damage.ENEMY, bullet.GetDamageAndSendToPool());
+                        gameManager.nextLevel(LEVEL);
+
+                        break;
+                    }
+                }
+            }
+
+        }
+
+        if (collision.gameObject.name.StartsWith("TELEPORTER_LASTLVL"))
+        {
+            Debug.Log("TELEPORT_LASTLVL");
+            collision.gameObject.SetActive(false);
+            LEVEL++;
+            nextDebuff();
+            hasKey = false;
+        }
+
+
+        if (collision.gameObject.layer == LayerMask.NameToLayer("EnemyBullet"))
+        {
+            if (collision.gameObject.layer.Equals(12))
+            {
+                Debug.Log("Player hit by bullet");
+
+                Bullet bullet = collision.gameObject.GetComponent<Bullet>();
+                damage(Damage.ENEMY, bullet.GetDamageAndSendToPool());
+            }
         }
     }
 
-    void OnTriggerEnter2D(Collider2D collider)
+    private void teleportToLevel(GameObject obj, int v)
     {
-        if (collider.gameObject.name == "ExitTrigger")
+        GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("keypos");
+        foreach (GameObject n in gameObjects)
         {
-            levelID++;
-            Debug.Log("Player has reached the exit.");
-            HasKey = false;
-            // TODO: Level transition as in: Destroy all enemies, close doors, spawn new enemies, spawn key, etc.
-            gameManager.nextLevel(levelID);
-            Destroy(collider.gameObject);
+            if (n.name.EndsWith("" + v))
+            {
+                n.SetActive(false);
+                obj.transform.position = n.transform.position;
+            }
         }
+    }
+
+    public bool HasKey()
+    {
+        return hasKey;
     }
 
     public float getLives() { return lives; }
@@ -265,7 +362,7 @@ public class PlayerMoveScript : MonoBehaviour
         switch (type)
         {
             case Damage.RUNSAGAINSTWALL:
-                lives -= 1;
+                lives -= dam;
                 break;
             case Damage.ENEMY:
                 lives -= dam;
@@ -283,7 +380,7 @@ public class PlayerMoveScript : MonoBehaviour
 
 
 
-    void centerCam()
+    private void centerCam()
     {
         if (cam != null)
             cam.transform.position = transform.position + new Vector3(0, 0, -10);
@@ -293,41 +390,22 @@ public class PlayerMoveScript : MonoBehaviour
 
     void move()
     {
-        // funktionert noch nicht!!!! Kollision mit Gegner!!! -->
-        if (dashTimer > 0)
-        {
-            dashTimer -= Time.deltaTime;
-            return;
-        }
-        else if (dashTimer > -0.1)
-        {
-            // rigid.totalForce = Vector2.zero;
-            rigid.AddForce(-transform.up * dashStrength, ForceMode2D.Impulse);
-            dashTimer = -0.1f;
-        }
-        if (getInputKey(KeyCode.Return))
-        {
-            rigid.AddForce(transform.up * dashStrength, ForceMode2D.Impulse);
-            dashTimer = 0.1f;
-            return;
-        }
-        // <-- funktionert noch nicht!!!!
-
-        if (isStuck > 0)
-        {
-            isStuck -= Time.deltaTime;
-            return;
-        }
-        else if (isStuck > -0.1)
-        {
-            rigid.AddForce(-forceVec, ForceMode2D.Impulse);
-            Debug.Log("FORCE ADDED");
-            isStuck = -0.1f;
-        }
         transform.Rotate(0, 0, Time.deltaTime * -rotate * getInputAxis("Horizontal"));
 
         float vertical = getInputAxis("Vertical");
-        transform.position += transform.up * ((vertical < 0) ? -0.5f : (vertical > 0) ? 1 : 0) * Time.deltaTime * speed;
+
+        Vector3 rotatedMoveDirection = transform.up;
+        if (isDrunk && drunkTimer > shakeTime)
+        {
+            drunkTimer = 0;
+            float randomAngle = Random.Range(-100, 100);
+
+            rotatedMoveDirection.x = transform.up.x * Mathf.Cos(randomAngle * Mathf.Deg2Rad) - transform.up.y * Mathf.Sin(randomAngle * Mathf.Deg2Rad);
+            rotatedMoveDirection.y = transform.up.x * Mathf.Sin(randomAngle * Mathf.Deg2Rad) + transform.up.y * Mathf.Cos(randomAngle * Mathf.Deg2Rad);
+            rotatedMoveDirection.Normalize();
+            rotatedMoveDirection *= 3f;
+        }
+        transform.position += rotatedMoveDirection * ((vertical < 0) ? -0.5f : (vertical > 0) ? 1 : 0) * Time.deltaTime * speed;
     }
 
     void shoot()
@@ -339,20 +417,24 @@ public class PlayerMoveScript : MonoBehaviour
         }
         else if (getInputKey(KeyCode.Space))
         {
+            // TODO TOBI: what layer mask??
             GameObject bullet = bulletPool.GetBullet(bulletPrefab, transform.position + transform.up * bulletSpawnDistance, playerDamage, null, bulletLayer: 11);
-            Vector2 dir = transform.up;
+            if (bullet != null)
+            {
+                PlayerBullet pbscript = bullet.gameObject.GetComponent<PlayerBullet>();
+                Vector2 dir = transform.up;
+                Vector2 rotatedShootDirection = dir;
+                rotatedShootDirection.x = dir.x * Mathf.Cos(-90 * Mathf.Deg2Rad) - dir.y * Mathf.Sin(-90 * Mathf.Deg2Rad);
+                rotatedShootDirection.y = dir.x * Mathf.Sin(-90 * Mathf.Deg2Rad) + dir.y * Mathf.Cos(-90 * Mathf.Deg2Rad);
+                rotatedShootDirection.Normalize();
 
-            Vector2 rotatedShootDirection = dir;
-            rotatedShootDirection.x = dir.x * Mathf.Cos(-90 * Mathf.Deg2Rad) - dir.y * Mathf.Sin(-90 * Mathf.Deg2Rad);
-            rotatedShootDirection.y = dir.x * Mathf.Sin(-90 * Mathf.Deg2Rad) + dir.y * Mathf.Cos(-90 * Mathf.Deg2Rad);
-            rotatedShootDirection.Normalize();
+                float angle = Mathf.Atan2(rotatedShootDirection.y, rotatedShootDirection.x) * Mathf.Rad2Deg;
+                bullet.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
-            float angle = Mathf.Atan2(rotatedShootDirection.y, rotatedShootDirection.x) * Mathf.Rad2Deg;
-            bullet.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+                bullet.GetComponent<Rigidbody2D>().velocity = (dir * bulletSpeed);
 
-            bullet.GetComponent<Rigidbody2D>().velocity = (dir * bulletSpeed);
-
-            timeSinceLastShoot = 0;
+                timeSinceLastShoot = 0;
+            }
         }
 
     }

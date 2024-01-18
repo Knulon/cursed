@@ -22,23 +22,30 @@ public class PlayerBullet : MonoBehaviour
     void Update()
     {
         transform.position += transform.up * speed * Time.deltaTime;
-
-        if (Vector2.Distance(transform.position, new Vector2(0, 0)) > 30)
+        if (Vector2.Distance(transform.position, player.transform.position) > 30)
         {
             // here deactivate in bullett pool
-            Destroy(gameObject);
+            SendToPool();
         }
     }
 
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log("COLLISSSSSSIOOOON with " + collision.collider.tag);
         if (collision != null)
         {
             if (collision.gameObject.tag == "Obstacle")
             {
-                _bulletPool.AddBullet(this.gameObject);
+                // here deactivate in bullett pool
+                SendToPool();
             }
         }
+    }
+
+
+    public void SendToPool()
+    {
+        player.GetComponent<PlayerMoveScript>().bulletPool.AddBullet(gameObject);
     }
 }

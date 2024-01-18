@@ -14,4 +14,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Noahs_Testszene.unity
     guid: c0c59c7e086b8424da0cf76a06d3c7cf
+  - enabled: 1
+    path: Assets/Scenes/RoomsScene.unity
+    guid: 018bc4c6aeb840a4a8dee5a59a67a1a1
+  - enabled: 1
+    path: Assets/Scenes/Credits.unity
+    guid: 1e57961646f3bfb408758ee71c6e8b05
   m_configObjects: {}

@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
+using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -32,7 +34,8 @@ public class EnemySpawner : MonoBehaviour
 
     private float spawnBucket;
 
-    private static EnemyPool enemyPool = new();
+    private static EnemyPool enemyPool;
+    private static bool _enemiesArePrepared = false;
 
 
     private class EnemyPool
@@ -44,14 +47,17 @@ public class EnemySpawner : MonoBehaviour
             if (_pool.Count == 0)
             {
                 GameObject enemy = Instantiate(enemyPrefab, position, enemyPrefab.transform.rotation);
-                SetEnemyStats(ref enemy, (Enemytype)Random.Range(0, 3), exitTrigger);
+                SetEnemyStats(ref enemy, (Enemytype)Random.Range(0, Enum.GetNames(typeof(Enemytype)).Length), exitTrigger);
                 return enemy;
             }
-
             GameObject enemyFromPool = _pool.Pop();
-            enemyFromPool.transform.position = position;
-            SetEnemyStats(ref enemyFromPool, (Enemytype)Random.Range(0, 3), exitTrigger);
+            for (int i = 0; i<10 && enemyFromPool == null; i++)
+            {
+                enemyFromPool = _pool.Pop();
+            }
             enemyFromPool.SetActive(true);
+            enemyFromPool.transform.position = position;
+            SetEnemyStats(ref enemyFromPool, (Enemytype)Random.Range(0, Enum.GetNames(typeof(Enemytype)).Length), exitTrigger);
             return enemyFromPool;
         }
 
@@ -64,14 +70,16 @@ public class EnemySpawner : MonoBehaviour
         public void PrepareEnemies(GameObject enemyPrefab, int count)
         {
             GameObject enemy = Instantiate(enemyPrefab, Vector3.zero, enemyPrefab.transform.rotation);
-            EnemyInfoManager enemyInfoManager = enemy.GetComponent<EnemyInfoManager>();
+            EnemyInfoManager enemyInfoManager = enemy.GetComponentInChildren<EnemyInfoManager>();
             enemyInfoManager.SetExitTrigger(null);
-            enemyInfoManager.SetHealth(100);
+            enemyInfoManager.SetMaxHealth(100);
 
             for (int i = 0; i < count; i++)
             {
                 ReturnEnemy(Instantiate(enemy));
             }
+
+            Destroy(enemy);
         }
 
         public int Count()
@@ -81,12 +89,23 @@ public class EnemySpawner : MonoBehaviour
 
     }
 
-    void Start()
+    void Awake()
     {
-        if (enemyPool.Count() == 0)
+        AStar_Handler aStar_Handler = _enemyPrefab.GetComponentInChildren<AStar_Handler>();
+        if (aStar_Handler != null)
         {
+            AStarOnNodes aStar = new(aStar_Handler.GetGridOffset(), aStar_Handler.GetNumerator(), aStar_Handler.GetDenominator(), aStar_Handler.GetCollisionBoxSize());
+            aStar.BuildBlockedTilesHashMap(new(aStar_Handler.GetNumerator(), aStar_Handler.GetDenominator()), 3000);
+        }
+
+        if (!_enemiesArePrepared)
+        {
+            _enemiesArePrepared = true;
+            enemyPool = new();
             enemyPool.PrepareEnemies(_enemyPrefab, 300);
         }
+
+
     }
 
 
@@ -128,34 +147,42 @@ public class EnemySpawner : MonoBehaviour
         GameObject enemy = enemyPool.GetEnemy(_enemyPrefab, spawnPosition, _exitTrigger);
     }
 
+    public void SetExitTrigger(GameObject exitTrigger)
+    {
+        _exitTrigger = exitTrigger;
+    }
+
     static void SetEnemyStats(ref GameObject enemy, Enemytype enemytype, GameObject exitTrigger)
     {
-        EnemyInfoManager enemyInfoManager = enemy.GetComponent<EnemyInfoManager>();
-        EnemyController enemyController = enemy.GetComponent<EnemyController>();
-        EnemyWeaponController enemyWeaponController = enemy.GetComponent<EnemyWeaponController>();
+        EnemyInfoManager enemyInfoManager = enemy.GetComponentInChildren<EnemyInfoManager>();
+        EnemyController enemyController = enemy.GetComponentInChildren<EnemyController>();
+        EnemyWeaponController enemyWeaponController = enemy.GetComponentInChildren<EnemyWeaponController>();
         enemyInfoManager.SetExitTrigger(exitTrigger);
 
         switch (enemytype)
         {
             case Enemytype.Normal:
-                enemyInfoManager.SetHealth(100f);
+                enemyWeaponController._reloadTime = 0.25f;
+                enemyWeaponController._damage = 11f;
+                enemyInfoManager.SetMaxHealth(100f);
                 break;
             case Enemytype.Sniper:
-                enemyInfoManager.SetHealth(50f);
+                enemyInfoManager.SetMaxHealth(50f);
                 enemyWeaponController._fireRate = 0.5f;
-                enemyWeaponController._damage = 50f;
+                enemyWeaponController._damage = 17f;
                 enemyWeaponController._magazineSize = 1;
-                enemyWeaponController._reloadTime = 0.25f;
+                enemyWeaponController._reloadTime = 0.5f;
                 enemyInfoManager._detectPlayerRadius = 20f;
                 enemyInfoManager._attackPlayerRadius = 18f;
                 break;
             case Enemytype.Runner:
-                enemyInfoManager.SetHealth(75f);
+                enemyInfoManager.SetMaxHealth(75f);
+                enemyWeaponController._reloadTime = 0.25f;
                 enemyController.maxVelocity = 10f;
                 enemyController.acceleration = 10f;
                 enemyWeaponController._bulletSpread = 50f;
                 enemyWeaponController._fireRate = 5f;
-                enemyWeaponController._damage = 25f;
+                enemyWeaponController._damage = 7f;
                 break;
             default:
                 Debug.LogError("Invalid enemy type");
@@ -166,7 +193,11 @@ public class EnemySpawner : MonoBehaviour
     public void Reset()
     {
         _enemiesSpawned = 0;
-        SpawnEnemies = true;
+    }
+
+    public void SetStatusOfSpawner(bool spawnEnemies)
+    {
+        SpawnEnemies = spawnEnemies;
     }
 
     public static void ReturnEnemy(GameObject enemy)

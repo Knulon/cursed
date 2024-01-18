@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -111,13 +107,6 @@ public class EnemyWeaponController : MonoBehaviour
             Debug.Log("Shoot");
         }
     }
-
-    public static void AddBulletToPool(GameObject bullet)
-    {
-        bullet.SetActive(false);
-        _bulletPool.AddBullet(bullet);
-    }
-
 
     void OnDrawGizmos()
     {

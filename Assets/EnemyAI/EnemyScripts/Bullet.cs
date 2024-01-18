@@ -5,6 +5,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     Collider2D _collider;
+    private static BulletPool BulletPool;
 
     public float Damage
     {
@@ -14,12 +15,25 @@ public class Bullet : MonoBehaviour
 
     private float _timeToLive = 5f;
 
+    void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
+    private void Start()
+    {
+        if (BulletPool == null)
+        {
+            BulletPool = BulletPool.GetInstance(gameObject);
+        }
+    }
+
     private void Update()
     {
         _timeToLive -= Time.deltaTime;
         if (_timeToLive <= 0)
         {
-            EnemyWeaponController.AddBulletToPool(this.gameObject);
+            BulletPool.AddBullet(this.gameObject);
         }
     }
 
@@ -28,14 +42,15 @@ public class Bullet : MonoBehaviour
     {
         if (collision.gameObject.layer == 13)
         {
-            EnemyWeaponController.AddBulletToPool(this.gameObject);
+
+            BulletPool.AddBullet(this.gameObject);
             Debug.Log("Bullet hit obstacle");
         }
     }
 
     public float GetDamageAndSendToPool()
     {
-        EnemyWeaponController.AddBulletToPool(this.gameObject);
+        BulletPool.AddBullet(this.gameObject);
         return Damage;
     }
 
