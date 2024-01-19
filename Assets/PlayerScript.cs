@@ -442,7 +442,12 @@ public class PlayerMoveScript : MonoBehaviour
 
     void move()
     {
-        transform.Rotate(0, 0, Time.deltaTime * -rotate * getInputAxis("Horizontal"));
+        // Look at mouse
+        Vector3 mousePos = Input.mousePosition;
+        transform.rotation = Quaternion.LookRotation(Vector3.forward, mousePos - cam.WorldToScreenPoint(transform.position));
+
+
+        //transform.Rotate(0, 0, Time.deltaTime * -rotate * getInputAxis("Horizontal"));
 
         float vertical = getInputAxis("Vertical");
 
