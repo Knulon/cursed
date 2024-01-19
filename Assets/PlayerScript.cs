@@ -188,6 +188,39 @@ public class PlayerMoveScript : MonoBehaviour
             nextDebuff();
         }
 
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            lives = MAX_LIVES;
+            GameObject key = GameObject.Find("Key");
+
+            if (LEVEL >= MAX_LEVEL && lastLvlKeyCount == 3)
+            {
+                Debug.Log("WIN!!!!!");
+                winscreen.SetActive(true);
+                Time.timeScale = 0.0f;
+            }
+            else
+            {
+                Debug.Log("TELEPORT");
+                GameObject[] spawner = GameObject.FindGameObjectsWithTag("SPAWN");
+                foreach (var spawn in spawner)
+                {
+                    if (spawn.name.EndsWith("" + (LEVEL + 1)))
+                    {
+                        transform.position = spawn.transform.position;
+                        nextDebuff();
+                        LEVEL++;
+                        hasKey = false;
+                        lives = MAX_LIVES;
+                        gameManager.nextLevel(LEVEL + 1);
+
+                        break;
+                    }
+                }
+            }
+            teleportToLevel(key, LEVEL);
+        }
+
         if (Input.GetKeyDown(KeyCode.Escape) && lives > 0)
         {
             if (pauseMenu.activeSelf)
