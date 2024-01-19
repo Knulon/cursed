@@ -175,13 +175,15 @@ public class EnemySpawner : MonoBehaviour
         switch (enemytype)
         {
             case Enemytype.Normal:
+                enemyInfoManager.SetMaxHealth(100f);
                 enemyWeaponController._reloadTime = 0.25f;
                 enemyWeaponController._damage = 11f;
-                enemyInfoManager.SetMaxHealth(100f);
                 spriteRenderer.sprite = _enemySpriteProviderStatic.GetSprite(Enemytype.Normal);
                 break;
             case Enemytype.Sniper:
                 enemyInfoManager.SetMaxHealth(50f);
+                enemyController.maxVelocity = 2f;
+                enemyController.acceleration = 8f;
                 enemyWeaponController._fireRate = 0.5f;
                 enemyWeaponController._damage = 17f;
                 enemyWeaponController._magazineSize = 1;
@@ -192,10 +194,10 @@ public class EnemySpawner : MonoBehaviour
                 break;
             case Enemytype.Runner:
                 enemyInfoManager.SetMaxHealth(75f);
-                enemyWeaponController._reloadTime = 0.25f;
-                enemyController.maxVelocity = 10f;
-                enemyController.acceleration = 10f;
-                enemyWeaponController._bulletSpread = 50f;
+                enemyController.maxVelocity = 6f;
+                enemyController.acceleration = 7f;
+                enemyWeaponController._reloadTime = 0.3f;
+                enemyWeaponController._bulletSpread = 40f;
                 enemyWeaponController._fireRate = 5f;
                 enemyWeaponController._damage = 7f;
                 spriteRenderer.sprite = _enemySpriteProviderStatic.GetSprite(Enemytype.Runner);

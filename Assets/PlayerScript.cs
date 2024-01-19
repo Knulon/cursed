@@ -325,7 +325,7 @@ public class PlayerMoveScript : MonoBehaviour
                         nextDebuff();
                         LEVEL++;
                         hasKey = false;
-
+                        lives = MAX_LIVES;
                         gameManager.nextLevel(LEVEL+1);
 
                         break;

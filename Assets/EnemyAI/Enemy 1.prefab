@@ -330,9 +330,9 @@ MonoBehaviour:
   BulletRotationOffset: -90
   _bulletPrefab: {fileID: 1814608980210987177, guid: 53ac9caa79b0b294382c16fdf260b713, type: 3}
   _bulletSpeed: 50
-  _damage: 1
-  _fireRate: 33
-  _magazineSize: 10
+  _damage: 10
+  _fireRate: 3
+  _magazineSize: 3
   _reloadTime: 1
   _bulletSpread: 10
   BulletPoolItems: 0
