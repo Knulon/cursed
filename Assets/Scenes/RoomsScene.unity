@@ -75893,6 +75893,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1761284691}
     - target: {fileID: 1871550238725185830, guid: 320a4ea755d7b0344a9b23226378fc03, type: 3}
+      propertyPath: settings
+      value: 
+      objectReference: {fileID: 332509645}
+    - target: {fileID: 1871550238725185830, guid: 320a4ea755d7b0344a9b23226378fc03, type: 3}
       propertyPath: MAX_LIVES
       value: 1000000
       objectReference: {fileID: 0}
@@ -75916,6 +75920,10 @@ PrefabInstance:
       propertyPath: gameManager
       value: 
       objectReference: {fileID: 474646988}
+    - target: {fileID: 1871550238725185830, guid: 320a4ea755d7b0344a9b23226378fc03, type: 3}
+      propertyPath: soundSlider
+      value: 
+      objectReference: {fileID: 1973386679}
     - target: {fileID: 3857900247372139261, guid: 320a4ea755d7b0344a9b23226378fc03, type: 3}
       propertyPath: m_LocalPosition.x
       value: 110.22
