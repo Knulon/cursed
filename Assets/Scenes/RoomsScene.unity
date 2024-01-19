@@ -1111,7 +1111,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -29.01
+      value: -29.38
       objectReference: {fileID: 0}
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1166,8 +1166,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 123499816}
     - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _spawnRadius
+      value: 3.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: _numberOfEnemies
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: _basicEnemyTexture
@@ -1507,11 +1511,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 143.31
+      value: 143.65
       objectReference: {fileID: 0}
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -48.3
+      value: -49.76
       objectReference: {fileID: 0}
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1972,6 +1976,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 95963951}
     - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _spawnRadius
+      value: 2.73
+      objectReference: {fileID: 0}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: _basicEnemyTexture
       value: 
       objectReference: {fileID: 2800000, guid: 506e2b68fdd9b6a41875eb54fabe4b0c, type: 3}
@@ -1983,6 +1991,10 @@ PrefabInstance:
       propertyPath: _sniperEnemyTexture
       value: 
       objectReference: {fileID: 2800000, guid: ad8b80303efa1ab4a84dc7d4dd316510, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _spawnRatePerSecond
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: _enemySpriteProvider
       value: 
@@ -2809,11 +2821,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 123.6
+      value: 123.49
       objectReference: {fileID: 0}
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 69
+      value: 68.46
       objectReference: {fileID: 0}
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2867,6 +2879,10 @@ PrefabInstance:
       propertyPath: _exitTrigger
       value: 
       objectReference: {fileID: 1053677336}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _spawnRadius
+      value: 3.27
+      objectReference: {fileID: 0}
     - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: _numberOfEnemies
       value: 2
@@ -3659,11 +3675,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 206.2
+      value: 206.91
       objectReference: {fileID: 0}
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 58.6
+      value: 57.8
       objectReference: {fileID: 0}
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3717,6 +3733,10 @@ PrefabInstance:
       propertyPath: _exitTrigger
       value: 
       objectReference: {fileID: 1966435747}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _spawnRadius
+      value: 3.21
+      objectReference: {fileID: 0}
     - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: _basicEnemyTexture
       value: 
@@ -16907,11 +16927,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 146.12
+      value: 145.3
       objectReference: {fileID: 0}
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -40.73
+      value: -40.7
       objectReference: {fileID: 0}
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.z
@@ -17372,6 +17392,8 @@ GameObject:
   - component: {fileID: 1066621444}
   - component: {fileID: 1066621446}
   - component: {fileID: 1066621445}
+  - component: {fileID: 1066621448}
+  - component: {fileID: 1066621447}
   m_Layer: 0
   m_Name: Tilemap (1)
   m_TagString: Untagged
@@ -76071,6 +76093,76 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!66 &1066621447
+CompositeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1066621443}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_GeometryType: 0
+  m_GenerationType: 0
+  m_EdgeRadius: 0
+  m_ColliderPaths: []
+  m_CompositePaths:
+    m_Paths: []
+  m_VertexDistance: 0.0005
+  m_OffsetDistance: 0.00005
+  m_UseDelaunayMesh: 0
+  m_CompositeGameObject: {fileID: 1066621443}
+--- !u!50 &1066621448
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1066621443}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1001 &1091980856
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -76189,11 +76281,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 123.6
+      value: 123.49
       objectReference: {fileID: 0}
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 69
+      value: 68.46
       objectReference: {fileID: 0}
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.z
@@ -76248,8 +76340,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1053677336}
     - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _spawnRadius
+      value: 3.27
+      objectReference: {fileID: 0}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: _numberOfEnemies
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: _basicEnemyTexture
@@ -76289,11 +76385,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 129.1
+      value: 129.26
       objectReference: {fileID: 0}
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 56.3
+      value: 48.24
       objectReference: {fileID: 0}
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.z
@@ -76349,7 +76445,7 @@ PrefabInstance:
       objectReference: {fileID: 1053677336}
     - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: _numberOfEnemies
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: _basicEnemyTexture
@@ -76561,7 +76657,7 @@ PrefabInstance:
       objectReference: {fileID: 332509645}
     - target: {fileID: 1871550238725185830, guid: 320a4ea755d7b0344a9b23226378fc03, type: 3}
       propertyPath: MAX_LIVES
-      value: 300
+      value: 250
       objectReference: {fileID: 0}
     - target: {fileID: 1871550238725185830, guid: 320a4ea755d7b0344a9b23226378fc03, type: 3}
       propertyPath: pauseMenu
@@ -77213,11 +77309,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 216.42
+      value: 216.69
       objectReference: {fileID: 0}
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 61.07
+      value: 59.45
       objectReference: {fileID: 0}
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.z
@@ -77893,6 +77989,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 35876057}
     - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _numberOfEnemies
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: _basicEnemyTexture
       value: 
       objectReference: {fileID: 2800000, guid: 506e2b68fdd9b6a41875eb54fabe4b0c, type: 3}
@@ -77904,6 +78004,10 @@ PrefabInstance:
       propertyPath: _sniperEnemyTexture
       value: 
       objectReference: {fileID: 2800000, guid: ad8b80303efa1ab4a84dc7d4dd316510, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _spawnRatePerSecond
+      value: 0.15
+      objectReference: {fileID: 0}
     - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: _enemySpriteProvider
       value: 
@@ -78132,11 +78236,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 109.76
+      value: 109.83
       objectReference: {fileID: 0}
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -32.52
+      value: -32.7
       objectReference: {fileID: 0}
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.z
@@ -78191,8 +78295,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 123499816}
     - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _spawnRadius
+      value: 3.27
+      objectReference: {fileID: 0}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: _numberOfEnemies
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: _basicEnemyTexture
@@ -78808,11 +78916,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 243
+      value: 242.42
       objectReference: {fileID: 0}
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 44.2
+      value: 44.03
       objectReference: {fileID: 0}
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.z
@@ -78867,6 +78975,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1966435747}
     - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _spawnRadius
+      value: 2.78
+      objectReference: {fileID: 0}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: _basicEnemyTexture
       value: 
       objectReference: {fileID: 2800000, guid: 506e2b68fdd9b6a41875eb54fabe4b0c, type: 3}
@@ -78880,7 +78992,7 @@ PrefabInstance:
       objectReference: {fileID: 2800000, guid: ad8b80303efa1ab4a84dc7d4dd316510, type: 3}
     - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: _spawnRatePerSecond
-      value: 0.05
+      value: 0.08
       objectReference: {fileID: 0}
     - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: _enemySpriteProvider
@@ -79381,11 +79493,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 242.24
+      value: 241.38
       objectReference: {fileID: 0}
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 59.08
+      value: 58.81
       objectReference: {fileID: 0}
     - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: m_LocalPosition.z
@@ -79439,6 +79551,10 @@ PrefabInstance:
       propertyPath: _exitTrigger
       value: 
       objectReference: {fileID: 1966435747}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _spawnRadius
+      value: 3.19
+      objectReference: {fileID: 0}
     - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: _numberOfEnemies
       value: 2
@@ -79562,7 +79678,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 603.4529, y: -357.17938}
+  m_AnchoredPosition: {x: 604, y: -357.17938}
   m_SizeDelta: {x: 60, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2100797777

@@ -195,7 +195,7 @@ public class PlayerMoveScript : MonoBehaviour
             lives = MAX_LIVES;
             GameObject key = GameObject.Find("Key");
 
-            if (LEVEL >= MAX_LEVEL && lastLvlKeyCount == 3)
+            if (LEVEL >= (MAX_LEVEL) && lastLvlKeyCount == 3)
             {
                 Debug.Log("WIN!!!!!");
                 winscreen.SetActive(true);
@@ -256,7 +256,11 @@ public class PlayerMoveScript : MonoBehaviour
     private void showPlayerData()
     {
         lifes.GetComponent<TextMeshProUGUI>().text = "Leben: " + lives;
-        level.GetComponent<TextMeshProUGUI>().text = "Level " + ((LEVEL + 1) >= MAX_LEVEL ? MAX_LEVEL : (LEVEL + 1)) + " von " + MAX_LEVEL;
+        level.GetComponent<TextMeshProUGUI>().text = "Level " + ((LEVEL + 1) >= MAX_LEVEL ? MAX_LEVEL : (LEVEL + 1)) + " von 4";
+        if (LEVEL > 4)
+        {
+            level.GetComponent<TextMeshProUGUI>().text = "Level 4 von 4";
+        }
         if (lastLvlKeyCount > 0)
         {
             key.GetComponent<TextMeshProUGUI>().text = lastLvlKeyCount > 0 ? "eingesammelte Schlüssel: " + lastLvlKeyCount : "";
@@ -269,11 +273,12 @@ public class PlayerMoveScript : MonoBehaviour
 
     private void nextDebuff()
     {
+        lives = MAX_LIVES;
         currentDebuff += 1;
         switch (currentDebuff)
         {
             case Debuffs.DRUNK:
-                textAppear.SetText("Ups. Der Raum ist curesd. Anscheinend kannst du hier nicht geradeaus laufen! Versuchen kannst du es aber trotzdem!");
+                textAppear.SetText("Ups. Der Raum ist cursed. Anscheinend kannst du hier nicht geradeaus laufen! Versuchen kannst du es aber trotzdem!");
                 isDrunk = true;
                 break;
             case Debuffs.LessVisibility:
@@ -288,12 +293,13 @@ public class PlayerMoveScript : MonoBehaviour
                 invertedControls = true;
                 break;
             case Debuffs.NoAttack:
-                textAppear.SetText("Unsere Waffe ist hier anscheindend ausgefallen. Finde den Schlüssel auf europäischer Art!");
+                textAppear.SetText("Unsere Waffe ist hier anscheindend ausgefallen. Finde den Schlüssel auf europäische Art!");
                 // invertedControls = false;
                 break;
             case Debuffs.STRONGDRUNK:
-                textAppear.SetText("OMG! OMG! ERDBENEN!");
-                drunkTimer = 0.0001f;
+                textAppear.SetText("OMG! OMG! ERDBEBEN!");
+                shakeTime = 0.0001f;
+                isDrunk = true;
                 break;
             case Debuffs.NONE:
                 textAppear.SetText("Du bist in einem Labyrinth. Finde den Schlüssel um die Tür zu öffnen!");
@@ -363,7 +369,6 @@ public class PlayerMoveScript : MonoBehaviour
                         nextDebuff();
                         LEVEL++;
                         hasKey = false;
-                        lives = MAX_LIVES;
                         gameManager.nextLevel(LEVEL+1);
 
                         break;

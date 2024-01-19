@@ -154,8 +154,15 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
-        Vector3 spawnPosition = transform.position + Random.insideUnitSphere * _spawnRadius;
+        Vector3 spawnOffset = Random.insideUnitSphere * _spawnRadius;
+        if (Vector3.Distance(spawnOffset, Vector3.zero) > _spawnRadius)
+        {
+            spawnOffset = spawnOffset.normalized * 1f;
+            Debug.LogError("SpawnOffset was weird.");
+        }
+        Vector3 spawnPosition = transform.position + spawnOffset;
         spawnPosition.z = 0f;
+
         GameObject enemy = enemyPool.GetEnemy(_enemyPrefab, spawnPosition, _exitTrigger);
     }
 

@@ -122,6 +122,12 @@ public class EnemyInfoManager : MonoBehaviour
         }
     }
 
+    void OnTriggerExit2D(Collider2D collision)
+    {
+        Debug.LogError("Triggered with:" + collision.gameObject.name);
+
+    }
+
 
     public void OnDrawGizmos()
     {
