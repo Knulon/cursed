@@ -285,7 +285,7 @@ public class PlayerMoveScript : MonoBehaviour
         {
             key = keyCodeMap[key];
         }
-        return Input.GetKeyDown(key);
+        return Input.GetKey(key);
     }
 
 
