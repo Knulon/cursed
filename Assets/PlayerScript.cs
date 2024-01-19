@@ -287,7 +287,9 @@ public class PlayerMoveScript : MonoBehaviour
                 // invertedControls = false;
                 break;
             case Debuffs.STRONGDRUNK:
-                drunkTimer = 0.0001f;
+                Debug.Log("STRONGDRUNK activated");
+                shakeTime = 0.0001f;
+                isDrunk = true;
                 break;
             case Debuffs.NONE:
                 break;
@@ -462,7 +464,15 @@ public class PlayerMoveScript : MonoBehaviour
             rotatedMoveDirection.Normalize();
             rotatedMoveDirection *= 3f;
         }
+
+
+
         transform.position += rotatedMoveDirection * ((vertical < 0) ? -0.5f : (vertical > 0) ? 1 : 0) * Time.deltaTime * speed;
+
+        // Move left/right 
+        float horizontal = getInputAxis("Horizontal");
+        transform.position += transform.right * horizontal * Time.deltaTime * speed;
+
     }
 
     void shoot()
