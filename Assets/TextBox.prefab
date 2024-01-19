@@ -35,7 +35,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.34091187, y: -201.5761}
+  m_AnchoredPosition: {x: -0.34094238, y: -201.57611}
   m_SizeDelta: {x: -344.8213, y: -403.15228}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4398501270532569305
@@ -111,8 +111,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.34091187, y: -0.21377563}
-  m_SizeDelta: {x: 508.4782, y: 71.3562}
+  m_AnchoredPosition: {x: -0.000099182, y: -0.00050354}
+  m_SizeDelta: {x: 920, y: 180}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2759144865253344156
 CanvasRenderer:
@@ -142,8 +142,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Lets try to type as much text as possible to get this to scale down a lot.
-    HAHAHAHAHAHAHHAHAHAHHAHAHAH
+  m_text: "-- Hier Text einf\xFCgen --"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -170,7 +169,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20.85
+  m_fontSize: 72
   m_fontSizeBase: 38.38
   m_fontWeight: 400
   m_enableAutoSizing: 1

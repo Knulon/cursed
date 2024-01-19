@@ -110,6 +110,8 @@ public class PlayerMoveScript : MonoBehaviour
 
     [SerializeField] GameObject pauseMenu;
 
+    [SerializeField] TextAppear textAppear;
+
     void Awake()
     {
         bulletPool = BulletPool.GetInstance(bulletPrefab);
@@ -271,28 +273,33 @@ public class PlayerMoveScript : MonoBehaviour
         switch (currentDebuff)
         {
             case Debuffs.DRUNK:
-                Debug.Log("DRUNK activated");
+                textAppear.SetText("Ups. Der Raum ist curesd. Anscheinend kannst du hier nicht geradeaus laufen! Versuchen kannst du es aber trotzdem!");
                 isDrunk = true;
                 break;
             case Debuffs.LessVisibility:
+                textAppear.SetText("Ist es ein Fluch oder einfach nur ein Stromausfall? Auf jeden Fall können wir in diesem Raum nichts sehen!");
                 animateIn = true;
                 animationTimer = 0.1f;
                 isDrunk = false;
                 break;
             case Debuffs.ChangedControls:
+                textAppear.SetText("Wohin war nochmal vorwärts? Sind wir Piraten oder warum ist die Enter-Taste auf einmal so wichtig?");
                 animateIn = false;
                 invertedControls = true;
                 break;
             case Debuffs.NoAttack:
+                textAppear.SetText("Unsere Waffe ist hier anscheindend ausgefallen. Finde den Schlüssel auf europäischer Art!");
                 // invertedControls = false;
                 break;
             case Debuffs.STRONGDRUNK:
+                textAppear.SetText("OMG! OMG! ERDBENEN!");
                 drunkTimer = 0.0001f;
                 break;
             case Debuffs.NONE:
+                textAppear.SetText("Du bist in einem Labyrinth. Finde den Schlüssel um die Tür zu öffnen!");
                 break;
         }
-
+        textAppear.Appear();
     }
 
     private float getInputAxis(string s)
@@ -320,8 +327,6 @@ public class PlayerMoveScript : MonoBehaviour
         }
         return Input.GetKey(key);
     }
-
-
 
     private void OnCollisionEnter2D(Collision2D collision)
     {

@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -40,21 +38,26 @@ public class TextAppear : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.P))
+        {
             Appear();
-
+        }
 
         if (!timePerCharacter && timePassed < timeToDisplayFullText)
         {
-            textMesh.text = textToDisplay.Substring(0, (int)(timePassed / timeToDisplayFullText * textToDisplay.Length));
+            textMesh.text = textToDisplay.Substring(0, (int)(timePassed / timeToDisplayFullText * textToDisplay.Length + 1));
         }
 
         if (timePerCharacter && timePassed < timeToDisplayCharacter * textToDisplay.Length)
         {
-            textMesh.text = textToDisplay.Substring(0, (int)(timePassed / timeToDisplayCharacter));
+            textMesh.text = textToDisplay.Substring(0, (int)(timePassed / timeToDisplayCharacter + 1));
         }
 
         timePassed += Time.deltaTime;
+
+        if (timePassed > 10) {
+            textMesh.text = "";
+        }
     }
 
 }
