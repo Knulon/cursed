@@ -349,7 +349,7 @@ public class PlayerMoveScript : MonoBehaviour
         {
             if (collision.gameObject.layer.Equals(12))
             {
-                Debug.Log("Player hit by bullet");
+                //Debug.Log("Player hit by bullet");
 
                 Bullet bullet = collision.gameObject.GetComponent<Bullet>();
                 damage(Damage.ENEMY, bullet.GetDamageAndSendToPool());

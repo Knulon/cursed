@@ -44,7 +44,7 @@ public class Bullet : MonoBehaviour
         {
 
             BulletPool.AddBullet(this.gameObject);
-            Debug.Log("Bullet hit obstacle");
+            //Debug.Log("Bullet hit obstacle");
         }
     }
 

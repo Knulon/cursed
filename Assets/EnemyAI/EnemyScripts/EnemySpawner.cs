@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour
 {
-    private enum Enemytype
+    public enum Enemytype
     {
         Normal = 0,
         Sniper = 1,
@@ -15,6 +15,11 @@ public class EnemySpawner : MonoBehaviour
 
     [SerializeField]
     private GameObject _enemyPrefab;
+
+    [SerializeField]
+    [Tooltip("This will have to be added to aleast one EnemySpawner")]
+    private EnemySpriteProvider _enemySpriteProvider;
+    private static EnemySpriteProvider _enemySpriteProviderStatic;
 
     [SerializeField]
     private float _spawnRatePerSecond = 0.5f;
@@ -51,7 +56,7 @@ public class EnemySpawner : MonoBehaviour
                 return enemy;
             }
             GameObject enemyFromPool = _pool.Pop();
-            for (int i = 0; i<10 && enemyFromPool == null; i++)
+            for (int i = 0; i < 10 && enemyFromPool == null; i++)
             {
                 enemyFromPool = _pool.Pop();
             }
@@ -91,6 +96,7 @@ public class EnemySpawner : MonoBehaviour
 
     void Awake()
     {
+
         AStar_Handler aStar_Handler = _enemyPrefab.GetComponentInChildren<AStar_Handler>();
         if (aStar_Handler != null)
         {
@@ -100,12 +106,18 @@ public class EnemySpawner : MonoBehaviour
 
         if (!_enemiesArePrepared)
         {
+            if (_enemySpriteProviderStatic == null)
+            {
+                _enemySpriteProviderStatic = _enemySpriteProvider;
+            }
+            else
+            {
+                _enemySpriteProvider = _enemySpriteProviderStatic;
+            }
             _enemiesArePrepared = true;
             enemyPool = new();
             enemyPool.PrepareEnemies(_enemyPrefab, 300);
         }
-
-
     }
 
 
@@ -157,6 +169,7 @@ public class EnemySpawner : MonoBehaviour
         EnemyInfoManager enemyInfoManager = enemy.GetComponentInChildren<EnemyInfoManager>();
         EnemyController enemyController = enemy.GetComponentInChildren<EnemyController>();
         EnemyWeaponController enemyWeaponController = enemy.GetComponentInChildren<EnemyWeaponController>();
+        SpriteRenderer spriteRenderer = enemy.GetComponentInChildren<SpriteRenderer>();
         enemyInfoManager.SetExitTrigger(exitTrigger);
 
         switch (enemytype)
@@ -165,6 +178,7 @@ public class EnemySpawner : MonoBehaviour
                 enemyWeaponController._reloadTime = 0.25f;
                 enemyWeaponController._damage = 11f;
                 enemyInfoManager.SetMaxHealth(100f);
+                spriteRenderer.sprite = _enemySpriteProviderStatic.GetSprite(Enemytype.Normal);
                 break;
             case Enemytype.Sniper:
                 enemyInfoManager.SetMaxHealth(50f);
@@ -174,6 +188,7 @@ public class EnemySpawner : MonoBehaviour
                 enemyWeaponController._reloadTime = 0.5f;
                 enemyInfoManager._detectPlayerRadius = 20f;
                 enemyInfoManager._attackPlayerRadius = 18f;
+                spriteRenderer.sprite = _enemySpriteProviderStatic.GetSprite(Enemytype.Sniper);
                 break;
             case Enemytype.Runner:
                 enemyInfoManager.SetMaxHealth(75f);
@@ -183,6 +198,7 @@ public class EnemySpawner : MonoBehaviour
                 enemyWeaponController._bulletSpread = 50f;
                 enemyWeaponController._fireRate = 5f;
                 enemyWeaponController._damage = 7f;
+                spriteRenderer.sprite = _enemySpriteProviderStatic.GetSprite(Enemytype.Runner);
                 break;
             default:
                 Debug.LogError("Invalid enemy type");

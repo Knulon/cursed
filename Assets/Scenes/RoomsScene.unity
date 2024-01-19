@@ -1017,6 +1017,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &110418243 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5996901924742196478, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+  m_PrefabInstance: {fileID: 1145607778}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &110418246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110418243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 778e0a9f156d5cd4faa607b7b2e68b98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _basicEnemyTexture: {fileID: 21300000, guid: 506e2b68fdd9b6a41875eb54fabe4b0c, type: 3}
+  _sniperEnemyTexture: {fileID: 21300000, guid: ad8b80303efa1ab4a84dc7d4dd316510, type: 3}
+  _runnerEnemyTexture: {fileID: 21300000, guid: c114b8eaa6f28b74b9bcaa038d6f9a03, type: 3}
 --- !u!1 &115422721
 GameObject:
   m_ObjectHideFlags: 0
@@ -1367,6 +1387,18 @@ PrefabInstance:
       propertyPath: _exitTrigger
       value: 
       objectReference: {fileID: 123499816}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _basicEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: 506e2b68fdd9b6a41875eb54fabe4b0c, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _runnerEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: c114b8eaa6f28b74b9bcaa038d6f9a03, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _sniperEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: ad8b80303efa1ab4a84dc7d4dd316510, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1746,6 +1778,18 @@ PrefabInstance:
       propertyPath: _exitTrigger
       value: 
       objectReference: {fileID: 95963951}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _basicEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: 506e2b68fdd9b6a41875eb54fabe4b0c, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _runnerEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: c114b8eaa6f28b74b9bcaa038d6f9a03, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _sniperEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: ad8b80303efa1ab4a84dc7d4dd316510, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2605,11 +2649,23 @@ PrefabInstance:
       objectReference: {fileID: 1053677336}
     - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: _numberOfEnemies
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _basicEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: 506e2b68fdd9b6a41875eb54fabe4b0c, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _runnerEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: c114b8eaa6f28b74b9bcaa038d6f9a03, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _sniperEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: ad8b80303efa1ab4a84dc7d4dd316510, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: _spawnRatePerSecond
-      value: 0.15
+      value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3283,6 +3339,18 @@ PrefabInstance:
       propertyPath: _exitTrigger
       value: 
       objectReference: {fileID: 911203917}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _basicEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: 506e2b68fdd9b6a41875eb54fabe4b0c, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _runnerEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: c114b8eaa6f28b74b9bcaa038d6f9a03, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _sniperEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: ad8b80303efa1ab4a84dc7d4dd316510, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3356,6 +3424,18 @@ PrefabInstance:
       propertyPath: _exitTrigger
       value: 
       objectReference: {fileID: 1966435747}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _basicEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: 506e2b68fdd9b6a41875eb54fabe4b0c, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _runnerEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: c114b8eaa6f28b74b9bcaa038d6f9a03, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _sniperEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: ad8b80303efa1ab4a84dc7d4dd316510, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -75635,6 +75715,99 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1129125471
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 123.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 69
+      objectReference: {fileID: 0}
+    - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1603194379407903342, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5996901924742196478, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: m_Name
+      value: EnemySpawnpoint_1_Intial_Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 5996901924742196478, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5996901924742196478, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: m_TagString
+      value: EnemySpawnpoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: SpawnEnemies
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _exitTrigger
+      value: 
+      objectReference: {fileID: 1053677336}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _numberOfEnemies
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _basicEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: 506e2b68fdd9b6a41875eb54fabe4b0c, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _runnerEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: c114b8eaa6f28b74b9bcaa038d6f9a03, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _sniperEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: ad8b80303efa1ab4a84dc7d4dd316510, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _spawnRatePerSecond
+      value: 0.2
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
 --- !u!1001 &1145607778
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -75705,16 +75878,35 @@ PrefabInstance:
       objectReference: {fileID: 1053677336}
     - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: _numberOfEnemies
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _basicEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: 506e2b68fdd9b6a41875eb54fabe4b0c, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _runnerEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: c114b8eaa6f28b74b9bcaa038d6f9a03, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _sniperEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: ad8b80303efa1ab4a84dc7d4dd316510, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
       propertyPath: _spawnRatePerSecond
-      value: 5
+      value: 0.1
       objectReference: {fileID: 0}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _enemySpriteProvider
+      value: 
+      objectReference: {fileID: 110418246}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5996901924742196478, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 110418246}
   m_SourcePrefab: {fileID: 100100000, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
 --- !u!1001 &1167672936
 PrefabInstance:
@@ -76822,6 +77014,18 @@ PrefabInstance:
       propertyPath: _exitTrigger
       value: 
       objectReference: {fileID: 35876057}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _basicEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: 506e2b68fdd9b6a41875eb54fabe4b0c, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _runnerEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: c114b8eaa6f28b74b9bcaa038d6f9a03, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _sniperEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: ad8b80303efa1ab4a84dc7d4dd316510, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -77040,6 +77244,18 @@ PrefabInstance:
       propertyPath: _exitTrigger
       value: 
       objectReference: {fileID: 123499816}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _basicEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: 506e2b68fdd9b6a41875eb54fabe4b0c, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _runnerEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: c114b8eaa6f28b74b9bcaa038d6f9a03, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _sniperEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: ad8b80303efa1ab4a84dc7d4dd316510, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -77689,6 +77905,18 @@ PrefabInstance:
       propertyPath: _exitTrigger
       value: 
       objectReference: {fileID: 1966435747}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _basicEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: 506e2b68fdd9b6a41875eb54fabe4b0c, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _runnerEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: c114b8eaa6f28b74b9bcaa038d6f9a03, type: 3}
+    - target: {fileID: 6563628975759183047, guid: fbef9a743b0457444864f683bebb4b66, type: 3}
+      propertyPath: _sniperEnemyTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: ad8b80303efa1ab4a84dc7d4dd316510, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -78473,6 +78701,7 @@ SceneRoots:
   - {fileID: 1599819716}
   - {fileID: 1145607778}
   - {fileID: 405747550}
+  - {fileID: 1129125471}
   - {fileID: 1722589044}
   - {fileID: 131652886}
   - {fileID: 673796412}
