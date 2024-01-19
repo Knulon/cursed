@@ -39,7 +39,7 @@ public class FinishPathfinding : ActionNode
                 context.isPathValid = true;
             }
             context.displayPath.Display(path);
-            context.spriteRenderer.color = Color.green;
+            //context.spriteRenderer.color = Color.green;
             return State.Success;
         }
 

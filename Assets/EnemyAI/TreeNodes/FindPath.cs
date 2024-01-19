@@ -51,7 +51,7 @@ public class FindPath : ActionNode
             localPath.AddRange(context.AStarHandler.GetPath(start, context.pathGoal, context.gameObject));
             return localPath;
         });
-        context.spriteRenderer.color = Color.red;
+        //context.spriteRenderer.color = Color.red;
     }
 
     protected override void OnStop()
@@ -67,7 +67,7 @@ public class FindPath : ActionNode
             context.displayPath.Display(path);
             stopwatch.Stop();
             Debug.Log("Pathfinding task completed in " + stopwatch.ElapsedMilliseconds + "ms");
-            context.spriteRenderer.color = Color.green;
+            //context.spriteRenderer.color = Color.green;
             return State.Success;
         }
 
