@@ -8,10 +8,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 6c270f595064e42539bf8d667fbcaab0
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Tobias_Test_Scene.unity
     guid: e3e2f28db1aa7b844935d1670a6d37ed
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Noahs_Testszene.unity
     guid: c0c59c7e086b8424da0cf76a06d3c7cf
   - enabled: 1

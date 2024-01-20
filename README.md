@@ -10,6 +10,7 @@ A top-down shooter game made with Unity for the course "Einführung in Digitale 
 - AD to rotate
 - Spacebar (or try Enter) to shoot
 - Escape to pause
+- C to Cheat (skip level)
 
 ### Objective
 
@@ -35,3 +36,11 @@ Enemies will split up when you pick up a key. A few of them will follow you and 
 - Noah Apelt
 - Marlon Hörner
 - Tobias Fricke
+
+## Quick side note
+
+... because they might be unnoticed otherwise:
+
+- we are using behavior trees for the enemies (picture included in files)
+- A* for pathfinding was implemented by us
+- the loading screen actually prepares: enemies, bullets and A*
