@@ -12,6 +12,7 @@ TagManager:
   - Undefined
   - EnemySpawnpoint
   - ExitTrigger
+  - TilemapGround
   layers:
   - Default
   - TransparentFX
