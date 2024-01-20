@@ -154,8 +154,8 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
-        Vector3 spawnOffset = Random.insideUnitSphere * _spawnRadius;
-        if (Vector3.Distance(spawnOffset, Vector3.zero) > _spawnRadius)
+        Vector3 spawnOffset = (Random.insideUnitSphere * _spawnRadius) /4;
+        if (Vector3.Distance(spawnOffset, Vector3.zero) > (_spawnRadius / 4))
         {
             spawnOffset = spawnOffset.normalized * 1f;
             Debug.LogError("SpawnOffset was weird.");
