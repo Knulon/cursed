@@ -257,13 +257,13 @@ public class PlayerMoveScript : MonoBehaviour
     {
         lifes.GetComponent<TextMeshProUGUI>().text = "Leben: " + lives;
         level.GetComponent<TextMeshProUGUI>().text = "Level " + ((LEVEL + 1) >= MAX_LEVEL ? MAX_LEVEL : (LEVEL + 1)) + " von 4";
-        if (LEVEL > 4)
+        if (LEVEL >= 3)
         {
             level.GetComponent<TextMeshProUGUI>().text = "Level 4 von 4";
         }
         if (lastLvlKeyCount > 0)
         {
-            key.GetComponent<TextMeshProUGUI>().text = lastLvlKeyCount > 0 ? "eingesammelte Schlüssel: " + lastLvlKeyCount : "";
+            key.GetComponent<TextMeshProUGUI>().text = lastLvlKeyCount > 0 ? "Schlüssel eingesammelt: " + lastLvlKeyCount : "";
         }
         else
         {
